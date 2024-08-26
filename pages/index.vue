@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GoMyPosition from "~/components/kakaomap/GoMyPosition.vue";
 import KakaoMap from "~/components/kakaomap/KakaoMap.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 useHead({
@@ -32,8 +33,9 @@ onUnmounted(() => {
 
 <template>
   <SharedLayout>
-    <div :id="mapCont" class="size-full relative overflow-hidden rounded-md">
+    <div :id="mapCont" :class="`size-full relative overflow-hidden rounded-md`">
       <KakaoMap :width="width!" :height="height!" />
+      <GoMyPosition />
     </div>
   </SharedLayout>
 </template>

@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import {makeMarker} from "~/utils/kakaomap";
+
 interface IKakaoMapProps {
   width: number | string;
   height: number | string;
 }
 defineProps<IKakaoMapProps>();
+
 const lat = ref<number | null>(null);
 const lon = ref<number | null>(null);
+const initMap = useKakaoMap();
 onMounted(() => {
   navigator.geolocation.getCurrentPosition((position) => {
     lat.value = position.coords.latitude;
@@ -21,8 +25,9 @@ onMounted(() => {
       };
       //@ts-ignore
       const map = new kakao.maps.Map(container, options);
-      //@ts-ignore
-      const marker = new kakao.maps.Marker({position: myPosition});
+      initMap.value = map;
+      //make marker
+      const {marker} = makeMarker(myPosition);
       marker.setMap(map);
     });
   });

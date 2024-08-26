@@ -5,7 +5,7 @@ interface ISharedLayoutProps {
 defineProps<ISharedLayoutProps>();
 </script>
 <template>
-  <section :class="`flex flex-col ${className} h-full`">
+  <section :class="`flex flex-col h-full px-10 ${className} `">
     <slot />
   </section>
 </template>
