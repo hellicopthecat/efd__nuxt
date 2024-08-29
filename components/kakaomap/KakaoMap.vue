@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {makeMarker} from "~/utils/kakaomap";
+import {initializeMap, makeMarker} from "~/utils/kakaomap";
+import GoMyPosition from "./GoMyPosition.vue";
 
 interface IKakaoMapProps {
   width: number | string;
@@ -7,32 +8,24 @@ interface IKakaoMapProps {
 }
 defineProps<IKakaoMapProps>();
 
-const lat = ref<number | null>(null);
-const lon = ref<number | null>(null);
 const initMap = useKakaoMap();
+
 onMounted(() => {
   navigator.geolocation.getCurrentPosition((position) => {
-    lat.value = position.coords.latitude;
-    lon.value = position.coords.longitude;
-    //@ts-ignore
-    kakao.maps.load(() => {
-      const container = document.getElementById("map");
-      //@ts-ignore
-      const myPosition = new kakao.maps.LatLng(lat.value, lon.value);
-      const options = {
-        center: myPosition,
-        level: 3,
-      };
-      //@ts-ignore
-      const map = new kakao.maps.Map(container, options);
-      initMap.value = map;
-      //make marker
-      const {marker} = makeMarker(myPosition);
-      marker.setMap(map);
-    });
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude;
+    initializeMap(lat, lon, true);
   });
 });
 </script>
 <template>
-  <div id="map" :style="`width:${width};height:${height}`"></div>
+  <div v-if="!initMap" class="flex justify-center items-center h-full">
+    <h1 class="text-red-500">LOADING</h1>
+  </div>
+  <div
+    id="map"
+    :style="`width:${width};height:${height}`"
+    class="rounded-md"
+  ></div>
+  <GoMyPosition v-if="initMap" />
 </template>

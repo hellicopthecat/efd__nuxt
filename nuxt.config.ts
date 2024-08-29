@@ -11,9 +11,14 @@ export default defineNuxtConfig({
       script: [
         {
           type: "text/javascript",
-          src: `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_MAP_KEY}`,
+          src: `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NUXT_KAKAO_MAP_KEY}`,
         },
       ],
     },
+  },
+  runtimeConfig: {
+    publicAPIKEY: process.env.NUXT_MY_PUBLIC_APIKEY,
+
+    kakaoKEY: process.env.NUXT_KAKAO_MAP_KEY,
   },
 });
