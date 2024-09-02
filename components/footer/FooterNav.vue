@@ -1,14 +1,4 @@
-<script setup lang="ts">
-const links = [
-  [
-    {
-      label: "HOME",
-      icon: "i-heroicons-solid:home",
-      to: "/",
-    },
-  ],
-];
-</script>
+<script setup lang="ts"></script>
 <template>
-  <UHorizontalNavigation :links="links" class="justify-center h-40 z-50" />
+  <nav></nav>
 </template>

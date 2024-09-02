@@ -13,11 +13,8 @@ onMounted(() => {
 <template>
   <button
     @click="panTo(initMap, lat, lng)"
-    class="absolute z-50 bottom-10 right-10 bg-darkBlue size-[5%] rounded-xl flex justify-center items-center"
+    class="absolute z-50 bottom-10 right-10 bg-darkBlue size-12 rounded-xl flex justify-center items-center"
   >
-    <UIcon
-      name="i-heroicons:map-pin-16-solid"
-      class="size-[50%] bg-warnYellow"
-    />
+    <Icon name="heroicons:map-pin-solid" class="text-warnYellow" />
   </button>
 </template>

@@ -4,6 +4,7 @@ import KakaoMap from "../kakaomap/KakaoMap.vue";
 const mapCont = ref("mapCont");
 const width = ref<string | number | null | undefined>("100%");
 const height = ref<string | number | null | undefined>("100%");
+const initMap = useKakaoMap();
 onMounted(() => {
   const mapCont = document.getElementById("mapCont");
   width.value = mapCont?.clientWidth;
@@ -13,6 +14,8 @@ onMounted(() => {
       if (entry.contentBoxSize) {
         width.value = entry.contentBoxSize[0].inlineSize + "px";
         height.value = entry.contentBoxSize[0].blockSize + "px";
+        //@ts-ignore
+        initMap.value.relayout();
         window.addEventListener("resize", () => {
           width.value = entry.contentBoxSize[0].inlineSize + "px";
           height.value = entry.contentBoxSize[0].blockSize + "px";
@@ -27,7 +30,10 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div :id="mapCont" :class="`size-full relative overflow-hidden rounded-md`">
+  <div
+    :id="mapCont"
+    :class="`size-full relative overflow-hidden rounded-md my-10`"
+  >
     <KakaoMap :width="width!" :height="height!" />
   </div>
 </template>

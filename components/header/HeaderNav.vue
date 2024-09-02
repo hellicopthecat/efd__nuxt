@@ -2,7 +2,7 @@
 import SharedText from "../shared/SharedText.vue";
 </script>
 <template>
-  <nav class="flex justify-between items-center py-10 text-warnYellow">
+  <nav class="flex justify-between items-center text-warnYellow">
     <NuxtLink to="/">
       <SharedText tag="h3" txt="ESCAPE FORM DANGER" />
     </NuxtLink>
@@ -13,7 +13,9 @@ import SharedText from "../shared/SharedText.vue";
         </NuxtLink>
       </li>
       <li>
-        <SharedText tag="h5" txt="회원가입" />
+        <NuxtLink to="/join">
+          <SharedText tag="h5" txt="회원가입" />
+        </NuxtLink>
       </li>
     </ul>
   </nav>

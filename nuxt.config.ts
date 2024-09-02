@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: {enabled: true},
-  modules: ["@nuxt/ui", "@nuxtjs/tailwindcss"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon"],
   typescript: {
     typeCheck: true,
   },
@@ -18,7 +18,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     publicAPIKEY: process.env.NUXT_MY_PUBLIC_APIKEY,
-
     kakaoKEY: process.env.NUXT_KAKAO_MAP_KEY,
   },
 });

@@ -5,11 +5,11 @@ useHead({
 });
 </script>
 <template>
-  <main class="h-dvh bg-darkBlue">
-    <UContainer class="flex flex-col h-full">
+  <main class="h-dvh bg-darkBlue p-10">
+    <div class="flex flex-col h-full mx-auto">
       <HeaderNav />
       <slot />
       <FooterNav />
-    </UContainer>
+    </div>
   </main>
 </template>

@@ -18,7 +18,7 @@ export function initializeMap(lat: number, lon: number, createMarker = true) {
       const {marker} = makeMarker(myPosition);
       marker.setMap(map);
     }
-    map.relayout();
+
     initMap.value = map;
   });
   return {map, myPosition};
