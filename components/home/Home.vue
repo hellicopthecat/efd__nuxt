@@ -30,10 +30,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div
-    :id="mapCont"
-    :class="`size-full relative overflow-hidden rounded-md my-10`"
-  >
+  <div :id="mapCont" :class="`size-full relative overflow-hidden rounded-md`">
     <KakaoMap :width="width!" :height="height!" />
   </div>
 </template>

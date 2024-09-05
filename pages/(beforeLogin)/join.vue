@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AuthLayout from "~/components/auth/AuthLayout.vue";
-import SharedText from "~/components/shared/SharedText.vue";
-useHead({title: "로그인"});
+useHead({title: "회원가입"});
 </script>
 <template>
   <AuthLayout>
@@ -13,7 +12,7 @@ useHead({title: "로그인"});
         method="post"
         class="flex flex-col justify-center gap-5 h-full"
       >
-        <legend class="mx-auto"><SharedText tag="h2" txt="로그인" /></legend>
+        <legend class="mx-auto"><SharedText tag="h2" txt="회원가입" /></legend>
         <SharedInput
           label-txt="아이디"
           name="uid"
@@ -21,25 +20,32 @@ useHead({title: "로그인"});
           placeholder="아이디"
         />
         <SharedInput
+          label-txt="이메일"
+          name="email"
+          type="text"
+          placeholder="이메일"
+        />
+        <SharedInput
           label-txt="비밀번호"
           name="password"
           type="text"
           placeholder="비밀번호"
         />
+        <SharedInput
+          label-txt="비밀번호 확인"
+          name="passwordCheck"
+          type="text"
+          placeholder="비밀번호 확인"
+        />
 
         <button type="submit" class="bg-warnYellow h-10 rounded-lg text-black">
-          로그인
+          회원가입
         </button>
-        <div class="relative flex items-center justify-center">
-          <div class="w-full border border-white/50" />
-          <SharedText tag="span" txt="OR" class-name="px-10 text-white/50" />
-          <div class="w-full border border-white/50" />
-        </div>
       </form>
       <div class="flex justify-center">
         <p class="flex gap-5">
-          아직 회원이 아니신가요?
-          <NuxtLink href="/join" class="text-warnYellow"> 회원가입 </NuxtLink>
+          이미 회원이신가요?
+          <NuxtLink href="/login" class="text-warnYellow"> 로그인 </NuxtLink>
         </p>
       </div>
     </div>

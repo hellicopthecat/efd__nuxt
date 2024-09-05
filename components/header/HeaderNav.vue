@@ -2,7 +2,9 @@
 import SharedText from "../shared/SharedText.vue";
 </script>
 <template>
-  <nav class="flex justify-between items-center text-warnYellow">
+  <nav
+    class="relative z-50 flex justify-between items-center text-warnYellow p-10 bg-transparent"
+  >
     <NuxtLink to="/">
       <SharedText tag="h3" txt="ESCAPE FORM DANGER" />
     </NuxtLink>
