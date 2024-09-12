@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AuthLayout from "~/components/auth/AuthLayout.vue";
 useHead({title: "회원가입"});
+const router = useRouter();
 const formData = ref({
   uid: "",
   name: "",
@@ -9,26 +10,36 @@ const formData = ref({
   checkPass: "",
 });
 const errorMsg = ref("");
-const submitForm = async () => {
-  const {error} = await useAsyncData("join", () =>
-    $fetch("/api/join/join", {method: "POST", body: formData.value})
+const submitJoin = async () => {
+  const {data, error} = await useAsyncData("join", () =>
+    $fetch("/api/auth/join", {method: "POST", body: formData.value})
   );
   if (error.value && error.value.data) {
     const err = error.value.data as Error;
     errorMsg.value = err.message;
   }
+  if (data.value && data.value.success) {
+    router.push("/");
+  }
 };
-const error = useError();
-console.log(error.value);
+const handleErrOffClick = () => {
+  errorMsg.value = "";
+  clearError();
+};
 </script>
 <template>
   <AuthLayout>
     <div
       class="flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
     >
-      <h1 v-if="errorMsg">{{ errorMsg }}</h1>
+      <div v-if="errorMsg">
+        <h1>
+          {{ errorMsg }}
+        </h1>
+        <button @click="handleErrOffClick">확인</button>
+      </div>
       <form
-        @submit.prevent="submitForm"
+        @submit.prevent="submitJoin"
         method="post"
         class="flex flex-col justify-center gap-5 h-full"
       >

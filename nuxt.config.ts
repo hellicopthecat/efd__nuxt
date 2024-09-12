@@ -1,3 +1,4 @@
+import type {NuxtPage} from "nuxt/schema";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
@@ -21,5 +22,19 @@ export default defineNuxtConfig({
     kakaoKEY: process.env.NUXT_KAKAO_MAP_KEY,
     cookieID: process.env.COOKIE_ID,
     cookieKEY: process.env.COOKIE_KEY,
+  },
+  hooks: {
+    "pages:extend"(pages) {
+      function setMiddleware(pages: NuxtPage[]) {
+        for (const page of pages) {
+          page.meta ||= {};
+          page.meta.middleware = ["auth"];
+          if (page.children) {
+            setMiddleware(page.children);
+          }
+        }
+      }
+      setMiddleware(pages);
+    },
   },
 });

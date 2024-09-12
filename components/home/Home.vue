@@ -14,11 +14,11 @@ onMounted(() => {
       if (entry.contentBoxSize) {
         width.value = entry.contentBoxSize[0].inlineSize + "px";
         height.value = entry.contentBoxSize[0].blockSize + "px";
-        //@ts-ignore
-        initMap.value.relayout();
         window.addEventListener("resize", () => {
           width.value = entry.contentBoxSize[0].inlineSize + "px";
           height.value = entry.contentBoxSize[0].blockSize + "px";
+          //@ts-ignore
+          initMap.value.relayout();
         });
       }
     }
