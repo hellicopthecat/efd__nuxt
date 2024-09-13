@@ -1,12 +1,14 @@
 import prisma from "~/lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 interface ILoginType {
   uid: string;
   password: string;
 }
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
+
   const formData: ILoginType = await readBody(event);
 
   try {
@@ -33,11 +35,13 @@ export default defineEventHandler(async (event) => {
       });
     }
     const token = jwt.sign({id: user.id, uid: user.uid}, config.cookieKEY);
+
     setCookie(event, "AccessToken", token, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
     });
+
     return {
       success: true,
     };

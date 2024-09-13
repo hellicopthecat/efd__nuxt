@@ -1,34 +1,33 @@
-import prisma from "~/lib/prisma";
 interface ITokenObj {
   id: number;
   uid: string;
 }
-const publicRouter = ["/login", "/join"];
-const protectRouter = [""];
+const publicRouter = {"/login": true, "/join": true};
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const config = useRuntimeConfig();
   const cookie = useCookie("AccessToken");
+  const auth = useAuth();
   if (import.meta.server) {
-    if (protectRouter.includes(to.path) && !cookie.value) {
+    try {
+      if (!cookie.value) {
+        auth.value = false;
+        if (!publicRouter) {
+          return navigateTo("/");
+        }
+      }
+      if (cookie.value) {
+        auth.value = true;
+        if (publicRouter) {
+          if (to.path !== "/") {
+            return navigateTo("/");
+          }
+          return;
+        }
+      }
+    } catch (error) {
+      const err = error as Error;
+      console.log("err", err.message);
       return navigateTo("/");
     }
-    try {
-      const jwt = await import("jsonwebtoken");
-      const token = jwt.verify(
-        cookie.value + "",
-        config.cookieKEY
-      ) as ITokenObj;
-
-      if (!token && protectRouter.includes(to.path)) {
-        return navigateTo("/");
-      }
-      if (token && publicRouter.includes(to.path)) {
-        return navigateTo("/");
-      }
-    } catch (err) {
-      console.log("err", err);
-    }
   }
-
-  return;
 });

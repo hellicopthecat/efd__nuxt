@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import AuthLayout from "~/components/auth/AuthLayout.vue";
 import SharedText from "~/components/shared/SharedText.vue";
+
 useHead({title: "로그인"});
+
 const router = useRouter();
+const auth = useAuth();
 const formData = ref({
   uid: "",
   password: "",
@@ -19,6 +22,7 @@ const submitLogin = async () => {
     })
   );
   if (data.value && data.value.success) {
+    auth.value = true;
     return router.push("/");
   }
   if (error.value) {

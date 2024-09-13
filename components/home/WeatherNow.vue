@@ -41,6 +41,7 @@ const getWeatherNow = async (lat: number, lng: number) => {
       windPower.value = Number(weather.obsrValue);
     }
   });
+  console.log(data);
 };
 onMounted(() => {
   navigator.geolocation.getCurrentPosition(({coords}) => {
@@ -52,33 +53,36 @@ onMounted(() => {
 <template>
   <div
     v-if="weatherNow && weatherNow.response.body.items.item"
-    class="absolute top-10 left-10 z-50 bg-black opacity-65 rounded-md p-5"
+    class="absolute top-10 left-10 z-50 rounded-md p-5 text-white overflow-hidden"
   >
-    <div class="flex">
-      <!-- 현재날씨 및 온도 -->
-      <Precipitation :weatherType="Number(precipitation)" />
-      <SharedText tag="h3" :txt="`${temperature} &#8451;`" />
-    </div>
-    <div class="flex items-center">
-      <!-- 습도 -->
-      <Icon name="wi:humidity" class="size-12" />
-      <SharedText tag="h3" :txt="`${humidity} %`" />
-    </div>
-    <div class="flex items-center">
-      <!-- 강수확률 -->
-      <Icon name="wi:raindrops" class="size-12" />
-      <RainfallProbability :probability="Number(raindropsProbability)" />
-    </div>
+    <div class="absolute bg-black w-full h-full left-0 top-0 opacity-65" />
+    <div class="relative z-50">
+      <div class="flex">
+        <!-- 현재날씨 및 온도 -->
+        <Precipitation :weatherType="Number(precipitation)" />
+        <SharedText tag="h3" :txt="`${temperature} &#8451;`" />
+      </div>
+      <div class="flex items-center">
+        <!-- 습도 -->
+        <Icon name="wi:humidity" class="size-12" />
+        <SharedText tag="h3" :txt="`${humidity} %`" />
+      </div>
+      <div class="flex items-center">
+        <!-- 강수확률 -->
+        <Icon name="wi:raindrops" class="size-12" />
+        <RainfallProbability :probability="Number(raindropsProbability)" />
+      </div>
 
-    <div class="flex items-center">
-      <!-- 풍향 -->
-      <Icon name="wi:small-craft-advisory" class="size-12" />
-      <WindDirection :angle="Number(windDirection)" />
-    </div>
-    <div class="flex items-center">
-      <!-- 풍속 -->
-      <Icon name="wi:strong-wind" class="size-12" />
-      <WindPower :power="Number(windPower)" />
+      <div class="flex items-center">
+        <!-- 풍향 -->
+        <Icon name="wi:small-craft-advisory" class="size-12" />
+        <WindDirection :angle="Number(windDirection)" />
+      </div>
+      <div class="flex items-center">
+        <!-- 풍속 -->
+        <Icon name="wi:strong-wind" class="size-12" />
+        <WindPower :power="Number(windPower)" />
+      </div>
     </div>
   </div>
 </template>

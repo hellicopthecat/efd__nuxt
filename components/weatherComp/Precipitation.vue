@@ -4,12 +4,44 @@ defineProps({
 });
 </script>
 <template>
-  <!-- <Icon v-if="weatherType === 0" name="wi:day-sunny" class="size-32" />
-  <Icon v-else-if="weatherType === 1" name="wi:rain" class="size-32" />
-  <Icon v-else-if="weatherType === 2" name="wi:rain-mixn" class="size-32" />
-  <Icon v-else-if="weatherType === 3" name="wi:snow" class="size-32" />
-  <Icon v-else-if="weatherType === 4" name="wi:showers" class="size-32" />
-  <Icon v-else-if="weatherType === 5" name="wi:raindrops" class="size-32" />
-  <Icon v-else-if="weatherType === 6" name="wi:rain-wind" class="size-32" />
-  <Icon v-else-if="weatherType === 7" name="wi:snow-wind" class="size-32" /> -->
+  <NuxtImg
+    v-if="weatherType === 0"
+    src="/weatherIcon/sunny.png"
+    class="size-32"
+  />
+  <NuxtImg
+    v-else-if="weatherType === 1"
+    src="/weatherIcon/rainy.png"
+    class="size-32"
+  />
+  <NuxtImg
+    v-else-if="weatherType === 2"
+    src="/weatherIcon/snowrain.png"
+    class="size-32"
+  />
+  <NuxtImg
+    v-else-if="weatherType === 3"
+    src="/weatherIcon/snow.png"
+    class="size-32"
+  />
+  <NuxtImg
+    v-else-if="weatherType === 4"
+    src="/weatherIcon/heavyrain.png"
+    class="size-32"
+  />
+  <NuxtImg
+    v-else-if="weatherType === 5"
+    src="/weatherIcon/raindrop.png"
+    class="size-32"
+  />
+  <NuxtImg
+    v-else-if="weatherType === 6"
+    src="/weatherIcon/raindropsnow.png"
+    class="size-32"
+  />
+  <NuxtImg
+    v-else-if="weatherType === 7"
+    src="/weatherIcon/snowdrop.png"
+    class="size-32"
+  />
 </template>

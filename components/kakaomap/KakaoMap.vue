@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {initializeMap, makeMarker} from "~/utils/kakaomap";
+import {initializeMap} from "~/utils/kakaomap";
 import GoMyPosition from "./GoMyPosition.vue";
 import WeatherNow from "../home/WeatherNow.vue";
 

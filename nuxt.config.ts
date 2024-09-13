@@ -3,7 +3,7 @@ import type {NuxtPage} from "nuxt/schema";
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: {enabled: true},
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon", "@prisma/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon", "@prisma/nuxt", "@nuxt/image"],
   typescript: {
     typeCheck: true,
   },
