@@ -12,24 +12,25 @@ defineProps<IKakaoMapProps>();
 const initMap = useKakaoMap();
 
 onMounted(() => {
-  navigator.geolocation.getCurrentPosition((position) => {
-    let lat = position.coords.latitude;
-    let lon = position.coords.longitude;
-    initializeMap(lat, lon, true);
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    await initializeMap(lat, lon, true);
   });
 });
 </script>
 <template>
-  <div v-if="!initMap" class="flex justify-center items-center h-full">
-    <h1 class="text-red-500">LOADING</h1>
-  </div>
-  <WeatherNow />
-  <div class="relative">
-    <div
-      id="map"
-      :style="`width:${width};height:${height}`"
-      class="rounded-md"
-    ></div>
-    <GoMyPosition v-if="initMap" />
+  <div class="flex justify-center items-center h-full">
+    <h1 v-if="!initMap" class="text-red-500">LOADING</h1>
+
+    <div class="relative">
+      <WeatherNow v-if="initMap" />
+      <div
+        id="map"
+        :style="`width:${width};height:${height}`"
+        class="rounded-md"
+      ></div>
+      <GoMyPosition v-if="initMap" />
+    </div>
   </div>
 </template>

@@ -1,10 +1,14 @@
-export function initializeMap(lat: number, lon: number, createMarker = true) {
+export async function initializeMap(
+  lat: number,
+  lon: number,
+  createMarker = true
+) {
   const initMap = useKakaoMap();
   let map;
   let myPosition;
 
   //@ts-ignore
-  kakao.maps.load(async () => {
+  await kakao.maps.load(async () => {
     const container = document.getElementById("map");
     //@ts-ignore
     myPosition = new kakao.maps.LatLng(lat, lon);
@@ -23,6 +27,7 @@ export function initializeMap(lat: number, lon: number, createMarker = true) {
   });
   return {map, myPosition};
 }
+
 export function makeMarker(position: any) {
   const imageSrc = "/pin.png",
     //@ts-ignore

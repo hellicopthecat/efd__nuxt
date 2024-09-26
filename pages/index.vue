@@ -4,7 +4,5 @@ useHead({
 });
 </script>
 <template>
-  <SharedLayout>
-    <Home />
-  </SharedLayout>
+  <Home />
 </template>

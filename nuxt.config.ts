@@ -16,6 +16,9 @@ export default defineNuxtConfig({
         },
       ],
     },
+    rootAttrs: {
+      class: "h-dvh",
+    },
   },
   runtimeConfig: {
     publicAPIKEY: process.env.NUXT_MY_PUBLIC_APIKEY,

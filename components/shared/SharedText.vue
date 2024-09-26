@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type {HtmlTxtTag} from "~/types/apiType";
+
 interface ISharedTxt {
-  tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "small";
+  tag: HtmlTxtTag;
   txt: string | undefined;
   className?: string;
 }
