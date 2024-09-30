@@ -5,7 +5,7 @@ useHead({
 });
 </script>
 <template>
-  <div class="flex flex-col bg-darkBlue h-full">
+  <div class="flex flex-col bg-darkBlue h-dvh">
     <HeaderNav />
     <main class="flex flex-col h-full">
       <slot />
