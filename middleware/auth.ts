@@ -2,7 +2,10 @@ interface ITokenObj {
   id: number;
   uid: string;
 }
-const publicRouter = {"/login": true, "/join": true};
+const publicRouter = {
+  "/login": true,
+  "/join": true,
+};
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const cookie = useCookie("AccessToken");

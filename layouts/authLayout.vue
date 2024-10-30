@@ -1,6 +1,12 @@
 <template>
   <div class="flex flex-col bg-darkBlue overflow-hidden h-dvh">
-    <HeaderNav />
+    <NuxtLink to="/" class="absolute top-10 left-10 z-[99]">
+      <SharedText
+        tag="h3"
+        txt="ESCAPE FROM DANGER"
+        :class-name="'text-warnYellow'"
+      />
+    </NuxtLink>
     <main
       class="relative text-white flex justify-center items-center *:transition-all *:duration-200 *:ease-in-out h-full"
     >

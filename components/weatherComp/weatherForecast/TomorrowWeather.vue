@@ -51,6 +51,7 @@ const getTomorrwWeater = async (lat: number, lng: number) => {
 
   isLoading.value = false;
 };
+
 onMounted(() => {
   navigator.geolocation.getCurrentPosition(({coords}) => {
     getTomorrwWeater(coords.latitude, coords.longitude);

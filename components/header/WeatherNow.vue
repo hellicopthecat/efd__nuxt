@@ -49,6 +49,7 @@ const getWeatherNow = async (lat: number, lng: number) => {
   );
 };
 const handleRotate = () => (rotate.value = !rotate.value);
+
 onMounted(() => {
   navigator.geolocation.getCurrentPosition(({coords}) => {
     getWeatherNow(coords.latitude, coords.longitude);
@@ -57,71 +58,68 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="absolute top-10 left-10 z-50 w-96 bg-black/70 rounded-md p-5 text-white overflow-hidden *:transition-all *:ease-in-out *:duration-200"
-  >
+  <div class="text-white *:transition-all *:ease-in-out *:duration-200 w-full">
     <div v-if="!(weatherNow && weatherNow.response.body.items.item)">
       <LoadingIndicator />
     </div>
 
     <div
       v-if="weatherNow && weatherNow.response.body.items.item"
-      class="relative z-50 flex flex-col gap-2 *:transition-all *:ease-in-out *:duration-200"
+      class="flex flex-col gap-2 *:transition-all *:ease-in-out *:duration-200"
     >
       <NuxtLink to="/weather" class="self-end">
         <SharedText tag="h5" txt="날씨보러가기" />
       </NuxtLink>
-      <div class="flex items-center justify-between gap-10">
+
+      <div class="flex justify-around items-center">
         <!-- 현재날씨 및 온도 -->
         <Precipitation
           :weatherType="Number(precipitation)"
-          className="size-24"
+          className="size-10"
         />
         <SharedText tag="h2" :txt="`${temperature} &#8451;`" />
       </div>
-      <Icon
-        name="heroicons:chevron-double-down-16-solid"
+
+      <div
+        class="origin-top"
+        :class="rotate ? 'scale-y-100 h-full' : 'scale-y-0 h-0'"
+      >
+        <div class="flex items-center gap-5">
+          <!-- 습도 -->
+          <Icon name="wi:humidity" class="size-8" />
+          <SharedText tag="h4" :txt="`${humidity} %`" />
+        </div>
+        <div class="flex items-center gap-5">
+          <!-- 강수확률 -->
+          <Icon name="wi:raindrops" class="size-8" />
+          <RainfallProbability
+            tag="h4"
+            :probability="Number(raindropsProbability)"
+          />
+        </div>
+
+        <div class="flex items-center gap-5">
+          <!-- 풍향 -->
+          <Icon name="wi:small-craft-advisory" class="size-8" />
+          <WindDirection tag="h4" :angle="Number(windDirection)" />
+        </div>
+        <div class="flex items-center gap-5">
+          <!-- 풍속 -->
+          <Icon name="wi:strong-wind" class="size-8" />
+          <WindPower :power="Number(windPower)" />
+        </div>
+      </div>
+
+      <button
         @click="handleRotate"
         class="size-10 self-center"
         :class="rotate ? '-rotate-180' : 'rotate-0'"
-      />
-
-      <div
-        class="flex items-center gap-5 origin-top"
-        :class="rotate ? 'scale-y-100 h-full' : 'scale-y-0 h-0'"
       >
-        <!-- 습도 -->
-        <Icon name="wi:humidity" class="size-12" />
-        <SharedText tag="h3" :txt="`${humidity} %`" />
-      </div>
-      <div
-        class="flex items-center gap-5 origin-top"
-        :class="rotate ? 'scale-y-100 h-full' : 'scale-y-0 h-0'"
-      >
-        <!-- 강수확률 -->
-        <Icon name="wi:raindrops" class="size-12" />
-        <RainfallProbability
-          tag="h4"
-          :probability="Number(raindropsProbability)"
+        <Icon
+          name="heroicons:chevron-double-down-16-solid"
+          class="size-7 hover:animate-bounce"
         />
-      </div>
-
-      <div
-        class="flex items-center gap-5 origin-top"
-        :class="rotate ? 'scale-y-100 h-full' : 'scale-y-0 h-0'"
-      >
-        <!-- 풍향 -->
-        <Icon name="wi:small-craft-advisory" class="size-12" />
-        <WindDirection tag="h4" :angle="Number(windDirection)" />
-      </div>
-      <div
-        class="flex items-center gap-5 origin-top"
-        :class="rotate ? 'scale-y-100 h-full' : 'scale-y-0 h-0'"
-      >
-        <!-- 풍속 -->
-        <Icon name="wi:strong-wind" class="size-12" />
-        <WindPower :power="Number(windPower)" />
-      </div>
+      </button>
     </div>
   </div>
 </template>

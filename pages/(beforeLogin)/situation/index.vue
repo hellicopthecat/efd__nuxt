@@ -27,11 +27,12 @@ const rightClick = () => {
 };
 </script>
 <template>
-  <div class="flex flex-col px-10 h-full">
+  <div class="flex flex-col p-10 h-full">
     <div class="flex items-end gap-5">
       <SharedText tag="h2" txt="현 재난상황 전파" class-name="text-white" />
       <SharedText tag="h4" txt="(최근 10개)" class-name="text-white/75" />
     </div>
+
     <div class="flex items-center self-center h-full">
       <button @click="leftClick">
         <Icon
@@ -50,7 +51,7 @@ const rightClick = () => {
               v-if="data"
               v-for="(situation, index) in data.MisfortuneSituationNoticeMsg[1]
                 .row"
-              class="bg-white p-4 min-w-full"
+              class="bg-white p-4 min-w-full flex flex-col gap-5"
             >
               <SharedText
                 tag="h3"

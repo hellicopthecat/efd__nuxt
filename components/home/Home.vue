@@ -2,8 +2,8 @@
 import KakaoMap from "../kakaomap/KakaoMap.vue";
 
 const mapCont = ref("mapCont");
-const width = ref<string | number | null | undefined>("100%");
-const height = ref<string | number | null | undefined>("100%");
+const width = ref<string | number | null | undefined>(0);
+const height = ref<string | number | null | undefined>(0);
 const initMap = useKakaoMap();
 onMounted(() => {
   const mapCont = document.getElementById("mapCont");
@@ -12,11 +12,11 @@ onMounted(() => {
   const resizeObserver = new ResizeObserver((entries) => {
     for (const entry of entries) {
       if (entry.contentBoxSize) {
-        width.value = entry.contentBoxSize[0].inlineSize + "px";
-        height.value = entry.contentBoxSize[0].blockSize + "px";
+        width.value = entry.contentRect.width + "px";
+        height.value = entry.contentRect.height + "px";
         window.addEventListener("resize", () => {
-          width.value = entry.contentBoxSize[0].inlineSize + "px";
-          height.value = entry.contentBoxSize[0].blockSize + "px";
+          width.value = entry.contentRect.width + "px";
+          height.value = entry.contentRect.height + "px";
           //@ts-ignore
           initMap.value.relayout();
         });
@@ -30,7 +30,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div :id="mapCont" :class="`relative rounded-md overflow-hidden h-full`">
+  <div :id="mapCont" class="relative w-full h-full overflow-hidden">
     <KakaoMap :width="width!" :height="height!" />
   </div>
 </template>

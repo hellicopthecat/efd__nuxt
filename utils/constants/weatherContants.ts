@@ -27,16 +27,16 @@ export const lastDays = [
   30,
   31,
 ];
-const thirtyOne = [
-  {1: true},
-  {3: true},
-  {5: true},
-  {7: true},
-  {8: true},
-  {10: true},
-  {12: true},
-];
-const thirty = [{4: true}, {6: true}, {9: true}, {11: true}];
+const thirtyOne: {[key: number]: boolean} = {
+  1: true,
+  3: true,
+  5: true,
+  7: true,
+  8: true,
+  10: true,
+  12: true,
+};
+const thirty: {[key: number]: boolean} = {4: true, 6: true, 9: true, 11: true};
 //time
 const min =
   DATE.getMinutes() <= 29 ? "45" : String(DATE.getMinutes()).padStart(2, "0");
@@ -93,27 +93,35 @@ const endOfDate = (
   date: number,
   after: boolean | undefined | null
 ) => {
-  if (date === 31 && thirtyOne[month]) {
-    return after ? 2 : 1;
-  } else if (date === 30 && thirty[month]) {
-    return after ? 2 : 1;
-  } else if (isLeapYear && date === 29) {
-    return after ? 2 : 1;
+  if (date + 1 >= 31 && thirtyOne[month]) {
+    return after ? "02" : "01";
+  } else if (date + 1 >= 30 && thirty[month]) {
+    return after ? "02" : "01";
+  } else if (isLeapYear && date + 1 === 29) {
+    return after ? "02" : "01";
   } else {
-    return after ? date + 2 : date + 1;
+    return after
+      ? String(date + 2).padStart(2, "0")
+      : String(date + 1).padStart(2, "0");
   }
 };
 const changeMonth = (month: number, date: number) => {
-  if (date === 31 && thirtyOne[month]) {
-    return month + 1 > 12 ? "01" : String(month + 1).padStart(2, "0");
-  } else if (date === 30 && thirtyOne[month]) {
-    return String(month + 1).padStart(2, "0");
-  } else if (month === 2 && (date === 28 || (date === 29 && isLeapYear))) {
-    return String(month + 1).padStart(2, "0");
-  } else {
-    return String(month).padStart(2, "0");
+  if (date === 31 && month + 1 > 12) {
+    return "01";
   }
+  if (date + 1 >= 31 && thirtyOne[month]) {
+    return String(month + 1).padStart(2, "0");
+  }
+  if (date + 1 >= 30 && thirty[month]) {
+    return String(month + 1).padStart(2, "0");
+  }
+  if (month === 2 && (date === 28 || (date === 29 && isLeapYear))) {
+    return String(month + 1).padStart(2, "0");
+  }
+
+  return String(month).padStart(2, "0");
 };
+
 const changeYear = (month: number, date: number) => {
   if (month === 12 && date === 31) {
     return year + 1;
