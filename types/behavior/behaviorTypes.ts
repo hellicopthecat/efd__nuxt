@@ -1,5 +1,23 @@
-export interface INaturalBehavior {
-  actRmks: string[];
+export interface IDefaultBehaviorTypes {
+  response: {
+    header: [
+      {
+        resultCode: string[];
+        resultMsg: string[];
+      }
+    ];
+    body: [
+      {
+        items: [{item: IBehaviorTypes[]}];
+        numOfRows: string[];
+        pageNo: string[];
+        totalCount: string[];
+      }
+    ];
+  };
+}
+export interface IBehaviorTypes {
+  actRmks?: string[];
   contentsType: string[];
   contentsUrl?: string[];
   mainOrd: string[];

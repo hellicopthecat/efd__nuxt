@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SharedLayout from "~/components/shared/SharedLayout.vue";
 import TodayWeather from "~/components/weatherComp/weatherForecast/TodayWeather.vue";
 import TomorrowWeather from "~/components/weatherComp/weatherForecast/TomorrowWeather.vue";
 
