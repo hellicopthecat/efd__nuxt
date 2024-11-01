@@ -22,6 +22,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     publicAPIKEY: process.env.NUXT_MY_PUBLIC_APIKEY,
+    disasterMsgAPIKEY: process.env.DISASTERMSG_APIKEY,
     kakaoKEY: process.env.NUXT_KAKAO_MAP_KEY,
     cookieID: process.env.COOKIE_ID,
     cookieKEY: process.env.COOKIE_KEY,
