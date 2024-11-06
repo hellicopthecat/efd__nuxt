@@ -9,7 +9,7 @@ useHead({
 <template>
   <div class="flex w-full h-full bg-darkBlue text-warnYellow">
     <HeaderNav />
-    <main class="w-full h-full overflow-x-hidden">
+    <main class="flex flex-col w-full h-full overflow-x-hidden">
       <DisasterMsg />
       <slot />
     </main>

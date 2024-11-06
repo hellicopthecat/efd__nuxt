@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SharedText from "../shared/SharedText.vue";
+import GlobalNav from "./GlobalNav.vue";
 import WeatherNow from "./WeatherNow.vue";
 
 const headerOpen = ref(false);
@@ -46,6 +47,7 @@ const headerOpneClick = () => {
 
     <WeatherNow :class="headerOpen && 'hidden'" />
 
+    <GlobalNav :class="headerOpen && 'hidden'" />
     <button
       @click="headerOpneClick"
       class="flex items-center justify-center bg-slate-600 border border-warnYellow size-10 rounded-md mt-auto"

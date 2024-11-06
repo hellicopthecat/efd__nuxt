@@ -25,7 +25,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="fixed top-0 z-[99] w-full">
+  <div class="relative z-[99] w-full">
     <div v-if="disasterMsgData" class="w-full h-24 bg-red-600 overflow-hidden">
       <div
         :id="msgCont"

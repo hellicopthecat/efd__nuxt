@@ -27,5 +27,7 @@ defineProps<ISharedTxt>();
   <h6 v-if="tag === 'h6'" :class="`text-lg ${className}`">{{ txt }}</h6>
   <span v-if="tag === 'span'" :class="`text-sm ${className}`">{{ txt }}</span>
   <p v-if="tag === 'p'" :class="` ${className}`">{{ txt }}</p>
-  <small v-if="tag === 'p'" :class="`text-xs ${className}`">{{ txt }}</small>
+  <small v-if="tag === 'small'" :class="`text-xs ${className}`">{{
+    txt
+  }}</small>
 </template>

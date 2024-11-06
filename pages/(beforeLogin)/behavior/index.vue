@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BackPack from "~/components/iconComp/BackPack.vue";
+</script>
 <template>
   <div class="flex justify-center items-center w-full h-full p-10">
     <ul

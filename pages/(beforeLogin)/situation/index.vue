@@ -33,7 +33,7 @@ const rightClick = () => {
       <SharedText tag="h4" txt="(최근 10개)" class-name="text-white/75" />
     </div>
 
-    <div class="flex items-center self-center h-full">
+    <div class="flex items-center self-center w-full h-full">
       <button @click="leftClick">
         <Icon
           name="heroicons:chevron-left-16-solid"
@@ -58,7 +58,7 @@ const rightClick = () => {
                 :txt="`${index + 1}. ${situation.titl}`"
                 class-name=""
               />
-              <div v-html="situation.cnts1" class="*:w-full"></div>
+              <div v-html="situation.cnts1" class="*:w-full *:text-black"></div>
             </section>
           </ClientOnly>
         </div>
