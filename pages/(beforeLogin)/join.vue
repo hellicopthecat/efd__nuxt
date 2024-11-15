@@ -1,8 +1,17 @@
 <script setup lang="ts">
+import SharedText from "~/components/shared/SharedText.vue";
+import {LOGINUSER_KEY} from "~/utils/constants/constants";
+import {
+  clickPostCode,
+  onMountAddress,
+  unMountAddress,
+} from "~/utils/postCode/address";
+
 useHead({title: "회원가입"});
 definePageMeta({
   layout: "auth-layout",
 });
+const auth = useAuth();
 const router = useRouter();
 const formData = ref({
   uid: "",
@@ -10,7 +19,18 @@ const formData = ref({
   email: "",
   password: "",
   checkPass: "",
+  addressData: {
+    sido: "",
+    sigungu: "",
+    bname: "",
+    bname1: "",
+    roadAddress: "",
+    buildingName: "",
+    zonecode: "",
+  },
+  restAddress: "",
 });
+
 const errorMsg = ref("");
 const submitJoin = async () => {
   const {data, error} = await useAsyncData("join", () =>
@@ -21,6 +41,8 @@ const submitJoin = async () => {
     errorMsg.value = err.message;
   }
   if (data.value && data.value.success) {
+    auth.value = true;
+    sessionStorage.setItem(LOGINUSER_KEY, data.value.id + "");
     router.push("/");
   }
 };
@@ -28,16 +50,28 @@ const handleErrOffClick = () => {
   errorMsg.value = "";
   clearError();
 };
+onMounted(() => {
+  onMountAddress();
+});
+onUnmounted(() => {
+  unMountAddress();
+});
 </script>
 <template>
   <div
-    class="flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
+    class="relative flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
   >
-    <div v-if="errorMsg">
-      <h1>
-        {{ errorMsg }}
-      </h1>
-      <button @click="handleErrOffClick">확인</button>
+    <div
+      v-if="errorMsg"
+      class="flex justify-between items-center bg-red-700 px-5 py-2 rounded-lg"
+    >
+      <SharedText tag="h6" :txt="errorMsg" />
+      <button
+        @click="handleErrOffClick"
+        class="rounded-lg hover:bg-pink-800 px-3 py-2"
+      >
+        확인
+      </button>
     </div>
     <form
       @submit.prevent="submitJoin"
@@ -69,6 +103,44 @@ const handleErrOffClick = () => {
         :value="formData.email"
         @update:value="formData.email = $event"
       />
+      <div class="flex flex-col gap-3">
+        <label for="zonecode">주소</label>
+        <div class="flex items-center gap-5">
+          <input
+            id="zonecode"
+            type="text"
+            placeholder="우편번호"
+            class="bg-darkBlue h-10 px-5 rounded-xl"
+            :value="formData.addressData.zonecode"
+            disabled
+          />
+          <button
+            class="mt-auto bg-slate-600 px-4 py-2 rounded-lg hover:bg-slate-800"
+            @click.prevent="clickPostCode(formData.addressData)"
+          >
+            주소찾기
+          </button>
+        </div>
+        <div class="flex gap-3">
+          <input
+            type="text"
+            placeholder="도로명 주소"
+            class="bg-darkBlue w-full h-10 px-5 rounded-xl"
+            :value="`${formData.addressData.roadAddress}${
+              formData.addressData.buildingName &&
+              `(${formData.addressData.buildingName})`
+            }`"
+            disabled
+          />
+          <input
+            type="text"
+            placeholder="나머지 주소"
+            class="bg-darkBlue w-full h-10 px-5 rounded-xl"
+            :value="formData.restAddress"
+            @input="(event) => {formData.restAddress = (event.target as HTMLInputElement).value}"
+          />
+        </div>
+      </div>
       <SharedInput
         label-txt="비밀번호"
         name="password"

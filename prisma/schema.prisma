@@ -11,14 +11,51 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createAt  DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  uid       String   @unique
-  email     String   @unique
-  name      String?
-  password  String?
-  googleId  String?
-  kakaoId   String?
-  avatarUrl String?
+  id            Int         @id @default(autoincrement())
+  createAt      DateTime    @default(now())
+  updateAt      DateTime    @updatedAt
+  uid           String      @unique
+  email         String      @unique
+  name          String?
+  password      String?
+  address       UserAddress @relation(fields: [userAddressId], references: [id])
+  googleId      String?
+  kakaoId       String?
+  avatarUrl     String?
+  sellItem      Item[]      @relation("sell")
+  buyItem       Item[]      @relation("buy")
+  userAddressId Int
+}
+
+model UserAddress {
+  id           Int     @id @default(autoincrement())
+  sido         String
+  sigungu      String
+  bname        String
+  bname1       String?
+  roadAddress  String
+  buildingNmae String
+  restAddress  String?
+  zonecode     String
+
+  User User[]
+}
+
+model Item {
+  id             Int      @id @default(autoincrement())
+  createAt       DateTime @default(now())
+  updateAt       DateTime @updatedAt
+  itemName       String
+  itemFileName   String
+  itemPrice      String
+  itemImageUrl   String
+  itemDesc       String
+  itemSido       String
+  itemSigungu    String
+  itemRoadAdress String
+  itemRestAdress String
+  complete       Boolean  @default(false)
+  seller         User     @relation("sell", fields: [userId], references: [id])
+  buyer          User?    @relation("buy", fields: [userId], references: [id])
+  userId         Int
 }

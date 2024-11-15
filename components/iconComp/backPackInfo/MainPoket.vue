@@ -15,10 +15,10 @@ const props = defineProps({
     :switch="props.switch"
   >
     <SharedText tag="h4" txt="메인 주머니" />
-    <div
-      class="flex flex-col w-full h-full bg-sky-700 rounded-md overflow-hidden"
-    >
-      <div class="flex items-center justify-center w-full h-[15%] p-2">
+    <div class="flex flex-col w-full h-full bg-sky-700 rounded-md p-3">
+      <div
+        class="flex items-center justify-center w-full h-[15%] p-2 bg-violet-800 rounded-md"
+      >
         <SharedText tag="p" txt="방수의류" />
       </div>
       <div class="flex h-full">

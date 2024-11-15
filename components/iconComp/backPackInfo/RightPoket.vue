@@ -15,27 +15,39 @@ const props = defineProps({
   >
     <SharedText tag="h4" txt="오른쪽주머니" />
     <div
-      class="flex flex-col gap-3 w-full h-full p-3 bg-cyan-800 rounded-md text-center"
+      class="flex flex-col gap-2 w-full h-full p-3 bg-cyan-800 rounded-md text-nowrap"
     >
       <SharedText tag="h4" txt="통신수단" />
       <div class="flex flex-col h-full">
         <!--  -->
         <div
-          class="flex flex-col items-center justify-center w-full h-full bg-teal-700 p-3"
+          class="flex gap-3 w-full h-full bg-teal-700 p-2 rounded-md text-center line-"
         >
-          <SharedText tag="p" txt="충전기" />
-          <SharedText tag="p" txt="충전선" />
-          <SharedText tag="p" txt="외장배터리" />
+          <SharedText
+            tag="p"
+            txt="충전기"
+            class-name="w-full h-full leading-loose"
+          />
+          <SharedText
+            tag="p"
+            txt="충전선"
+            class-name="w-full h-full leading-loose"
+          />
+          <SharedText
+            tag="p"
+            txt="외장배터리"
+            class-name="w-full h-full leading-loose"
+          />
         </div>
         <!--  -->
         <div
-          class="flex flex-col items-center justify-center w-full h-full bg-indigo-700 p-3"
+          class="flex flex-col items-center justify-center w-full h-full bg-indigo-700 p-2 rounded-md"
         >
           <SharedText tag="p" txt="미니라디오" />
         </div>
         <!-- / -->
         <div
-          class="flex flex-col items-center justify-center w-full h-full bg-pink-700 p-3"
+          class="flex flex-col items-center justify-center w-full h-full bg-pink-700 p-2 rounded-md"
         >
           <SharedText tag="p" txt="조명탄" />
           <SharedText tag="p" txt="야광봉" />

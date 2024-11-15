@@ -7,20 +7,30 @@ import jwt from "jsonwebtoken";
 
 let userSchema = object({
   uid: string()
-    .matches(UIDREGEX, {message: "조건과 일치하지 않습니다."})
+    .matches(UIDREGEX, {message: "아이디 조건과 일치하지 않습니다."})
     .required("아이디를 입력하지 않았습니다."),
   email: string()
     .email()
-    .matches(EMAILREGEX, {message: "조건과 일치하지 않습니다."})
+    .matches(EMAILREGEX, {message: "이메일 조건과 일치하지 않습니다."})
     .required("이메일을 입력하지 않았습니다."),
   name: string(),
   password: string()
-    .matches(PASSREGEX, {message: "조건과 일치하지 않습니다."})
+    .matches(PASSREGEX, {message: "비밀번호 조건과 일치하지 않습니다."})
     .required("비밀번호를 입력하지 않았습니다."),
   checkPass: string()
-    .matches(PASSREGEX, {message: "조건과 일치하지 않습니다."})
+    .matches(PASSREGEX, {message: "비밀번호 조건과 일치하지 않습니다."})
     .required("2차 확인 비밀번호를 입력하지 않았습니다.")
     .oneOf([ref("password")], "비밀번호가 일치하지 않습니다."),
+  addressData: object({
+    sido: string(),
+    sigungu: string(),
+    bname: string(),
+    bname1: string(),
+    roadAddress: string(),
+    buildingName: string(),
+    zonecode: string(),
+  }),
+  restAddress: string(),
 });
 
 type User = InferType<typeof userSchema>;
@@ -48,12 +58,25 @@ export default defineEventHandler(async (event) => {
       });
     }
     const hashPassword = await bcrypt.hash(results.password, 10);
+
     const user = await prisma.user.create({
       data: {
         uid: results.uid,
         email: results.email,
         name: results.name,
         password: hashPassword,
+        address: {
+          create: {
+            sido: results.addressData.sido + "",
+            sigungu: results.addressData.sigungu + "",
+            zonecode: results.addressData.zonecode + "",
+            bname: results.addressData.bname + "",
+            bname1: results.addressData.bname1 + "",
+            roadAddress: results.addressData.roadAddress + "",
+            buildingNmae: results.addressData.buildingName + "",
+            restAddress: results.restAddress,
+          },
+        },
       },
     });
     const token = jwt.sign({id: user.id, uid: user.uid}, config.cookieKEY);
@@ -66,6 +89,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
+      id: user.id,
     };
   } catch (error) {
     const err = error as Error;

@@ -12,13 +12,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/icon": "^1.5.6",
+    "@nuxt/icon": "^1.7.2",
     "@nuxt/image": "^1.8.1",
     "@prisma/nuxt": "^0.0.35",
-    "apexcharts": "^3.54.1",
+    "apexcharts": "^4.0.0",
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
-    "nuxt": "^3.13.2",
+    "nuxt": "^3.14.159",
     "vue": "latest",
     "vue3-apexcharts": "^1.7.0",
     "xml2js": "^0.6.2",
@@ -32,6 +32,6 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/xml2js": "^0.4.14",
     "typescript": "^5.6.3",
-    "vue-tsc": "^2.1.6"
+    "vue-tsc": "^2.1.10"
   }
 }

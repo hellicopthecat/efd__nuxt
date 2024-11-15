@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SharedText from "~/components/shared/SharedText.vue";
+import {LOGINUSER_KEY} from "~/utils/constants/constants";
 definePageMeta({
   layout: "auth-layout",
 });
@@ -24,6 +25,7 @@ const submitLogin = async () => {
   );
   if (data.value && data.value.success) {
     auth.value = true;
+    sessionStorage.setItem(LOGINUSER_KEY, data.value.id + "");
     return router.push("/");
   }
   if (error.value) {

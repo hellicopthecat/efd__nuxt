@@ -27,18 +27,4 @@ export default defineNuxtConfig({
     cookieID: process.env.COOKIE_ID,
     cookieKEY: process.env.COOKIE_KEY,
   },
-  hooks: {
-    "pages:extend"(pages) {
-      function setMiddleware(pages: NuxtPage[]) {
-        for (const page of pages) {
-          page.meta ||= {};
-          page.meta.middleware = ["auth"];
-          if (page.children) {
-            setMiddleware(page.children);
-          }
-        }
-      }
-      setMiddleware(pages);
-    },
-  },
 });

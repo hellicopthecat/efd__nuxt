@@ -8,9 +8,7 @@ interface ILoginType {
 }
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
-
   const formData: ILoginType = await readBody(event);
-
   try {
     const user = await prisma.user.findUnique({
       where: {uid: formData.uid},
@@ -44,6 +42,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
+      id: user.id,
     };
   } catch (err) {
     const errMsg = (err as Error).message;

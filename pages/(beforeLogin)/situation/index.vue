@@ -27,7 +27,7 @@ const rightClick = () => {
 };
 </script>
 <template>
-  <div class="flex flex-col p-10 h-full">
+  <div class="flex flex-col p-10 h-full gap-10">
     <div class="flex items-end gap-5">
       <SharedText tag="h2" txt="현 재난상황 전파" class-name="text-white" />
       <SharedText tag="h4" txt="(최근 10개)" class-name="text-white/75" />
