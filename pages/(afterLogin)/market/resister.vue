@@ -66,11 +66,11 @@ onUnmounted(() => {
         class="border border-dashed rounded-lg p-5 cursor-pointer flex items-center justify-center w-full h-96"
       >
         <label v-if="url !== ''" for="itemImgFile">
-          <NuxtImg :src="url" class="size-80" />
+          <NuxtImg :src="url" class="size-80 cursor-pointer" />
         </label>
 
         <label v-if="url === ''" for="itemImgFile">
-          <Icon name="mdi:file-image" class="size-32" />
+          <Icon name="mdi:file-image" class="size-32 cursor-pointer" />
         </label>
         <input
           id="itemImgFile"

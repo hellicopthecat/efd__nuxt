@@ -25,3 +25,6 @@ logs
 
 # affinity design
 *.afdesign
+
+# Test Image File Root
+/public/testImg

@@ -6,7 +6,13 @@ import path from "path";
 import type {ITokenTypes} from "~/types/tokenType";
 
 const itemResisterSchema = object({
-  data: mixed().required("파일이 누락되었습니다."),
+  data: mixed()
+    .required("파일이 누락되었습니다.")
+    .test(
+      "isValidSize",
+      "Allowed Sized is 3MB",
+      (value) => value && (value as File).size <= 300000
+    ),
   itemData: object({
     itemName: string().required("물품 이름을 작성해주세요."),
     itemPrice: string().required("물품 가격을 작성해주세요."),

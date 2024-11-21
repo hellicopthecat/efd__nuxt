@@ -1,16 +1,46 @@
 <script setup lang="ts">
+import ItemData from "~/components/market/ItemData.vue";
 import MarketLayer from "~/components/shared/MarketLayer.vue";
-import SharedText from "~/components/shared/SharedText.vue";
 import type {GetItemsTypes} from "~/server/api/market/itemList.get";
 
+const datalength = ref(4);
+const observer = ref<IntersectionObserver | null>(null);
+const prevData = ref<GetItemsTypes | null>(null);
 const {data: itemData, refresh} = useAsyncData(
   "itemList",
   async () =>
-    await $fetch<GetItemsTypes>("/api/market/itemList", {method: "GET"})
+    await $fetch<GetItemsTypes>("/api/market/itemList", {
+      method: "GET",
+      query: {page: datalength.value},
+    })
 );
+
 const handleRefresh = async () => {
   await refresh();
 };
+
+const observerRefresh = async () => {
+  datalength.value += 1;
+  prevData.value = itemData.value;
+  await refresh();
+};
+
+onMounted(() => {
+  const observeBox = document.getElementById("observeBox");
+  observer.value = new IntersectionObserver(async (entries) => {
+    if (entries[0].isIntersecting) {
+      await observerRefresh();
+    }
+  });
+  if (observeBox) {
+    observer.value.observe(observeBox);
+  }
+});
+onUnmounted(() => {
+  if (observer.value) {
+    observer.value.disconnect();
+  }
+});
 </script>
 
 <template>
@@ -30,46 +60,11 @@ const handleRefresh = async () => {
           <Icon name="mdi:sync" class="size-8" />
         </button>
       </div>
+      <ItemData :itemData="itemData as GetItemsTypes" />
       <div
-        v-for="data in itemData"
-        :key="data.id"
-        class="flex flex-col gap-3 even:bg-slate-700 odd:bg-slate-800 p-5 rounded-lg even:hover:bg-slate-600 odd:hover:bg-gray-700"
-      >
-        <div class="flex gap-5">
-          <NuxtImg
-            :src="`/testImg/${data.itemImageUrl}`"
-            class="size-44 rounded-xl"
-          />
-
-          <div class="flex flex-col gap-2">
-            <div class="flex gap-3">
-              <SharedText tag="h5" :txt="data.itemSido" />
-              <SharedText tag="h5" :txt="data.itemSigungu" />
-            </div>
-
-            <div class="flex gap-2 items-center">
-              <div class="flex">
-                <SharedText
-                  tag="h6"
-                  :txt="data.complete ? '거래완료' : '판매중'"
-                  :class-name="
-                    data.complete
-                      ? 'bg-slate-400 px-2 py-1 rounded-lg'
-                      : 'bg-green-600 px-2 py-1 rounded-lg'
-                  "
-                />
-              </div>
-              <SharedText tag="h3" :txt="data.itemName" />
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <SharedText tag="h4" txt="가격 / 교환품목" />
-              <SharedText tag="h4" :txt="data.itemPrice" />
-            </div>
-            <SharedText tag="h6" :txt="`@${data.seller.uid}`" />
-          </div>
-        </div>
-      </div>
+        id="observeBox"
+        class="border-2 border-slate-400/50 border-dashed"
+      ></div>
     </div>
   </MarketLayer>
 </template>

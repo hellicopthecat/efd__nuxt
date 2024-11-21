@@ -3,17 +3,29 @@ import jwt from "jsonwebtoken";
 import type {ITokenTypes} from "~/types/tokenType";
 import prisma from "~/lib/prisma";
 import {Prisma} from "@prisma/client";
-async function getItems({sido, sigungu}: {sido: string; sigungu: string}) {
+async function getItems({
+  sido,
+  sigungu,
+  takes,
+}: {
+  sido: string;
+  sigungu: string;
+  takes: number;
+}) {
   const items = await prisma.item.findMany({
     where: {
       AND: [{itemSido: sido}, {itemSigungu: sigungu}],
     },
     include: {seller: true},
+    take: takes + 1,
+    skip: 0,
+    orderBy: {createAt: "desc"},
   });
   return items;
 }
 export type GetItemsTypes = Prisma.PromiseReturnType<typeof getItems>;
 export default defineEventHandler(async (event) => {
+  const query = getQuery(event);
   const cookie = getCookie(event, ACCESSTOKEN);
   const config = useRuntimeConfig();
   let data = [] as GetItemsTypes | [];
@@ -31,6 +43,7 @@ export default defineEventHandler(async (event) => {
       const items: GetItemsTypes = await getItems({
         sido: existUser.address.sido,
         sigungu: existUser.address.sigungu,
+        takes: Number(query.page),
       });
 
       return (data = items);
