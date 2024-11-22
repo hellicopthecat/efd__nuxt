@@ -9,7 +9,7 @@ const router = useRouter();
 const auth = useAuth();
 
 const logoutHandler = async () => {
-  auth.value = false;
+  auth.value.id = null;
   await $fetch("/api/auth/logout", {method: "POST"});
   router.push("/");
 };
@@ -27,7 +27,7 @@ const headerOpneClick = () => {
         <SharedText tag="h3" txt="ESCAPE FORM DANGER" />
       </NuxtLink>
       <NuxtLink
-        v-if="!auth"
+        v-if="!auth.id"
         to="/login"
         class="relative flex justify-center items-center bg-slate-600 size-10 p-3 rounded-full"
       >
@@ -37,7 +37,7 @@ const headerOpneClick = () => {
         <Icon name="fa6-solid:lock" class="size-6" />
       </NuxtLink>
       <button
-        v-if="auth"
+        v-if="auth.id"
         @click="logoutHandler"
         class="flex justify-center items-center bg-slate-600 size-10 p-3 rounded-full"
       >

@@ -1,3 +1,5 @@
+import type {ITokenTypes} from "~/types/tokenType";
+
 const publicRouter: {[key: string]: boolean} = {
   "/": true,
   "/login": true,
@@ -19,22 +21,25 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   };
 
   if (!cookie.value && !isPublicRouter) {
-    auth.value = false;
+    auth.value.id = null;
     return navigateTo("/");
   }
   if (cookie.value) {
-    auth.value = true;
     if (to.path === "/login" || to.path === "join") {
       return navigateTo("/");
     }
     if (import.meta.server) {
       const jwt = import("jsonwebtoken");
       try {
-        const ok = (await jwt).verify(cookie.value + "", cofing.cookieKEY);
+        const ok = (await jwt).verify(
+          cookie.value + "",
+          cofing.cookieKEY
+        ) as ITokenTypes;
+        auth.value.id = Number(ok.id);
         if (ok) return;
       } catch (error) {
         const err = error as Error;
-        auth.value = false;
+        auth.value.id = null;
         console.log(err.message);
         return navigateTo("/");
       }

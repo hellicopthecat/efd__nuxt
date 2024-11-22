@@ -29,7 +29,7 @@ const auth = useAuth();
           <SharedText tag="h5" txt="재난구호대비" />
         </NuxtLink>
       </li>
-      <li v-if="auth">
+      <li v-if="auth.id">
         <NuxtLink to="/market" class="flex justify-between items-center">
           <Icon name="icon-park-twotone:weixin-market" class="size-6" />
           <SharedText tag="h5" txt="돕고돕기" />

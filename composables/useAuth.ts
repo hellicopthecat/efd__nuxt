@@ -1,3 +1,3 @@
 export const useAuth = () => {
-  return useState("auth", () => false);
+  return useState("auth", () => ({id: null as null | number}));
 };

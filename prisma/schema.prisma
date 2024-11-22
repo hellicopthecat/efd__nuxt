@@ -11,20 +11,21 @@ datasource db {
 }
 
 model User {
-  id            Int         @id @default(autoincrement())
-  createAt      DateTime    @default(now())
-  updateAt      DateTime    @updatedAt
-  uid           String      @unique
-  email         String      @unique
-  name          String?
-  password      String?
-  address       UserAddress @relation(fields: [userAddressId], references: [id])
-  googleId      String?
-  kakaoId       String?
-  avatarUrl     String?
-  sellItem      Item[]      @relation("sell")
-  buyItem       Item[]      @relation("buy")
-  userAddressId Int
+  id             Int         @id @default(autoincrement())
+  createAt       DateTime    @default(now())
+  updateAt       DateTime    @updatedAt
+  uid            String      @unique
+  email          String      @unique
+  name           String?
+  password       String?
+  address        UserAddress @relation(fields: [userAddressId], references: [id])
+  googleId       String?
+  kakaoId        String?
+  avatarUrl      String?
+  sellItem       Item[]      @relation("sell")
+  buyItem        Item[]      @relation("buy")
+  userAddressId  Int
+  interestedItem Item[]      @relation("interested")
 }
 
 model UserAddress {
@@ -57,5 +58,6 @@ model Item {
   complete       Boolean  @default(false)
   seller         User     @relation("sell", fields: [userId], references: [id])
   buyer          User?    @relation("buy", fields: [userId], references: [id])
+  interested     User[]   @relation("interested")
   userId         Int
 }

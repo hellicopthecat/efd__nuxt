@@ -24,7 +24,7 @@ const submitLogin = async () => {
     })
   );
   if (data.value && data.value.success) {
-    auth.value = true;
+    auth.value.id = Number(data.value.id);
     sessionStorage.setItem(LOGINUSER_KEY, data.value.id + "");
     return router.push("/");
   }

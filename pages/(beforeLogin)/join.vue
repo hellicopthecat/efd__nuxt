@@ -41,7 +41,7 @@ const submitJoin = async () => {
     errorMsg.value = err.message;
   }
   if (data.value && data.value.success) {
-    auth.value = true;
+    auth.value.id = Number(data.value.id);
     sessionStorage.setItem(LOGINUSER_KEY, data.value.id + "");
     router.push("/");
   }
