@@ -1,7 +1,7 @@
 import type {
   INewForeCastType,
   IWeatherTodayTomorrowTypes,
-} from "~/types/apiType";
+} from "~/types/weather/weatherTypes";
 
 export const createNewArr = ({
   data,

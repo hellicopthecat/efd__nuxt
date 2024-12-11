@@ -17,6 +17,7 @@
     "@prisma/nuxt": "^0.0.35",
     "apexcharts": "^4.0.0",
     "bcrypt": "^5.1.1",
+    "hls.js": "^1.5.17",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.14.159",
     "vue": "latest",

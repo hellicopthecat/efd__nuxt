@@ -13,7 +13,6 @@ const fetchData = async () => {
     query: {id: defaultDataId.value},
   });
   lifeSafetyData.value = result;
-  console.log(lifeSafetyData.value);
 };
 
 const getDataId = async (id: string) => {

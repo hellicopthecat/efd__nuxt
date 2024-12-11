@@ -16,8 +16,8 @@ onMounted(async () => {
   const msgContainer = document.getElementById("msgCont");
   if (msgContainer) {
     setInterval(() => {
-      msgMarginTop.value = msgMarginTop.value + 96;
-      if (msgMarginTop.value >= 960) {
+      msgMarginTop.value = msgMarginTop.value + 144;
+      if (msgMarginTop.value >= 144 * disasterMsgData.value?.length!) {
         msgMarginTop.value = 0;
       }
     }, 3000);
@@ -26,7 +26,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="relative z-[99] w-full">
-    <div v-if="disasterMsgData" class="w-full h-24 bg-red-600 overflow-hidden">
+    <div v-if="disasterMsgData" class="w-full h-36 bg-red-600 overflow-hidden">
       <div
         :id="msgCont"
         class="trasition ease-in-out duration-500"
@@ -34,7 +34,7 @@ onMounted(async () => {
       >
         <div
           v-for="data in disasterMsgData"
-          class="flex flex-col gap-1 justify-center h-24 p-2"
+          class="flex flex-col gap-1 justify-center h-36 p-2"
         >
           <div class="flex items-center gap-4">
             <SharedText

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type {IDefaultApiResponse, IWeatherNowTypes} from "~/types/apiType";
+import type {IDefaultApiResponse} from "~/types/apiType";
+import type {IWeatherNowTypes} from "~/types/weather/weatherTypes";
 import Precipitation from "../weatherComp/Precipitation.vue";
 import RainfallProbability from "../weatherComp/RainfallProbability.vue";
 import WindDirection from "../weatherComp/WindDirection.vue";

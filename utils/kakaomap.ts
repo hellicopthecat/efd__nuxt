@@ -3,10 +3,10 @@ export async function initializeMap(
   lon: number,
   createMarker = true
 ) {
-  const initMap = useKakaoMap();
+  let load = true;
   let map;
   let myPosition;
-
+  const initMap = useKakaoMap();
   //@ts-ignore
   await kakao.maps.load(async () => {
     const container = document.getElementById("map");
@@ -18,14 +18,15 @@ export async function initializeMap(
     };
     //@ts-ignore
     map = await new kakao.maps.Map(container, options);
+    initMap.value = map;
+    load = false;
     if (createMarker) {
       const {marker} = makeMarker(myPosition);
       marker.setMap(map);
     }
-
-    initMap.value = map;
   });
-  return {map, myPosition};
+
+  return {map, myPosition, load};
 }
 
 export function makeMarker(position: any) {
@@ -52,6 +53,39 @@ export function makeMarker(position: any) {
 export function panTo(map: any, lat: number, lng: number) {
   //@ts-ignore
   const moveLatLon = new kakao.maps.LatLng(lat, lng);
-  //@ts-ignore
   map.panTo(moveLatLon);
+}
+
+export function setCenter(map: any, lat: number, lng: number) {
+  //@ts-ignore
+  const moveLocation = new kakao.maps.LatLng(lat, lng);
+  map.setCenter(moveLocation);
+}
+
+interface IPositionsObj {
+  title: string;
+  latlng: any;
+}
+export function multiMarker(map: any, positions: IPositionsObj[]) {
+  let marker: any;
+  //markerURL
+  const imageSrc =
+    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+  for (let i = 0; i < positions.length; i++) {
+    // 마커 이미지의 이미지 크기 입니다
+    //@ts-ignore
+    var imageSize = new kakao.maps.Size(24, 35);
+    // 마커 이미지를 생성합니다
+    //@ts-ignore
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+    // 마커를 생성합니다
+
+    //@ts-ignore
+    marker = new kakao.maps.Marker({
+      map: map,
+      position: positions[i].latlng, // 마커를 표시할 위치
+      title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      image: markerImage, // 마커 이미지
+    });
+  }
 }

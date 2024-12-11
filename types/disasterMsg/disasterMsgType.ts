@@ -1,14 +1,3 @@
-export interface IDisasterMsgResultType {
-  header: {
-    errorMsg: null | string;
-    resultCode: string;
-    resultMsg: string;
-  };
-  numbOfRows: number;
-  pageNo: number;
-  totalCount: number;
-  body: IDisasterMsgType[];
-}
 export interface IDisasterMsgType {
   /** 메세지 내용 */
   MSG_CN: string;

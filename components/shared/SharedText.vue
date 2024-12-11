@@ -3,7 +3,7 @@ import type {HtmlTxtTag} from "~/types/apiType";
 
 interface ISharedTxt {
   tag: HtmlTxtTag;
-  txt: string | undefined;
+  txt?: string;
   className?: string;
 }
 defineProps<ISharedTxt>();
@@ -24,7 +24,9 @@ defineProps<ISharedTxt>();
   <h5 v-if="tag === 'h5'" :class="`text-lg font-semibold ${className}`">
     {{ txt }}
   </h5>
-  <h6 v-if="tag === 'h6'" :class="`text-lg ${className}`">{{ txt }}</h6>
+  <h6 v-if="tag === 'h6'" :class="`text-lg ${className}`">
+    {{ txt }}
+  </h6>
   <span v-if="tag === 'span'" :class="`text-sm ${className}`">{{ txt }}</span>
   <p v-if="tag === 'p'" :class="` ${className}`">{{ txt }}</p>
   <small v-if="tag === 'small'" :class="`text-xs ${className}`">{{

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import KakaoMap from "../kakaomap/KakaoMap.vue";
-
+import SafePlace from "./SafePlace.vue";
 const mapCont = ref("mapCont");
 const width = ref<string | number | null | undefined>(0);
 const height = ref<string | number | null | undefined>(0);
@@ -31,6 +31,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div :id="mapCont" class="relative w-full h-full overflow-hidden">
+    <SafePlace />
     <KakaoMap :width="width!" :height="height!" />
   </div>
 </template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import LoadingIndicator from "~/components/shared/LoadingIndicator.vue";
+import type {IDefaultApiResponse} from "~/types/apiType";
 import type {
-  IDefaultApiResponse,
   INewForeCastType,
   IWeatherTodayTomorrowTypes,
-} from "~/types/apiType";
+} from "~/types/weather/weatherTypes";
 import {
   date,
   dayAfterDate,

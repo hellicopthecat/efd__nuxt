@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import EditProduct from "~/components/market/edit-product.vue";
 import MarketLayer from "~/components/shared/MarketLayer.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 
+//hooks
 const auth = useAuth();
 const route = useRoute();
+const router = useRouter();
+//state
 const interestUser = ref();
+//data
 const {data} = useAsyncData(
   `item${route.params.id}`,
   async () =>
@@ -16,6 +21,7 @@ const {data} = useAsyncData(
 interestUser.value = data.value?.interested.find(
   (user) => user.id === auth.value.id
 );
+//fn
 const interestedBtn = async () => {
   const interest = await $fetch("/api/market/interest", {
     method: "POST",
@@ -30,19 +36,52 @@ const unInterestedBtn = async () => {
   });
   interestUser.value = uninterest.interest;
 };
+const goBack = () => router.push("/market");
+//modal
+const showModal = computed(() => route.query.modal === "edit");
+const openModal = () => {
+  router.push({query: {modal: "edit"}});
+};
+const closeModal = () => {
+  router.push({query: {modal: undefined}});
+};
+// deletItem
+const deleteItem = async () => {
+  const {
+    data: result,
+    error,
+    refresh,
+  } = await useFetch("/api/market/deleteItem", {
+    method: "POST",
+    query: {id: data.value?.id},
+  });
+  if (!result.value?.ok) {
+    alert(error.value?.message);
+  } else {
+    alert("삭제되었습니다.");
+    router.push("/market");
+  }
+};
+//meta
+useHead({
+  title: data.value?.itemName,
+});
 </script>
 <template>
   <MarketLayer>
     <div class="flex flex-col gap-5">
       <div class="flex justify-between items-center">
-        <div class="flex gap-3 *:px-2 *:py-1 *:rounded-lg">
+        <!-- badges -->
+        <div class="flex items-center gap-3 *:px-2 *:py-1 *:rounded-lg">
+          <button @click.prevent="goBack">
+            <Icon name="mdi:chevron-left" class="size-10" />
+          </button>
           <div :class="data?.complete ? 'bg-gray-300' : 'bg-green-500'">
             <SharedText
               tag="h5"
               :txt="data?.complete ? '판매완료' : '판매중'"
             />
           </div>
-
           <SharedText
             tag="h5"
             :txt="data?.itemSido"
@@ -59,12 +98,21 @@ const unInterestedBtn = async () => {
             :class-name="'bg-slate-600'"
           />
         </div>
+        <!-- Fn badges -->
         <div class="flex gap-3">
           <button
             v-if="auth.id === data?.seller.id"
+            @click.prevent="openModal"
             class="p-2 rounded-md bg-slate-700 hover:bg-slate-800"
           >
-            <Icon name="mdi:layers-edit" class="size-8" />
+            <Icon name="mdi:pencil" class="size-8" />
+          </button>
+          <button
+            v-if="auth.id === data?.seller.id"
+            @click.prevent="deleteItem"
+            class="p-2 rounded-md bg-slate-700 hover:bg-slate-800"
+          >
+            <Icon name="mdi:trash-can" class="size-8" />
           </button>
           <button
             v-if="interestUser"
@@ -87,7 +135,7 @@ const unInterestedBtn = async () => {
 
       <div class="grid grid-cols-2 gap-5">
         <div class="self-center rounded-md overflow-hidden">
-          <NuxtImg :src="`/testImg/${data?.itemFileName}`" />
+          <NuxtImg :src="`/testImg/${data?.itemFileName}`" class="size-full" />
         </div>
 
         <div class="flex flex-col w-full gap-5">
@@ -118,5 +166,16 @@ const unInterestedBtn = async () => {
         </div>
       </div>
     </div>
+    <ClientOnly>
+      <Teleport to="#defaultLayout">
+        <div v-if="showModal" class="flex justify-center items-center">
+          <div
+            @click.prevent="closeModal"
+            class="fixed left-0 top-0 bg-black/50 size-full z-[99]"
+          ></div>
+          <EditProduct />
+        </div>
+      </Teleport>
+    </ClientOnly>
   </MarketLayer>
 </template>

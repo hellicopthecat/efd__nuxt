@@ -5,11 +5,10 @@ const defaultDataId = ref("04001");
 const civilDefenceData = ref<IBehaviorTypes[] | null>(null);
 
 const fetchData = async () => {
-  const result = await $fetch("/api/behavior/civliDefence", {
+  const result = await $fetch<IBehaviorTypes[]>("/api/behavior/civliDefence", {
     method: "GET",
     query: {id: defaultDataId.value},
   });
-  console.log(result);
   civilDefenceData.value = result;
 };
 const getDataId = async (id: string) => {

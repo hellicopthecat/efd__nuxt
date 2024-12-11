@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type {INewForeCastType} from "~/types/apiType";
+import type {INewForeCastType} from "~/types/weather/weatherTypes";
 import SkyStatus from "../SkyStatus.vue";
 import WindDirection from "../WindDirection.vue";
 import RainfallProbability from "../RainfallProbability.vue";

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import VueApexCharts from "vue3-apexcharts";
-import type {
-  IDefaultApiResponse,
-  IWeatherTodayTomorrowTypes,
-} from "~/types/apiType";
+import type {IDefaultApiResponse} from "~/types/apiType";
+import type {IWeatherTodayTomorrowTypes} from "~/types/weather/weatherTypes";
 import Precipitation from "../Precipitation.vue";
 import SkyStatus from "../SkyStatus.vue";
 import WindPower from "../WindPower.vue";

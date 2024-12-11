@@ -22,9 +22,18 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     publicAPIKEY: process.env.NUXT_MY_PUBLIC_APIKEY,
-    disasterMsgAPIKEY: process.env.DISASTERMSG_APIKEY,
     kakaoKEY: process.env.NUXT_KAKAO_MAP_KEY,
     cookieID: process.env.COOKIE_ID,
     cookieKEY: process.env.COOKIE_KEY,
+    weatherSpecialNotiKEY: process.env.WEATHER_SPECIAL_NOTIFICATION_KEY,
+    disasterMsgAPIKEY: process.env.DISASTERMSG_APIKEY,
+    safeAreaKEY: process.env.INTEGRATION_SAFEAREA_KEY,
+    lifesafetyDisasterKEY: process.env.LIFESAFETY_DISASTER_KEY,
+    socialDisasterKEY: process.env.SOCIAL_DISASTER_KEY,
+    naturalDisasterKEY: process.env.NATURAL_DISASTER_KEY,
+    civilDefenceKEY: process.env.CIVIL_DEFENCE_KEY,
+  },
+  routeRules: {
+    "/behavior": {cors: true},
   },
 });

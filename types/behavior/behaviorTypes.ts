@@ -1,31 +1,11 @@
-export interface IDefaultBehaviorTypes {
-  response: {
-    header: [
-      {
-        resultCode: string[];
-        resultMsg: string[];
-      }
-    ];
-    body: [
-      {
-        items: [{item: IBehaviorTypes[]}];
-        numOfRows: string[];
-        pageNo: string[];
-        totalCount: string[];
-      }
-    ];
-  };
-}
 export interface IBehaviorTypes {
-  actRmks?: string[];
-  contentsType: string[];
-  contentsUrl?: string[];
-  mainOrd: string[];
-  safetyCate1: string[];
-  safetyCate2: string[];
-  safetyCate3: string[];
-  safetyCateNm1: string[];
-  safetyCateNm2: string[];
-  safetyCateNm3: string[];
-  subOrd: string[];
+  actRmks: string | null;
+  contentsUrl: string | null;
+  safety_cate1: string;
+  safety_cate2: string;
+  safety_cate3: string;
+  safety_cate4: string | null;
+  safety_cate_nm1: string;
+  safety_cate_nm2: string;
+  safety_cate_nm3: string;
 }
