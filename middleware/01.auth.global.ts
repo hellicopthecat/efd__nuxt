@@ -1,47 +1,53 @@
-import type {ITokenTypes} from "~/types/tokenType";
+import {ACCESSTOKEN} from "~/utils/constants/constants";
 
 const publicRouter: {[key: string]: boolean} = {
   "/": true,
   "/login": true,
   "/join": true,
   "/weather": true,
-  "/situation": true,
+  "/weatherSpecial": true,
   "/behavior": true,
   "/disasterbag": true,
 };
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const cookie = useCookie("AccessToken");
-  const auth = useAuth();
-  const cofing = useRuntimeConfig();
+  const refreshToken = await $fetch("/api/auth/getRefresh", {method: "GET"});
+  const accessToken = useCookie(ACCESSTOKEN, {
+    httpOnly: false,
+    sameSite: true,
+    secure: true,
+    maxAge: 60 * 60 * 3,
+    path: "/",
+  });
+
   const isPublicRouter = (path: string) => {
-    if (publicRouter[to.path]) return true;
-    if (path.startsWith("/behavior")) return true;
+    if (publicRouter[to.path]) {
+      return true;
+    } else if (path.startsWith("/behavior")) {
+      return true;
+    }
     return false;
   };
-
-  if (!cookie.value && !isPublicRouter) {
-    auth.value.id = null;
-    return navigateTo("/");
-  }
-  if (cookie.value) {
-    if (to.path === "/login" || to.path === "join") {
+  if (accessToken.value && refreshToken) {
+    if (to.path === "/login" || to.path === "/join") {
       return navigateTo("/");
     }
-    if (import.meta.server) {
-      const jwt = import("jsonwebtoken");
+  }
+  if (!accessToken.value && !refreshToken && !isPublicRouter(to.path)) {
+    return navigateTo("/");
+  }
+  //refresh Token
+  if (!accessToken.value) {
+    if (refreshToken) {
       try {
-        const ok = (await jwt).verify(
-          cookie.value + "",
-          cofing.cookieKEY
-        ) as ITokenTypes;
-        auth.value.id = Number(ok.id);
-        if (ok) return;
+        const response = await $fetch("/api/auth/refresh", {method: "POST"});
+        accessToken.value = response;
+        if (!accessToken.value) {
+          throw new Error("Token refresh failed");
+        }
       } catch (error) {
         const err = error as Error;
-        auth.value.id = null;
         console.log(err.message);
-        return navigateTo("/");
       }
     }
   }

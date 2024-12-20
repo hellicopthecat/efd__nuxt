@@ -1,15 +1,13 @@
 <script setup lang="ts">
+import {ACCESSTOKEN} from "~/utils/constants/constants";
 import SharedText from "../shared/SharedText.vue";
 import GlobalNav from "./GlobalNav.vue";
 import WeatherNow from "./WeatherNow.vue";
 
 const headerOpen = ref(false);
-
 const router = useRouter();
-const auth = useAuth();
-
+const accessToken = useCookie(ACCESSTOKEN);
 const logoutHandler = async () => {
-  auth.value.id = null;
   await $fetch("/api/auth/logout", {method: "POST"});
   router.push("/");
 };
@@ -27,7 +25,7 @@ const headerOpneClick = () => {
         <SharedText tag="h3" txt="ESCAPE FORM DANGER" />
       </NuxtLink>
       <NuxtLink
-        v-if="!auth.id"
+        v-if="!accessToken"
         to="/login"
         class="relative flex justify-center items-center bg-slate-600 size-10 p-3 rounded-full"
       >
@@ -37,7 +35,7 @@ const headerOpneClick = () => {
         <Icon name="fa6-solid:lock" class="size-6" />
       </NuxtLink>
       <button
-        v-if="auth.id"
+        v-if="accessToken"
         @click="logoutHandler"
         class="flex justify-center items-center bg-slate-600 size-10 p-3 rounded-full"
       >

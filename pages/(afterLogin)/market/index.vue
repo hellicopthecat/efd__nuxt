@@ -6,7 +6,7 @@ import type {GetItemsTypes} from "~/server/api/market/itemList.get";
 const datalength = ref(4);
 const observer = ref<IntersectionObserver | null>(null);
 const prevData = ref<GetItemsTypes | null>(null);
-const {data: itemData, refresh} = useAsyncData(
+const {data, refresh} = useAsyncData(
   "itemList",
   async () =>
     await $fetch<GetItemsTypes>("/api/market/itemList", {
@@ -21,7 +21,7 @@ const handleRefresh = async () => {
 
 const observerRefresh = async () => {
   datalength.value += 1;
-  prevData.value = itemData.value;
+  prevData.value = data.value;
   await refresh();
 };
 
@@ -60,7 +60,7 @@ onUnmounted(() => {
           <Icon name="mdi:sync" class="size-8" />
         </button>
       </div>
-      <ItemData :itemData="itemData as GetItemsTypes" />
+      <ItemData :itemData="data as GetItemsTypes" />
       <div
         id="observeBox"
         class="border-2 border-slate-400/50 border-dashed"

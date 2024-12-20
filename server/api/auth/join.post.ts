@@ -1,8 +1,11 @@
 import type {InferType} from "yup";
 import {object, ref, string} from "yup";
 import {EMAILREGEX, PASSREGEX, UIDREGEX} from "~/utils/constants/regex";
-import bcrypt from "bcrypt";
 import prisma from "~/lib/prisma";
+import {ACCESSTOKEN, REFRESHTOKEN} from "~/utils/constants/constants";
+//@ts-ignore
+import bcrypt from "bcrypt";
+//@ts-ignore
 import jwt from "jsonwebtoken";
 
 let userSchema = object({
@@ -79,12 +82,28 @@ export default defineEventHandler(async (event) => {
         },
       },
     });
-    const token = jwt.sign({id: user.id, uid: user.uid}, config.cookieKEY);
+    //Refresh Token
+    const refreshToken = await useSession(event, {
+      name: REFRESHTOKEN,
+      password: config.refreshTokenKey,
+      cookie: {
+        httpOnly: true,
+        sameSite: true,
+        secure: true,
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      },
+    });
+    await refreshToken.update({uid: user.id});
 
-    setCookie(event, "AccessToken", token, {
-      httpOnly: true,
+    //Access Token
+    const accessToken = jwt.sign({uid: user.id}, config.accessTokenKey);
+    setCookie(event, ACCESSTOKEN, accessToken, {
+      httpOnly: false,
+      sameSite: true,
       secure: true,
-      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 60 * 3,
     });
 
     return {

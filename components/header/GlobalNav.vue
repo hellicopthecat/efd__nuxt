@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import {ACCESSTOKEN} from "~/utils/constants/constants";
 import SharedText from "../shared/SharedText.vue";
-const auth = useAuth();
+const accessToken = useCookie(ACCESSTOKEN);
 </script>
 <template>
   <nav class="w-full">
@@ -38,7 +39,7 @@ const auth = useAuth();
           <SharedText tag="h5" txt="재난구호대비" />
         </NuxtLink>
       </li>
-      <li v-if="auth.id">
+      <li v-if="accessToken">
         <NuxtLink to="/market" class="flex justify-between items-center">
           <Icon name="icon-park-twotone:weixin-market" class="size-6" />
           <SharedText tag="h5" txt="돕고돕기" />

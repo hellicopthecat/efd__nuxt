@@ -1,3 +1,4 @@
-export const useAuth = () => {
-  return useState("auth", () => ({id: null as null | number}));
+export const useAuth = async () => {
+  const getUid = await $fetch("/api/auth/getUid", {method: "GET"});
+  return getUid;
 };

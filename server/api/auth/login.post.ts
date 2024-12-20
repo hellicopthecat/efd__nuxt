@@ -1,5 +1,8 @@
 import prisma from "~/lib/prisma";
+import {ACCESSTOKEN, REFRESHTOKEN} from "~/utils/constants/constants";
+//@ts-ignore
 import bcrypt from "bcrypt";
+//@ts-ignore
 import jwt from "jsonwebtoken";
 
 interface ILoginType {
@@ -9,6 +12,7 @@ interface ILoginType {
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
   const formData: ILoginType = await readBody(event);
+
   try {
     const user = await prisma.user.findUnique({
       where: {uid: formData.uid},
@@ -32,12 +36,25 @@ export default defineEventHandler(async (event) => {
         message: "비밀번호가 틀렸습니다.",
       });
     }
-    const token = jwt.sign({id: user.id, uid: user.uid}, config.cookieKEY);
-
-    setCookie(event, "AccessToken", token, {
+    //TOKEN
+    const payload = {uid: user.id};
+    //Refresh TOKEN
+    const refreshToken = jwt.sign(payload, config.refreshTokenKey);
+    setCookie(event, REFRESHTOKEN, refreshToken, {
       httpOnly: true,
+      sameSite: true,
       secure: true,
-      sameSite: "strict",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
+
+    const accessToken = jwt.sign({uid: user.id}, config.accessTokenKey);
+    setCookie(event, ACCESSTOKEN, accessToken, {
+      httpOnly: false,
+      sameSite: true,
+      secure: true,
+      maxAge: 60 * 60 * 3,
+      path: "/",
     });
 
     return {
@@ -46,6 +63,7 @@ export default defineEventHandler(async (event) => {
     };
   } catch (err) {
     const errMsg = (err as Error).message;
+    console.log(errMsg);
     throw createError({
       statusCode: 400,
       statusMessage: "Bad Request",

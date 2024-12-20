@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SharedText from "~/components/shared/SharedText.vue";
-import {LOGINUSER_KEY} from "~/utils/constants/constants";
 import {
   clickPostCode,
   onMountAddress,
@@ -11,7 +10,6 @@ useHead({title: "회원가입"});
 definePageMeta({
   layout: "auth-layout",
 });
-const auth = useAuth();
 const router = useRouter();
 const formData = ref({
   uid: "",
@@ -36,14 +34,12 @@ const submitJoin = async () => {
   const {data, error} = await useAsyncData("join", () =>
     $fetch("/api/auth/join", {method: "POST", body: formData.value})
   );
+  if (data.value && data.value.success) {
+    router.push("/");
+  }
   if (error.value && error.value.data) {
     const err = error.value.data as Error;
     errorMsg.value = err.message;
-  }
-  if (data.value && data.value.success) {
-    auth.value.id = Number(data.value.id);
-    sessionStorage.setItem(LOGINUSER_KEY, data.value.id + "");
-    router.push("/");
   }
 };
 const handleErrOffClick = () => {

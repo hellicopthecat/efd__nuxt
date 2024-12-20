@@ -14,10 +14,7 @@ defineProps<IItemData>();
     class="flex justify-between items-center p-5 rounded-lg even:bg-slate-700 odd:bg-slate-800 even:hover:bg-slate-600 odd:hover:bg-gray-700"
   >
     <div class="flex gap-5">
-      <NuxtImg
-        :src="`/testImg/${data.itemImageUrl}`"
-        class="size-44 rounded-xl"
-      />
+      <NuxtImg :src="data.itemImageUrl" class="size-44 rounded-xl" />
       <div class="flex flex-col justify-center gap-2">
         <div class="flex gap-3">
           <SharedText tag="h5" :txt="data.itemSido" />

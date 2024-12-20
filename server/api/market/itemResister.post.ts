@@ -1,18 +1,41 @@
 import {mixed, object, string} from "yup";
 import prisma from "~/lib/prisma";
+import {ACCESSTOKEN} from "~/utils/constants/constants";
+//@ts-ignore
 import jwt from "jsonwebtoken";
-import fs from "fs";
-import path from "path";
-import type {ITokenTypes} from "~/types/tokenType";
+import {v2 as cloudinary} from "cloudinary";
+import type {UploadApiOptions} from "cloudinary";
+import {configCloudinary} from "~/lib/cloudinary";
 
+interface FileObject {
+  data: Buffer;
+  name?: string;
+  filename?: string;
+  type?: string;
+}
 const itemResisterSchema = object({
   data: mixed()
     .required("파일이 누락되었습니다.")
     .test(
       "isValidSize",
-      "Allowed Sized is 3MB",
-      (value) => value && (value as File).size <= 300000
-    ),
+      "3MB 이하의 파일이여만합니다. (Yup :: Allowed Sized is 3MB)",
+      (value) => {
+        const {data} = value as FileObject;
+        return data.length <= 300000;
+      }
+    )
+    .test("isValidType", "JPG, PNG, GIF 만 가능합니다.", (value) => {
+      const {type} = value as FileObject;
+      const validType: {[key: string]: boolean} = {
+        "image/jpg": true,
+        "image/jpeg": true,
+        "image/png": true,
+        "image/gif": true,
+      };
+      if (type) {
+        return validType[type];
+      }
+    }),
   itemData: object({
     itemName: string().required("물품 이름을 작성해주세요."),
     itemPrice: string().required("물품 가격을 작성해주세요."),
@@ -31,56 +54,95 @@ const itemResisterSchema = object({
 });
 
 export default defineEventHandler(async (event) => {
-  const formData = await readMultipartFormData(event);
-  const cookie = getCookie(event, "AccessToken");
-  const decodeToken = jwt.decode(cookie + "") as ITokenTypes;
-
+  const config = useRuntimeConfig();
+  const readFormData = await readMultipartFormData(event);
   try {
+    //token
+    const accessToken = getCookie(event, ACCESSTOKEN);
+    const verifiyAccessToken = jwt.verify(
+      accessToken + "",
+      config.accessTokenKey
+    ) as {uid: string};
+    if (!verifiyAccessToken.uid) {
+      return {
+        ok: false,
+        errMsg: "토큰이 만료되었습니다. 새로고침해주세요",
+      };
+    }
+
     // file upload
     const parseData = {
-      data: formData?.find((field) => field.name === "data")?.data,
+      data: readFormData?.find((field) => field.name === "data"),
       itemData: JSON.parse(
-        formData?.find((field) => field.name === "itemData")?.data.toString() ||
-          "{}"
+        readFormData
+          ?.find((field) => field.name === "itemData")
+          ?.data.toString() || "{}"
       ),
       address: JSON.parse(
-        formData?.find((field) => field.name === "address")?.data?.toString() ||
-          "{}"
+        readFormData
+          ?.find((field) => field.name === "address")
+          ?.data?.toString() || "{}"
       ),
     };
 
-    const filename = formData?.find((field) => field.name === "data")?.filename;
-    //test
-    const saveFilePath = path.join(
-      process.cwd(),
-      "public/testImg",
-      filename + ""
-    );
     //schema validate
-    const result = await itemResisterSchema.validate(parseData);
-    if (result) {
-      //test
-      fs.writeFileSync(saveFilePath, parseData.data as Buffer);
-      await prisma.item.create({
-        data: {
-          itemName: result.itemData.itemName,
-          itemFileName: filename + "",
-          itemPrice: result.itemData.itemPrice,
-          itemImageUrl: filename + "",
-          itemDesc: result.itemData.ItemDesc,
-          itemSido: result.address.sido + "",
-          itemSigungu: result.address.sigungu + "",
-          itemRoadAdress: result.address.roadAddress + "",
-          itemRestAdress: result.address.restAddress + "",
-          seller: {connect: {id: Number(decodeToken?.id)}},
-        },
+    const validateResult = await itemResisterSchema.validate(parseData);
+    // after validate
+    if (validateResult) {
+      const fileData = validateResult.data as FileObject;
+      const file = fileData.data;
+      const filename = validateResult.itemData.itemName;
+      const buffer = new Uint8Array(file);
+
+      // // cloudinary
+      configCloudinary();
+      const uploadOption = {
+        folder: `image/${verifiyAccessToken.uid}`,
+        public_id: filename,
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      } as UploadApiOptions;
+      //upload
+      await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(uploadOption, async (error, result) => {
+            if (error) {
+              console.log(error.message);
+              reject(error.message);
+              return;
+            }
+            resolve(result);
+            await prisma.item.create({
+              data: {
+                itemName: validateResult.itemData.itemName,
+                itemFileName: filename + "",
+                itemPrice: validateResult.itemData.itemPrice,
+                itemImageUrl: result?.secure_url + "",
+                itemDesc: validateResult.itemData.ItemDesc,
+                itemSido: validateResult.address.sido + "",
+                itemSigungu: validateResult.address.sigungu + "",
+                itemRoadAdress: validateResult.address.roadAddress + "",
+                itemRestAdress: validateResult.address.restAddress + "",
+                seller: {connect: {id: Number(verifiyAccessToken.uid)}},
+              },
+            });
+          })
+          .end(buffer);
       });
     }
     return {
       ok: true,
+      errMsg: null,
     };
   } catch (error) {
     const err = error as Error;
-    throw createError(err.message);
+    console.log(err.message);
+    return {
+      ok: false,
+      errMsg: err.message
+        ? err.message
+        : "파일 업로드 중 에러가 발생되었습니다. 관리자에게 연락하세요.",
+    };
   }
 });

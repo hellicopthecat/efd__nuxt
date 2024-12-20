@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import SharedText from "~/components/shared/SharedText.vue";
-import {LOGINUSER_KEY} from "~/utils/constants/constants";
 definePageMeta({
   layout: "auth-layout",
 });
 useHead({title: "로그인"});
 
 const router = useRouter();
-const auth = useAuth();
 const formData = ref({
   uid: "",
   password: "",
@@ -24,8 +22,6 @@ const submitLogin = async () => {
     })
   );
   if (data.value && data.value.success) {
-    auth.value.id = Number(data.value.id);
-    sessionStorage.setItem(LOGINUSER_KEY, data.value.id + "");
     return router.push("/");
   }
   if (error.value) {

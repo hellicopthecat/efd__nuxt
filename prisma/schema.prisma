@@ -26,6 +26,9 @@ model User {
   buyItem        Item[]      @relation("buy")
   userAddressId  Int
   interestedItem Item[]      @relation("interested")
+
+  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String?
 }
 
 model UserAddress {
@@ -60,4 +63,22 @@ model Item {
   buyer          User?    @relation("buy", fields: [userId], references: [id])
   interested     User[]   @relation("interested")
   userId         Int
+}
+
+model ChatRoom {
+  id        String   @id @default(cuid())
+  createdAt DateTime
+  updateAt  DateTime
+  chat      Chat[]
+  user      User[]
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime
+  updateAt  DateTime
+  chat      String
+
+  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String?
 }

@@ -4,12 +4,12 @@ import MarketLayer from "~/components/shared/MarketLayer.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 
 //hooks
-const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
 //state
 const interestUser = ref();
 //data
+const uid = await $fetch("/api/auth/getUid", {method: "GET"});
 const {data} = useAsyncData(
   `item${route.params.id}`,
   async () =>
@@ -19,20 +19,20 @@ const {data} = useAsyncData(
     })
 );
 interestUser.value = data.value?.interested.find(
-  (user) => user.id === auth.value.id
+  (user) => user.id === Number(uid)
 );
 //fn
 const interestedBtn = async () => {
   const interest = await $fetch("/api/market/interest", {
     method: "POST",
-    query: {uid: auth.value.id, itemID: data.value?.id},
+    query: {uid: uid, itemID: data.value?.id},
   });
   interestUser.value = interest.interest;
 };
 const unInterestedBtn = async () => {
   const uninterest = await $fetch("/api/market/uninterest", {
     method: "POST",
-    query: {uid: auth.value.id, itemID: data.value?.id},
+    query: {uid: uid, itemID: data.value?.id},
   });
   interestUser.value = uninterest.interest;
 };
@@ -61,6 +61,9 @@ const deleteItem = async () => {
     alert("삭제되었습니다.");
     router.push("/market");
   }
+};
+const createRoom = async () => {
+  await $fetch("/api/chatting/createRoom", {method: "POST"});
 };
 //meta
 useHead({
@@ -101,14 +104,14 @@ useHead({
         <!-- Fn badges -->
         <div class="flex gap-3">
           <button
-            v-if="auth.id === data?.seller.id"
+            v-if="Number(uid) === data?.seller.id"
             @click.prevent="openModal"
             class="p-2 rounded-md bg-slate-700 hover:bg-slate-800"
           >
             <Icon name="mdi:pencil" class="size-8" />
           </button>
           <button
-            v-if="auth.id === data?.seller.id"
+            v-if="Number(uid) === data?.seller.id"
             @click.prevent="deleteItem"
             class="p-2 rounded-md bg-slate-700 hover:bg-slate-800"
           >
@@ -135,7 +138,7 @@ useHead({
 
       <div class="grid grid-cols-2 gap-5">
         <div class="self-center rounded-md overflow-hidden">
-          <NuxtImg :src="`/testImg/${data?.itemFileName}`" class="size-full" />
+          <NuxtImg :src="data?.itemImageUrl" class="size-full" />
         </div>
 
         <div class="flex flex-col w-full gap-5">
@@ -160,6 +163,7 @@ useHead({
 
           <button
             class="bg-indigo-900 hover:bg-warnYellow hover:text-indigo-900 rounded-md p-3 font-bold"
+            @click.prevent="createRoom"
           >
             구매문의하기
           </button>

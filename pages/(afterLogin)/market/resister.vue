@@ -33,17 +33,16 @@ const submitForm = async () => {
   if (imgData.value) formData.append("data", imgData.value);
   formData.append("itemData", JSON.stringify(itemData.value));
   formData.append("address", JSON.stringify(addressObj.value));
-  const {data, error} = await useAsyncData("itemResist", () =>
-    $fetch("/api/market/itemResister", {
-      body: formData,
-      method: "POST",
-    })
-  );
-  if (data.value?.ok) {
+  const result = await $fetch("/api/market/itemResister", {
+    body: formData,
+    method: "POST",
+  });
+
+  if (result.ok) {
+    alert("상품이 등록되었습니다.");
     return navigateTo("/market");
-  }
-  if (error.value?.data) {
-    console.log((error.value.data as {[key: string]: string | number}).message);
+  } else {
+    alert(result.errMsg);
   }
 };
 
