@@ -69,12 +69,11 @@ interface IPositionsObj {
 export function multiMarker(map: any, positions: IPositionsObj[]) {
   let marker: any;
   //markerURL
-  const imageSrc =
-    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+  const imageSrc = "/safehouse.png";
   for (let i = 0; i < positions.length; i++) {
     // 마커 이미지의 이미지 크기 입니다
     //@ts-ignore
-    var imageSize = new kakao.maps.Size(24, 35);
+    var imageSize = new kakao.maps.Size(35, 35);
     // 마커 이미지를 생성합니다
     //@ts-ignore
     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);

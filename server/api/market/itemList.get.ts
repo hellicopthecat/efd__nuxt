@@ -18,7 +18,7 @@ async function getItems({
     include: {seller: true},
     take: takes + 1,
     skip: 0,
-    orderBy: {createAt: "desc"},
+    orderBy: {createdAt: "desc"},
   });
   return items;
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ClearErrBtn from "~/components/auth/ClearErrBtn.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 definePageMeta({
   layout: "auth-layout",
@@ -10,29 +11,32 @@ const formData = ref({
   uid: "",
   password: "",
 });
-const errMsg = ref("");
+const errMsg = ref<string | undefined | null>("");
 const submitLogin = async () => {
-  const {data, error} = await useAsyncData("login", () =>
-    $fetch("/api/auth/login", {
-      method: "POST",
-      body: {
-        uid: formData.value.uid,
-        password: formData.value.password,
-      },
-    })
-  );
-  if (data.value && data.value.success) {
+  const {data, error} = await useFetch("/api/auth/login", {
+    method: "POST",
+    body: {
+      uid: formData.value.uid,
+      password: formData.value.password,
+    },
+  });
+
+  if (data.value && data.value.ok) {
     return router.push("/");
   }
   if (error.value) {
-    errMsg.value = error.value.message;
+    const err = error.value.data;
+    errMsg.value = err.message;
   }
 };
+const clearErrMsg = () => (errMsg.value = "");
 </script>
 <template>
   <div
     class="flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
   >
+    <ClearErrBtn v-if="errMsg" :err-msg="errMsg" @clear-err-msg="clearErrMsg" />
+
     <form
       @submit.prevent="submitLogin"
       method="post"

@@ -12,7 +12,8 @@ export type HtmlTxtTag =
   | "h6"
   | "p"
   | "span"
-  | "small";
+  | "small"
+  | "label";
 export interface IDefaultApiResponse {
   response: {
     header: {

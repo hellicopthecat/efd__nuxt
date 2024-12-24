@@ -3,6 +3,7 @@ import {ACCESSTOKEN} from "~/utils/constants/constants";
 import SharedText from "../shared/SharedText.vue";
 import GlobalNav from "./GlobalNav.vue";
 import WeatherNow from "./WeatherNow.vue";
+import HomeUser from "../user/HomeUser.vue";
 
 const headerOpen = ref(false);
 const router = useRouter();
@@ -21,8 +22,12 @@ const headerOpneClick = () => {
     :class="headerOpen ? 'w-20' : 'w-96'"
   >
     <div class="flex gap-10" :class="headerOpen && 'flex-col'">
-      <NuxtLink to="/" :class="headerOpen && 'text-vertical'">
-        <SharedText tag="h3" txt="ESCAPE FORM DANGER" />
+      <NuxtLink to="/">
+        <SharedText
+          tag="h3"
+          txt="ESCAPE FORM DANGER"
+          :class-name="headerOpen && 'text-vertical'"
+        />
       </NuxtLink>
       <NuxtLink
         v-if="!accessToken"
@@ -46,16 +51,22 @@ const headerOpneClick = () => {
     <WeatherNow :class="headerOpen && 'hidden'" />
 
     <GlobalNav :class="headerOpen && 'hidden'" />
-    <button
-      @click="headerOpneClick"
-      class="flex items-center justify-center bg-slate-600 border border-warnYellow size-10 rounded-md mt-auto"
-      :class="!headerOpen && 'self-end'"
+
+    <div
+      class="flex items-center w-full mt-auto"
+      :class="accessToken ? 'justify-between' : 'justify-end'"
     >
-      <Icon
-        name="heroicons-solid:chevron-right"
-        class="size-10"
-        :class="headerOpen ? 'rotate-0' : 'rotate-180'"
-      />
-    </button>
+      <HomeUser v-if="accessToken" :class="headerOpen && 'hidden'" />
+      <button
+        @click="headerOpneClick"
+        class="flex items-center justify-center bg-slate-600 border border-warnYellow size-10 rounded-md"
+      >
+        <Icon
+          name="heroicons-solid:chevron-right"
+          class="size-10"
+          :class="headerOpen ? 'rotate-0' : 'rotate-180'"
+        />
+      </button>
+    </div>
   </div>
 </template>

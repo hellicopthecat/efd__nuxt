@@ -39,6 +39,9 @@ export default defineNuxtConfig({
   routeRules: {
     "/behavior": {cors: true},
   },
+  tailwindcss: {
+    cssPath: "~/assets/css/main.css",
+  },
   postcss: {
     plugins: {autoprefixer: {}, cssnano: {}},
   },

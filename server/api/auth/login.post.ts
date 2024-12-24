@@ -12,16 +12,16 @@ interface ILoginType {
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
   const formData: ILoginType = await readBody(event);
-
   try {
     const user = await prisma.user.findUnique({
       where: {uid: formData.uid},
       select: {id: true, uid: true, password: true},
     });
+
     if (user?.uid !== formData.uid) {
       throw createError({
-        statusCode: 400,
-        statusMessage: "Bad Request",
+        status: 400,
+        statusMessage: "Bad Requeset",
         message: "유저가 존재하지 않습니다.",
       });
     }
@@ -31,9 +31,9 @@ export default defineEventHandler(async (event) => {
     );
     if (!comparePassword) {
       throw createError({
-        statusCode: 400,
-        statusMessage: "Bad Request",
-        message: "비밀번호가 틀렸습니다.",
+        status: 400,
+        statusMessage: "Bad Requeset",
+        message: "비밀번호가 일치하지 않습니다.",
       });
     }
     //TOKEN
@@ -58,16 +58,16 @@ export default defineEventHandler(async (event) => {
     });
 
     return {
-      success: true,
+      ok: true,
       id: user.id,
     };
-  } catch (err) {
-    const errMsg = (err as Error).message;
-    console.log(errMsg);
+  } catch (error) {
+    const err = error as Error;
+    console.log("backend", err.message);
     throw createError({
-      statusCode: 400,
-      statusMessage: "Bad Request",
-      message: errMsg,
+      status: 400,
+      statusMessage: "Bad Requeset",
+      message: err.message || "로그인 시 알수없는 오류가 발생했습니다.",
     });
   }
 });

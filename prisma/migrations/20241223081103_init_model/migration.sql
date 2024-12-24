@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
     "uid" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
@@ -19,6 +19,8 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "UserAddress" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
     "sido" TEXT NOT NULL,
     "sigungu" TEXT NOT NULL,
     "bname" TEXT NOT NULL,
@@ -32,8 +34,8 @@ CREATE TABLE "UserAddress" (
 -- CreateTable
 CREATE TABLE "Item" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
     "itemName" TEXT NOT NULL,
     "itemFileName" TEXT NOT NULL,
     "itemPrice" TEXT NOT NULL,
@@ -52,14 +54,14 @@ CREATE TABLE "Item" (
 -- CreateTable
 CREATE TABLE "ChatRoom" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "createdAt" DATETIME NOT NULL,
-    "updateAt" DATETIME NOT NULL
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "Chat" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "createdAt" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" DATETIME NOT NULL,
     "chat" TEXT NOT NULL,
     "chatRoomId" TEXT,

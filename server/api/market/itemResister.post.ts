@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
       // // cloudinary
       configCloudinary();
       const uploadOption = {
-        folder: `image/${verifiyAccessToken.uid}`,
+        folder: `${verifiyAccessToken.uid}/items`,
         public_id: filename,
         use_filename: true,
         unique_filename: false,

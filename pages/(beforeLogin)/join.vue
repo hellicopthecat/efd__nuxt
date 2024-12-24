@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ClearErrBtn from "~/components/auth/ClearErrBtn.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 import {
   clickPostCode,
@@ -29,23 +30,23 @@ const formData = ref({
   restAddress: "",
 });
 
-const errorMsg = ref("");
+const errMsg = ref("");
 const submitJoin = async () => {
-  const {data, error} = await useAsyncData("join", () =>
-    $fetch("/api/auth/join", {method: "POST", body: formData.value})
-  );
+  const {data, error} = await useFetch("/api/auth/join", {
+    method: "POST",
+    body: formData.value,
+  });
+
   if (data.value && data.value.success) {
     router.push("/");
   }
   if (error.value && error.value.data) {
     const err = error.value.data as Error;
-    errorMsg.value = err.message;
+    errMsg.value = err.message;
   }
 };
-const handleErrOffClick = () => {
-  errorMsg.value = "";
-  clearError();
-};
+const clearErrMsg = () => (errMsg.value = "");
+
 onMounted(() => {
   onMountAddress();
 });
@@ -57,18 +58,8 @@ onUnmounted(() => {
   <div
     class="relative flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
   >
-    <div
-      v-if="errorMsg"
-      class="flex justify-between items-center bg-red-700 px-5 py-2 rounded-lg"
-    >
-      <SharedText tag="h6" :txt="errorMsg" />
-      <button
-        @click="handleErrOffClick"
-        class="rounded-lg hover:bg-pink-800 px-3 py-2"
-      >
-        확인
-      </button>
-    </div>
+    <ClearErrBtn :err-msg="errMsg" @clear-err-msg="clearErrMsg" />
+
     <form
       @submit.prevent="submitJoin"
       method="post"
