@@ -2,6 +2,7 @@
 import SharedText from "~/components/shared/SharedText.vue";
 import type {UserInfoType} from "~/server/api/auth/getUserInfo.get";
 import UserInfoLayout from "./UserInfoLayout.vue";
+import DeleteAccount from "./DeleteAccount.vue";
 const avatarUrl = ref<string | null>(null);
 const {data} = useNuxtData<UserInfoType>("userInfo");
 //fn
@@ -9,7 +10,6 @@ const selectAvatarImg = async (dataFile: FileList) => {
   avatarUrl.value = "";
   const file = dataFile[0];
   const url = URL.createObjectURL(file);
-  const fileName = file.name;
   const ok = confirm("수정하시겠습니까?");
   if (ok) {
     avatarUrl.value = url;
@@ -44,10 +44,9 @@ const openFilePicker = () => {
             class="cursor-pointer overflow-hidden *:size-32"
           >
             <Icon v-if="!data?.avatarUrl && !avatarUrl" name="mdi:user" />
-            <NuxtImg v-if="avatarUrl" :src="avatarUrl" />
             <NuxtImg
-              v-if="data?.avatarUrl && !avatarUrl"
-              :src="data.avatarUrl"
+              v-if="avatarUrl ?? data?.avatarUrl"
+              :src="avatarUrl! ?? data?.avatarUrl"
             />
           </label>
 
@@ -157,5 +156,6 @@ const openFilePicker = () => {
         </div>
       </div>
     </div>
+    <DeleteAccount />
   </UserInfoLayout>
 </template>

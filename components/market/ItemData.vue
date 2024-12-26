@@ -41,7 +41,14 @@ defineProps<IItemData>();
 
     <div class="flex flex-col items-end gap-1">
       <SharedText tag="h4" txt="가격 / 교환품목" />
-      <SharedText tag="h4" :txt="data.itemPrice" />
+      <SharedText
+        tag="h4"
+        :txt="
+          /^[0-9]+$/.test(data.itemPrice)
+            ? `${Number(data.itemPrice).toLocaleString()} 원`
+            : String(data.itemPrice)
+        "
+      />
     </div>
   </NuxtLink>
 </template>

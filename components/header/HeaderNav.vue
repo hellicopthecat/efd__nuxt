@@ -6,11 +6,12 @@ import WeatherNow from "./WeatherNow.vue";
 import HomeUser from "../user/HomeUser.vue";
 
 const headerOpen = ref(false);
-const router = useRouter();
+
 const accessToken = useCookie(ACCESSTOKEN);
 const logoutHandler = async () => {
   await $fetch("/api/auth/logout", {method: "POST"});
-  router.push("/");
+  sessionStorage.removeItem("USERNAV");
+  navigateTo("/");
 };
 const headerOpneClick = () => {
   headerOpen.value = !headerOpen.value;

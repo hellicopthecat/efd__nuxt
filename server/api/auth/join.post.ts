@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 //@ts-ignore
 import jwt from "jsonwebtoken";
 
-let userSchema = object({
+const userSchema = object({
   uid: string()
     .matches(UIDREGEX, {message: "아이디 조건과 일치하지 않습니다."})
     .required("아이디를 입력하지 않았습니다."),
@@ -43,73 +43,75 @@ export default defineEventHandler(async (event) => {
   const params: User = await readBody(event);
   try {
     const results = await userSchema.validate(params);
-    const existUser = await prisma.user.findFirst({
-      where: {OR: [{uid: results.uid}, {email: results.email}]},
-      select: {uid: true, email: true},
-    });
-    if (existUser?.uid === results.uid) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Bad Request",
-        message: "사용하는 아이디 입니다.",
+    if (results) {
+      const existUser = await prisma.user.findFirst({
+        where: {OR: [{uid: results.uid}, {email: results.email}]},
+        select: {uid: true, email: true},
       });
-    } else if (existUser?.email === results.email) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Bad Request",
-        message: "사용하는 이메일 입니다.",
-      });
-    }
-    const hashPassword = await bcrypt.hash(results.password, 10);
+      if (existUser?.uid === results.uid) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: "Bad Request",
+          message: "사용하는 아이디 입니다.",
+        });
+      } else if (existUser?.email === results.email) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: "Bad Request",
+          message: "사용하는 이메일 입니다.",
+        });
+      }
+      const hashPassword = await bcrypt.hash(results.password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        uid: results.uid,
-        email: results.email,
-        name: results.name,
-        password: hashPassword,
-        address: {
-          create: {
-            sido: results.addressData.sido + "",
-            sigungu: results.addressData.sigungu + "",
-            zonecode: results.addressData.zonecode + "",
-            bname: results.addressData.bname + "",
-            bname1: results.addressData.bname1 + "",
-            roadAddress: results.addressData.roadAddress + "",
-            buildingNmae: results.addressData.buildingName + "",
-            restAddress: results.restAddress,
+      const user = await prisma.user.create({
+        data: {
+          uid: results.uid,
+          email: results.email,
+          name: results.name,
+          password: hashPassword,
+          address: {
+            create: {
+              sido: results.addressData.sido + "",
+              sigungu: results.addressData.sigungu + "",
+              zonecode: results.addressData.zonecode + "",
+              bname: results.addressData.bname + "",
+              bname1: results.addressData.bname1 + "",
+              roadAddress: results.addressData.roadAddress + "",
+              buildingNmae: results.addressData.buildingName + "",
+              restAddress: results.restAddress,
+            },
           },
         },
-      },
-    });
-    //Refresh Token
-    const refreshToken = await useSession(event, {
-      name: REFRESHTOKEN,
-      password: config.refreshTokenKey,
-      cookie: {
-        httpOnly: true,
+      });
+      //Refresh Token
+      const refreshToken = await useSession(event, {
+        name: REFRESHTOKEN,
+        password: config.refreshTokenKey,
+        cookie: {
+          httpOnly: true,
+          sameSite: true,
+          secure: true,
+          maxAge: 60 * 60 * 24 * 7,
+          path: "/",
+        },
+      });
+      await refreshToken.update({uid: user.id});
+
+      //Access Token
+      const accessToken = jwt.sign({uid: user.id}, config.accessTokenKey);
+      setCookie(event, ACCESSTOKEN, accessToken, {
+        httpOnly: false,
         sameSite: true,
         secure: true,
-        maxAge: 60 * 60 * 24 * 7,
         path: "/",
-      },
-    });
-    await refreshToken.update({uid: user.id});
+        maxAge: 60 * 60 * 3,
+      });
 
-    //Access Token
-    const accessToken = jwt.sign({uid: user.id}, config.accessTokenKey);
-    setCookie(event, ACCESSTOKEN, accessToken, {
-      httpOnly: false,
-      sameSite: true,
-      secure: true,
-      path: "/",
-      maxAge: 60 * 60 * 3,
-    });
-
-    return {
-      success: true,
-      id: user.id,
-    };
+      return {
+        success: true,
+        id: user.id,
+      };
+    }
   } catch (error) {
     const err = error as Error;
     throw createError({

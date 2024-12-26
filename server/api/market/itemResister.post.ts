@@ -64,10 +64,11 @@ export default defineEventHandler(async (event) => {
       config.accessTokenKey
     ) as {uid: string};
     if (!verifiyAccessToken.uid) {
-      return {
-        ok: false,
-        errMsg: "토큰이 만료되었습니다. 새로고침해주세요",
-      };
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Bad Request",
+        message: "토큰이 만료되었습니다. 새로고침해주세요",
+      });
     }
 
     // file upload
@@ -87,6 +88,13 @@ export default defineEventHandler(async (event) => {
 
     //schema validate
     const validateResult = await itemResisterSchema.validate(parseData);
+    if (!validateResult) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Bad Request",
+        message: "모든 사항을 기재해 주세요",
+      });
+    }
     // after validate
     if (validateResult) {
       const fileData = validateResult.data as FileObject;
@@ -133,16 +141,16 @@ export default defineEventHandler(async (event) => {
     }
     return {
       ok: true,
-      errMsg: null,
     };
   } catch (error) {
     const err = error as Error;
     console.log(err.message);
-    return {
-      ok: false,
-      errMsg: err.message
-        ? err.message
-        : "파일 업로드 중 에러가 발생되었습니다. 관리자에게 연락하세요.",
-    };
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message:
+        err.message ||
+        "파일 업로드 중 에러가 발생되었습니다. 관리자에게 연락하세요.",
+    });
   }
 });

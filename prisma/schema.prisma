@@ -18,7 +18,7 @@ model User {
   email          String      @unique
   name           String?
   password       String?
-  address        UserAddress @relation(fields: [userAddressId], references: [id])
+  address        UserAddress @relation(fields: [userAddressId], references: [id], onDelete: Cascade)
   googleId       String?
   kakaoId        String?
   avatarUrl      String?
@@ -27,7 +27,7 @@ model User {
   userAddressId  Int
   interestedItem Item[]      @relation("interested")
 
-  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId String?
 }
 
@@ -61,8 +61,8 @@ model Item {
   itemRoadAdress String
   itemRestAdress String
   complete       Boolean  @default(false)
-  seller         User     @relation("sell", fields: [userId], references: [id])
-  buyer          User?    @relation("buy", fields: [userId], references: [id])
+  seller         User     @relation("sell", fields: [userId], references: [id], onDelete: Cascade)
+  buyer          User?    @relation("buy", fields: [userId], references: [id], onDelete: Cascade)
   interested     User[]   @relation("interested")
   userId         Int
 }
@@ -81,6 +81,6 @@ model Chat {
   updateAt  DateTime @updatedAt
   chat      String
 
-  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId String?
 }

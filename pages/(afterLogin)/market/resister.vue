@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import FullCoverLoading from "~/components/shared/FullCoverLoading.vue";
 import {
   clickPostCode,
   onMountAddress,
   unMountAddress,
 } from "~/utils/postCode/address";
+const btnPending = ref(false);
 const imgData = ref<null | File>(null);
 const itemData = ref({
   itemName: "",
@@ -29,20 +31,30 @@ const handleImgUrlFile = async (data: FileList) => {
   }
 };
 const submitForm = async () => {
+  btnPending.value = true;
   const formData = new FormData();
   if (imgData.value) formData.append("data", imgData.value);
   formData.append("itemData", JSON.stringify(itemData.value));
   formData.append("address", JSON.stringify(addressObj.value));
-  const result = await $fetch("/api/market/itemResister", {
+  const {data, error} = await useFetch("/api/market/itemResister", {
     body: formData,
     method: "POST",
   });
 
-  if (result.ok) {
+  if (data.value?.ok) {
     alert("상품이 등록되었습니다.");
+    btnPending.value = false;
     return navigateTo("/market");
   } else {
-    alert(result.errMsg);
+    const err = error.value?.data as Error;
+    alert(err.message);
+    btnPending.value = false;
+  }
+};
+const inputFileClick = () => {
+  const input = document.getElementById("itemImgFile");
+  if (input) {
+    input?.click();
   }
 };
 
@@ -62,15 +74,17 @@ onUnmounted(() => {
     >
       <!-- image -->
       <div
+        @click="inputFileClick"
         class="border border-dashed rounded-lg p-5 cursor-pointer flex items-center justify-center w-full h-96"
       >
-        <label v-if="url !== ''" for="itemImgFile">
-          <NuxtImg :src="url" class="size-80 cursor-pointer" />
-        </label>
+        <NuxtImg v-if="url !== ''" :src="url" class="size-80 cursor-pointer" />
 
-        <label v-if="url === ''" for="itemImgFile">
-          <Icon name="mdi:file-image" class="size-32 cursor-pointer" />
-        </label>
+        <Icon
+          v-if="url === ''"
+          name="mdi:file-image"
+          class="size-32 cursor-pointer"
+        />
+
         <input
           id="itemImgFile"
           type="file"
@@ -156,12 +170,22 @@ onUnmounted(() => {
         />
       </div>
 
-      <div
-        class="flex gap-5 *:bg-warnYellow *:text-slate-800 *:px-3 *:py-2 *:rounded-md"
-      >
-        <button class="">등록</button>
-        <NuxtLink to="/market" class="">취소</NuxtLink>
+      <div class="flex gap-5 *:px-3 *:py-2 *:rounded-md">
+        <button
+          :class="
+            btnPending
+              ? 'bg-slate-500 text-slate-200'
+              : 'bg-warnYellow text-slate-800'
+          "
+          :disabled="btnPending"
+        >
+          {{ !btnPending ? "등록" : "등록중" }}
+        </button>
+        <NuxtLink to="/market" class="bg-warnYellow text-slate-800"
+          >취소</NuxtLink
+        >
       </div>
     </form>
   </div>
+  <FullCoverLoading :loading="btnPending" />
 </template>

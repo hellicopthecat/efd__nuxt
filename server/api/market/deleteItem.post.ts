@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     }
     configCloudinary();
     await cloudinary.uploader.destroy(
-      `image/${verifiedToken.uid}/${ok.itemName}`
+      `${verifiedToken.uid}/items/${ok.itemName}`
     );
 
     return {

@@ -6,12 +6,10 @@ import {
   onMountAddress,
   unMountAddress,
 } from "~/utils/postCode/address";
-
 useHead({title: "회원가입"});
 definePageMeta({
   layout: "auth-layout",
 });
-const router = useRouter();
 const formData = ref({
   uid: "",
   name: "",
@@ -38,7 +36,7 @@ const submitJoin = async () => {
   });
 
   if (data.value && data.value.success) {
-    router.push("/");
+    navigateTo("/");
   }
   if (error.value && error.value.data) {
     const err = error.value.data as Error;
@@ -58,7 +56,7 @@ onUnmounted(() => {
   <div
     class="relative flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
   >
-    <ClearErrBtn :err-msg="errMsg" @clear-err-msg="clearErrMsg" />
+    <ClearErrBtn v-if="errMsg" :err-msg="errMsg" @clear-err-msg="clearErrMsg" />
 
     <form
       @submit.prevent="submitJoin"
@@ -93,14 +91,20 @@ onUnmounted(() => {
       <div class="flex flex-col gap-3">
         <label for="zonecode">주소</label>
         <div class="flex items-center gap-5">
-          <input
-            id="zonecode"
-            type="text"
-            placeholder="우편번호"
-            class="bg-darkBlue h-10 px-5 rounded-xl"
-            :value="formData.addressData.zonecode"
-            disabled
-          />
+          <div class="relative">
+            <div
+              @click.prevent="clickPostCode(formData.addressData)"
+              class="absolute size-full cursor-pointer"
+            />
+            <input
+              id="zonecode"
+              type="text"
+              placeholder="우편번호"
+              class="bg-darkBlue h-10 px-5 rounded-xl"
+              :value="formData.addressData.zonecode"
+              disabled
+            />
+          </div>
           <button
             class="mt-auto bg-slate-600 px-4 py-2 rounded-lg hover:bg-slate-800"
             @click.prevent="clickPostCode(formData.addressData)"
