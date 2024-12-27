@@ -53,7 +53,7 @@ const clearErrMsg = () => (errMsg.value = "");
       <SharedInput
         label-txt="비밀번호"
         name="password"
-        type="text"
+        type="password"
         placeholder="비밀번호"
         :value="formData.password"
         @update:value="formData.password = $event"

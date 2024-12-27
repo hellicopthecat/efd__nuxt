@@ -1,5 +1,6 @@
 //@ts-ignore
 import {Prisma} from "@prisma/client";
+//@ts-ignore
 import jwt from "jsonwebtoken";
 import prisma from "~/lib/prisma";
 import {ACCESSTOKEN} from "~/utils/constants/constants";

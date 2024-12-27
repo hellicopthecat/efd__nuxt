@@ -1,6 +1,7 @@
 import {ACCESSTOKEN} from "~/utils/constants/constants";
 import prisma from "~/lib/prisma";
 import {Prisma} from "@prisma/client";
+//@ts-ignore
 import jwt from "jsonwebtoken";
 async function getItems({
   sido,

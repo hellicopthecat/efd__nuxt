@@ -135,7 +135,7 @@ onUnmounted(() => {
       <SharedInput
         label-txt="비밀번호"
         name="password"
-        type="text"
+        type="password"
         placeholder="비밀번호"
         :value="formData.password"
         @update:value="formData.password = $event"
@@ -143,7 +143,7 @@ onUnmounted(() => {
       <SharedInput
         label-txt="비밀번호 확인"
         name="checkPass"
-        type="text"
+        type="password"
         placeholder="비밀번호 확인"
         :value="formData.checkPass"
         @update:value="formData.checkPass = $event"
