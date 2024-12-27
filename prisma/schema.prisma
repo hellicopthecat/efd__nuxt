@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -61,8 +62,8 @@ model Item {
   itemRoadAdress String
   itemRestAdress String
   complete       Boolean  @default(false)
-  seller         User     @relation("sell", fields: [userId], references: [id], onDelete: Cascade)
-  buyer          User?    @relation("buy", fields: [userId], references: [id], onDelete: Cascade)
+  seller         User     @relation("sell", fields: [userId], references: [id], onDelete: Cascade, map: "Item_Seller_fKey")
+  buyer          User?    @relation("buy", fields: [userId], references: [id], onDelete: Cascade, map: "Item_Buyer_fKey")
   interested     User[]   @relation("interested")
   userId         Int
 }
