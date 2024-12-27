@@ -41,6 +41,9 @@ onUnmounted(() => {
     observer.value.disconnect();
   }
 });
+useHead({
+  title: "돕고돕기",
+});
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BackPack from "~/components/iconComp/BackPack.vue";
+useHead({title: "재난시 행동요령"});
 </script>
 <template>
   <div class="flex justify-center items-center w-full h-full p-10">

@@ -228,7 +228,7 @@ onMounted(() => {
             />
           </div>
         </div>
-        <div class="flex justify-between w-full">
+        <div class="flex justify-end gap-5 w-full">
           <SharedText tag="h4" txt="낙뢰" class-name="text-white" />
           <SharedText
             tag="h4"

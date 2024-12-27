@@ -32,6 +32,7 @@ onMounted(() => {
     mouseY.value = e.pageY;
   });
 });
+useHead({title: "재난구호대비"});
 </script>
 <template>
   <div class="flex flex-col gap-5 p-10 w-full h-full">

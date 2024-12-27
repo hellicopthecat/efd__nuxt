@@ -65,6 +65,11 @@ const deleteItem = async () => {
 const createRoom = async () => {
   await $fetch("/api/chatting/createRoom", {method: "POST"});
 };
+watch(data, () => {
+  useHead({
+    title: data.value?.itemName,
+  });
+});
 //meta
 useHead({
   title: data.value?.itemName,

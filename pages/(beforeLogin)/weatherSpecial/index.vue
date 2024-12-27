@@ -13,7 +13,6 @@ const totalPage = ref(0);
 const totalPagesArray = computed(() =>
   Array.from({length: totalPage.value}, (_, i) => i + 1)
 );
-
 //data
 const {data, status, refresh} = useAsyncData(
   "weatherSpecial",
@@ -27,13 +26,7 @@ const {data, status, refresh} = useAsyncData(
       }
     )
 );
-watch(data, () => {
-  if (data.value) {
-    const {numOfRows, pageNo: pageNum, totalCount} = data.value;
-    pageNo.value = Number(pageNum);
-    totalPage.value = Math.floor(Number(totalCount) / Number(numOfRows));
-  }
-});
+
 //fn
 const leftClick = () => {
   if (slideNum.value >= 9) {
@@ -85,6 +78,20 @@ const nextOffset = async () => {
   }
   await refresh();
 };
+//watch
+watch(data, () => {
+  if (data.value) {
+    const {numOfRows, pageNo: pageNum, totalCount} = data.value;
+    pageNo.value = Number(pageNum);
+    totalPage.value = Math.floor(Number(totalCount) / Number(numOfRows));
+  }
+});
+
+useHead({
+  title: `${new Date().toLocaleDateString("KO-KR", {
+    dateStyle: "long",
+  })} 기상특보`,
+});
 </script>
 <template>
   <div class="flex flex-col items-center p-10 h-full gap-10">

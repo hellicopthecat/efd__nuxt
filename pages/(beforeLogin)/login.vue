@@ -6,7 +6,6 @@ definePageMeta({
 });
 useHead({title: "로그인"});
 
-const router = useRouter();
 const formData = ref({
   uid: "",
   password: "",
@@ -22,10 +21,10 @@ const submitLogin = async () => {
   });
 
   if (data.value && data.value.ok) {
-    return router.push("/");
+    navigateTo("/");
   }
   if (error.value) {
-    const err = error.value.data;
+    const err = error.value.data as Error;
     errMsg.value = err.message;
   }
 };

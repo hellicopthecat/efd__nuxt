@@ -13,6 +13,19 @@ const editCurrentIndex = (index: number) => {
 onMounted(() => {
   currentIndex.value = Number(sessionStorage.getItem("USERNAV"));
 });
+const titleFn = (index: number) => {
+  if (index === 0) {
+    return "회원정보";
+  } else if (index === 1) {
+    return "판매품";
+  } else {
+    return "관심품목";
+  }
+};
+watch(currentIndex, () => {
+  useHead({title: titleFn(Number(currentIndex.value))});
+});
+useHead({title: titleFn(Number(currentIndex.value))});
 </script>
 <template>
   <div class="flex w-full h-full">

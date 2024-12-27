@@ -6,7 +6,7 @@ import type {IBehaviorTypes} from "~/types/behavior/behaviorTypes";
 
 const lifeSafetyData = ref<IBehaviorTypes[] | null>(null);
 const defaultDataId = ref("03002");
-
+const defaultHeadText = ref("응급처치");
 const fetchData = async () => {
   const result = await $fetch("/api/behavior/lifeSafety", {
     method: "GET",
@@ -19,14 +19,20 @@ const getDataId = async (id: string) => {
   defaultDataId.value = id;
   await fetchData();
 };
-
+const getHeadText = (txt: string) => {
+  defaultHeadText.value = txt;
+};
 onMounted(async () => {
   await fetchData();
 });
+watch(defaultHeadText, () => {
+  useHead({title: defaultHeadText.value});
+});
+useHead({title: defaultHeadText.value});
 </script>
 <template>
   <BehaviorLayout>
-    <LifeSafetyNav @lifeSafety="getDataId" />
+    <LifeSafetyNav @lifeSafety="getDataId" @get-head-text="getHeadText" />
     <BehaviorDataLayout :behavior="lifeSafetyData" :headTitle="3" />
   </BehaviorLayout>
 </template>

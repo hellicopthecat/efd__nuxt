@@ -6,7 +6,7 @@ import type {IBehaviorTypes} from "~/types/behavior/behaviorTypes";
 
 const naturalBehaviorData = ref<IBehaviorTypes[] | null>(null);
 const defaultDataId = ref("01001");
-
+const defaultHeadText = ref("태풍");
 const fetchData = async () => {
   const result = await $fetch<IBehaviorTypes[]>(
     "/api/behavior/naturalDisaster",
@@ -22,14 +22,22 @@ const getDataId = async (id: string) => {
   defaultDataId.value = id;
   await fetchData();
 };
-
+const getHeadText = (txt: string) => (defaultHeadText.value = txt);
+watch(defaultHeadText, () => {
+  useHead({
+    title: defaultHeadText.value,
+  });
+});
+useHead({
+  title: defaultHeadText.value,
+});
 onMounted(async () => {
   await fetchData();
 });
 </script>
 <template>
   <BehaviorLayout>
-    <NaturalBehaviorNav @natural="getDataId" />
+    <NaturalBehaviorNav @natural="getDataId" @get-head-text="getHeadText" />
     <BehaviorDataLayout :behavior="naturalBehaviorData" :head-title="1" />
   </BehaviorLayout>
 </template>

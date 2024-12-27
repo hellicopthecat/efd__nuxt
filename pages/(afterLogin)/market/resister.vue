@@ -64,6 +64,9 @@ onMounted(async () => {
 onUnmounted(() => {
   unMountAddress();
 });
+useHead({
+  title: "물건등록하기",
+});
 </script>
 <template>
   <div class="w-full h-full p-5">
