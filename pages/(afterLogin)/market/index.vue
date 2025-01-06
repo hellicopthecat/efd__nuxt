@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import ItemData from "~/components/market/ItemData.vue";
+import FullCoverLoading from "~/components/shared/FullCoverLoading.vue";
 import MarketLayer from "~/components/shared/MarketLayer.vue";
 import type {GetItemsTypes} from "~/server/api/market/itemList.get";
 
 const datalength = ref(4);
 const observer = ref<IntersectionObserver | null>(null);
 const prevData = ref<GetItemsTypes | null>(null);
-const {data, refresh} = useAsyncData(
-  "itemList",
-  async () =>
-    await $fetch<GetItemsTypes>("/api/market/itemList", {
-      method: "GET",
-      query: {page: datalength.value},
-    })
+const {data, refresh, status} = await useFetch<GetItemsTypes>(
+  "/api/market/itemList",
+  {method: "GET", query: {page: datalength.value}, key: "itemList"}
 );
 
 const handleRefresh = async () => {
@@ -41,13 +38,20 @@ onUnmounted(() => {
     observer.value.disconnect();
   }
 });
-useHead({
+useSeoMeta({
   title: "돕고돕기",
+  description: "재난구호 물품/현찰 거래",
+  ogTitle: "돕고돕기",
+  ogDescription: "재난구호 물품/현찰 거래",
+  twitterTitle: "돕고돕기",
+  twitterDescription: "재난구호 물품/현찰 거래",
+  twitterCard: "app",
 });
 </script>
 
 <template>
   <MarketLayer>
+    <FullCoverLoading :loading="status === 'pending'" />
     <div class="flex flex-col gap-5">
       <div class="flex gap-5 *:flex *:justify-center *:items-center">
         <NuxtLink

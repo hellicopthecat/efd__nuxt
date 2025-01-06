@@ -22,7 +22,7 @@ const props = defineProps({
         <SharedText tag="p" txt="방수의류" />
       </div>
       <div class="flex h-full">
-        <div class="flex items-center justify-center h-full bg-indigo-800 p-2">
+        <div class="flex items-center justify-center bg-indigo-800 p-2">
           <SharedText tag="p" txt="텐트부품" class-name="text-nowrap" />
         </div>
 
@@ -37,7 +37,7 @@ const props = defineProps({
               />
             </div>
             <div
-              class="flex flex-col items-center justify-center w-full h-full bg-lime-700 p-1 *:text-center"
+              class="flex flex-col items-center justify-center w-full bg-lime-700 p-1 *:text-center"
             >
               <SharedText tag="p" txt="생수(1인당 하루 2리터)" />
             </div>
@@ -64,7 +64,7 @@ const props = defineProps({
           </div>
         </div>
 
-        <div class="flex items-center justify-center h-full bg-indigo-800 p-2">
+        <div class="flex items-center justify-center bg-indigo-800 p-2">
           <SharedText tag="p" txt="텐트부품" class-name="text-nowrap" />
         </div>
       </div>

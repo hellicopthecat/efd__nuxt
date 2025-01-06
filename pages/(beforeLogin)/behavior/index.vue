@@ -1,12 +1,20 @@
 <script setup lang="ts">
-useHead({title: "재난시 행동요령"});
+useSeoMeta({
+  title: "재난시 행동요령",
+  description: "재난시 행동요령(자연,사회,생활안전,민방위)",
+  ogTitle: "재난시 행동요령",
+  ogDescription: "재난시 행동요령(자연,사회,생활안전,민방위)",
+  twitterTitle: "재난시 행동요령",
+  twitterDescription: "재난시 행동요령(자연,사회,생활안전,민방위)",
+  twitterCard: "app",
+});
 </script>
 <template>
   <div class="flex justify-center items-center w-full h-full p-10">
     <ul
-      class="grid grid-cols-2 gap-5 text-center *:bg-slate-700 *:h-20 *:w-96 *:rounded-md hover:*:bg-slate-500"
+      class="grid grid-cols-2 gap-5 text-center *:bg-slate-700 w-full h-20 *:w-full xl:*:w-96 *:rounded-md hover:*:bg-slate-500"
     >
-      <li>
+      <li class="xl:place-self-end">
         <NuxtLink to="/behavior/natural-behavior">
           <SharedText tag="h5" txt="자연재난" class-name="leading-[80px]" />
         </NuxtLink>
@@ -16,7 +24,7 @@ useHead({title: "재난시 행동요령"});
           <SharedText tag="h5" txt="사회재난" class-name="leading-[80px]" />
         </NuxtLink>
       </li>
-      <li>
+      <li class="xl:place-self-end">
         <NuxtLink to="/behavior/life-safety">
           <SharedText tag="h5" txt="생활안전" class-name="leading-[80px]" />
         </NuxtLink>

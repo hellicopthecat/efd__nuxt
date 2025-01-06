@@ -1,8 +1,24 @@
 <script setup lang="ts">
+import LoadingIndicator from "~/components/shared/LoadingIndicator.vue";
 import WeatherSpecialComp from "~/components/weatherComp/weatherSpecialNotice/WeatherSpecialComp.vue";
 import type {IDefaultSafetyDataTypes} from "~/types/apiType";
 import type {IWeatherSpecialNoticeType} from "~/types/weather/weatherTypes";
 
+useSeoMeta({
+  title: `${new Date().toLocaleDateString("KO-KR", {
+    dateStyle: "long",
+  })} 기상특보`,
+  description: "기상특보(Weather SpecialCast)",
+  ogTitle: `${new Date().toLocaleDateString("KO-KR", {
+    dateStyle: "long",
+  })} 기상특보`,
+  ogDescription: "기상특보(Weather SpecialCast)",
+  twitterTitle: `${new Date().toLocaleDateString("KO-KR", {
+    dateStyle: "long",
+  })} 기상특보`,
+  twitterDescription: "기상특보(Weather SpecialCast)",
+  twitterCard: "app",
+});
 //slide
 const slideNum = ref(0);
 // pagination
@@ -79,71 +95,78 @@ const nextOffset = async () => {
   await refresh();
 };
 //watch
-watch(data, () => {
+watchEffect(() => {
   if (data.value) {
     const {numOfRows, pageNo: pageNum, totalCount} = data.value;
     pageNo.value = Number(pageNum);
     totalPage.value = Math.floor(Number(totalCount) / Number(numOfRows));
   }
 });
-
-useHead({
-  title: `${new Date().toLocaleDateString("KO-KR", {
-    dateStyle: "long",
-  })} 기상특보`,
-});
 </script>
 <template>
-  <div class="flex flex-col items-center p-10 h-full gap-10">
-    <div class="flex self-start items-end gap-5">
-      <SharedText tag="h2" txt="기상특보" class-name="text-white" />
-      <SharedText tag="h4" txt="(최근 10개)" class-name="text-white/75" />
+  <div
+    class="flex flex-col items-center px-5 py-10 xl:px-10 gap-5 xl:gap-10 w-full"
+  >
+    <div class="flex self-start gap-5">
+      <h2 class="text-3xl xl:text-5xl">기상특보</h2>
     </div>
 
-    <div class="flex items-center self-center w-full h-full">
-      <button @click="leftClick">
-        <Icon
-          name="heroicons:chevron-left-16-solid"
-          class="hover:text-warnYellow text-white size-32"
-        />
-      </button>
-      <!-- data -->
-      <div class="w-full overflow-hidden">
-        <ul
-          id="weatherSpecial"
-          class="relative flex w-[1000%] transition-all ease-in-out duration-500"
-        >
-          <li
-            v-for="(weather, index) in data?.body"
-            :key="`special:${weather.PRSNTN_SN}`"
-            class="w-full"
+    <div
+      v-if="status === 'pending'"
+      class="w-full h-full flex justify-center items-center"
+    >
+      <LoadingIndicator />
+    </div>
+
+    <div v-else class="flex flex-col items-center gap-10 w-full">
+      <div class="flex items-center self-center w-full h-full">
+        <button @click="leftClick">
+          <Icon
+            name="heroicons:chevron-left-16-solid"
+            class="hover:text-warnYellow text-white size-10 xl:size-32"
+          />
+        </button>
+        <!-- data -->
+        <div class="w-full overflow-hidden">
+          <ul
+            id="weatherSpecial"
+            class="relative flex w-[1000%] transition-all ease-in-out duration-500"
           >
-            <WeatherSpecialComp :weather="weather" />
+            <li
+              v-for="(weather, index) in data?.body"
+              :key="`special:${weather.PRSNTN_SN}`"
+              class="w-full"
+            >
+              <WeatherSpecialComp :weather="weather" />
+            </li>
+          </ul>
+        </div>
+        <button @click="rightClick">
+          <Icon
+            name="heroicons:chevron-right-16-solid"
+            class="hover:text-warnYellow text-white size-10 xl:size-32"
+          />
+        </button>
+      </div>
+
+      <!-- pagination -->
+      <div class="flex items-center gap-10">
+        <button @click="prevOffset" class="size-7">
+          <Icon name="mdi:chevron-left" class="size-7" />
+        </button>
+        <ul class="flex gap-5">
+          <li v-for="page in totalPagesArray.slice(startOffSet, endOffSet)">
+            <button
+              @click="currentPageClick(String(page))"
+              class="size-7"
+              v-html="page"
+            ></button>
           </li>
         </ul>
+        <button @click="nextOffset" class="size-7">
+          <Icon name="mdi:chevron-right" class="size-7" />
+        </button>
       </div>
-      <button @click="rightClick">
-        <Icon
-          name="heroicons:chevron-right-16-solid"
-          class="hover:text-warnYellow text-white size-32"
-        />
-      </button>
-    </div>
-    <!-- pagination -->
-    <div class="flex items-center gap-10">
-      <button @click="prevOffset" class="size-7">
-        <Icon name="mdi:chevron-left" class="size-7" />
-      </button>
-      <ul class="flex gap-5">
-        <li v-for="page in totalPagesArray.slice(startOffSet, endOffSet)">
-          <button @click="currentPageClick(String(page))" class="size-7">
-            {{ page }}
-          </button>
-        </li>
-      </ul>
-      <button @click="nextOffset" class="size-7">
-        <Icon name="mdi:chevron-right" class="size-7" />
-      </button>
     </div>
   </div>
 </template>

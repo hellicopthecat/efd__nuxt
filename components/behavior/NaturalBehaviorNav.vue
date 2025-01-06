@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import BehaviorNavLayout from "./BehaviorNavLayout.vue";
 const id = ref("01001");
-
 const emit = defineEmits(["natural", "getHeadText"]);
 const handleDataIdClick = (event: MouseEvent) => {
-  const target = event.currentTarget as HTMLDListElement;
+  const target = event.currentTarget as HTMLLIElement;
   if (target.dataset.id) id.value = target.dataset.id;
   emit("natural", target.dataset.id);
   emit("getHeadText", target.dataset.text);

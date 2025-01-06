@@ -32,10 +32,19 @@ onMounted(() => {
     mouseY.value = e.pageY;
   });
 });
-useHead({title: "재난구호대비"});
+
+useSeoMeta({
+  title: "재난구호대비가방",
+  description: "재난구호 대비 가방 및 비상대비용품관련",
+  ogTitle: "재난구호대비가방",
+  ogDescription: "재난구호 대비 가방 및 비상대비용품관련",
+  twitterTitle: "재난구호대비가방",
+  twitterDescription: "재난구호 대비 가방 및 비상대비용품관련",
+  twitterCard: "app",
+});
 </script>
 <template>
-  <div class="flex flex-col gap-5 p-10 w-full h-full">
+  <div class="flex flex-col gap-5 p-10 w-full">
     <div class="flex flex-col gap-5">
       <SharedText tag="h2" txt="재난대비가방" />
       <div

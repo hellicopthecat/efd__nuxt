@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import EditProduct from "~/components/market/edit-product.vue";
+import FullCoverLoading from "~/components/shared/FullCoverLoading.vue";
 import MarketLayer from "~/components/shared/MarketLayer.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 
@@ -10,14 +11,12 @@ const router = useRouter();
 const interestUser = ref();
 //data
 const uid = await $fetch("/api/auth/getUid", {method: "GET"});
-const {data} = useAsyncData(
-  `item${route.params.id}`,
-  async () =>
-    await $fetch("/api/market/getItem", {
-      method: "GET",
-      query: {id: route.params.id},
-    })
-);
+const {data, status} = await useFetch("/api/market/getItem", {
+  method: "GET",
+  query: {id: route.params.id},
+  key: `item${route.params.id}`,
+});
+
 interestUser.value = data.value?.interested.find(
   (user) => user.id === Number(uid)
 );
@@ -74,15 +73,33 @@ watch(data, () => {
 useHead({
   title: data.value?.itemName,
 });
+useSeoMeta({
+  title: () => data.value?.itemName + "",
+  description: () => data.value?.itemDesc + "",
+  ogTitle: () => data.value?.itemName + "",
+  ogDescription: () => data.value?.itemDesc + "",
+  twitterTitle: () => data.value?.itemName + "",
+  twitterDescription: () => data.value?.itemDesc + "",
+  twitterCard: "app",
+});
 </script>
 <template>
   <MarketLayer>
-    <div class="flex flex-col gap-5">
-      <div class="flex justify-between items-center">
+    <FullCoverLoading
+      v-if="status === 'pending'"
+      :loading="status === 'pending'"
+    />
+    <div v-else class="flex flex-col gap-5">
+      <div class="flex flex-col gap-3 md:flex-row justify-between items-center">
         <!-- badges -->
-        <div class="flex items-center gap-3 *:px-2 *:py-1 *:rounded-lg">
-          <button @click.prevent="goBack">
-            <Icon name="mdi:chevron-left" class="size-10" />
+        <div
+          class="flex items-center gap-3 *:px-2 *:py-1 *:rounded-lg *:text-nowrap"
+        >
+          <button
+            @click.prevent="goBack"
+            class="flex justify-center items-center"
+          >
+            <Icon name="mdi:chevron-left" class="size-8" />
           </button>
           <div :class="data?.complete ? 'bg-gray-300' : 'bg-green-500'">
             <SharedText
@@ -107,7 +124,7 @@ useHead({
           />
         </div>
         <!-- Fn badges -->
-        <div class="flex gap-3">
+        <div class="flex self-end xl:self-start gap-3">
           <button
             v-if="Number(uid) === data?.seller.id"
             @click.prevent="openModal"
@@ -141,22 +158,26 @@ useHead({
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-5">
-        <div class="self-center rounded-md overflow-hidden">
+      <div class="grid grid-cols-1 2xl:grid-cols-2 gap-5">
+        <div class="flex justify-center w-full rounded-md overflow-hidden">
           <NuxtImg :src="data?.itemImageUrl" class="size-full" />
         </div>
 
-        <div class="flex flex-col w-full gap-5">
-          <div class="flex flex-col gap-5 mb-5 p-3 bg-slate-700 rounded-md">
-            <SharedText tag="h1" :txt="data?.itemName" />
-            <div>
+        <div class="flex flex-col w-full gap-3">
+          <div class="flex flex-col gap-2 mb-5 p-5 bg-slate-700 rounded-md">
+            <SharedText
+              tag="h5"
+              :txt="`@${data?.seller.uid}`"
+              class-name="text-warnYellow/75"
+            />
+            <div class="flex justify-between">
+              <SharedText tag="h3" :txt="data?.itemName" />
               <SharedText
-                tag="h5"
-                :txt="`@${data?.seller.uid}`"
-                class-name="text-warnYellow/75"
+                tag="p"
+                class-name="text-lg font-semibold"
+                :txt="data?.itemPrice"
               />
             </div>
-            <SharedText tag="h2" :txt="data?.itemPrice" />
           </div>
 
           <div class="flex flex-col gap-3">

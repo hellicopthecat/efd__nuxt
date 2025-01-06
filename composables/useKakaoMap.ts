@@ -1,3 +1,3 @@
 export const useKakaoMap = () => {
-  return useState("map", () => null);
+  return useState("map", () => undefined);
 };

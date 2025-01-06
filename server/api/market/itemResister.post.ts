@@ -99,7 +99,9 @@ export default defineEventHandler(async (event) => {
     if (validateResult) {
       const fileData = validateResult.data as FileObject;
       const file = fileData.data;
-      const filename = validateResult.itemData.itemName;
+      const filename = `${new Date().getTime()}_${
+        validateResult.itemData.itemName
+      }`;
       const buffer = new Uint8Array(file);
 
       // // cloudinary
@@ -116,7 +118,6 @@ export default defineEventHandler(async (event) => {
         cloudinary.uploader
           .upload_stream(uploadOption, async (error, result) => {
             if (error) {
-              console.log(error.message);
               reject(error.message);
               return;
             }

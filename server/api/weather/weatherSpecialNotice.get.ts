@@ -14,6 +14,10 @@ export default defineEventHandler(async (event) => {
     return response;
   } catch (error) {
     const err = error as Error;
-    console.log("Weatherspecial : ", err.message);
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request",
+      message: "기상특보를 불러오는데 오류가 발생했습니다.",
+    });
   }
 });

@@ -23,16 +23,18 @@ const getDataId = async (id: string) => {
   await fetchData();
 };
 const getHeadText = (txt: string) => (defaultHeadText.value = txt);
-watch(defaultHeadText, () => {
-  useHead({
-    title: defaultHeadText.value,
-  });
-});
-useHead({
-  title: defaultHeadText.value,
-});
 onMounted(async () => {
   await fetchData();
+});
+
+useSeoMeta({
+  title: () => defaultHeadText.value,
+  description: () => `${defaultHeadText.value} (자연재난)`,
+  ogTitle: () => defaultHeadText.value,
+  ogDescription: () => `${defaultHeadText.value} (자연재난)`,
+  twitterTitle: () => defaultHeadText.value,
+  twitterDescription: () => `${defaultHeadText.value} (자연재난)`,
+  twitterCard: "app",
 });
 </script>
 <template>

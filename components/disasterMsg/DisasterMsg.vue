@@ -25,7 +25,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="relative z-[99] w-full">
+  <div class="flex flex-col w-full mt-auto">
     <div v-if="disasterMsgData" class="w-full h-36 bg-red-600 overflow-hidden">
       <div
         :id="msgCont"
@@ -34,18 +34,19 @@ onMounted(async () => {
       >
         <div
           v-for="data in disasterMsgData"
-          class="flex flex-col gap-1 justify-center h-36 p-2"
+          class="flex flex-col gap-3 xl:gap-2 justify-center h-36 p-2"
         >
-          <div class="flex items-center gap-4">
+          <div class="flex xl:items-center gap-4">
             <SharedText
-              tag="h5"
+              tag="p"
               :txt="`${data.EMRG_STEP_NM}(${data.DST_SE_NM})`"
+              class-name="text-nowrap"
             />
-            <SharedText tag="h5" :txt="data.RCPTN_RGN_NM" />
+            <SharedText tag="p" :txt="data.RCPTN_RGN_NM" />
           </div>
-          <div class="flex items-center gap-4">
-            <SharedText tag="h5" :txt="data.CRT_DT" />
-            <SharedText tag="h5" :txt="data.MSG_CN" />
+          <div class="flex xl:items-center gap-4">
+            <SharedText tag="p" :txt="data.CRT_DT" />
+            <SharedText tag="p" :txt="data.MSG_CN" />
           </div>
         </div>
       </div>

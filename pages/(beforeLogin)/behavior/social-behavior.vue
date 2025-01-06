@@ -7,7 +7,8 @@ import type {IBehaviorTypes} from "~/types/behavior/behaviorTypes";
 const socialBehaviorData = ref<IBehaviorTypes[] | null>(null);
 const defaultDataId = ref("02001");
 const defaultHeadText = ref("해양오염사고");
-const fetchData = async () => {
+
+const getSocialData = async () => {
   const result = await $fetch<IBehaviorTypes[]>(
     "/api/behavior/socialDIsaster",
     {
@@ -17,20 +18,25 @@ const fetchData = async () => {
   );
   socialBehaviorData.value = result;
 };
-
 const getDataId = async (id: string) => {
   defaultDataId.value = id;
-  await fetchData();
+  await getSocialData();
 };
+
 const getHeadText = (txt: string) => (defaultHeadText.value = txt);
 
 onMounted(async () => {
-  await fetchData();
+  await getSocialData();
 });
-watch(defaultHeadText, () => {
-  useHead({title: defaultHeadText.value});
+useSeoMeta({
+  title: () => defaultHeadText.value,
+  description: () => `${defaultHeadText.value} (사회재난)`,
+  ogTitle: () => defaultHeadText.value,
+  ogDescription: () => `${defaultHeadText.value} (사회재난)`,
+  twitterTitle: () => defaultHeadText.value,
+  twitterDescription: () => `${defaultHeadText.value} (사회재난)`,
+  twitterCard: "app",
 });
-useHead({title: defaultHeadText.value});
 </script>
 <template>
   <BehaviorLayout>

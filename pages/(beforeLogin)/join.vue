@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import ClearErrBtn from "~/components/auth/ClearErrBtn.vue";
 import SharedText from "~/components/shared/SharedText.vue";
-import {
-  clickPostCode,
-  onMountAddress,
-  unMountAddress,
-} from "~/utils/postCode/address";
-useHead({title: "회원가입"});
 definePageMeta({
   layout: "auth-layout",
 });
+useHead({title: "회원가입"});
+useSeoMeta({
+  title: "회원가입",
+  description: "회원가입(Create Account)",
+  ogTitle: "회원가입",
+  ogDescription: "회원가입(Create Account)",
+  twitterTitle: "회원가입",
+  twitterDescription: "회원가입(Create Account)",
+  twitterCard: "app",
+});
+const {$onMountAddress, $unMountAddress, $clickAddressOpen} = useNuxtApp();
 const formData = ref({
   uid: "",
   name: "",
@@ -46,15 +51,15 @@ const submitJoin = async () => {
 const clearErrMsg = () => (errMsg.value = "");
 
 onMounted(() => {
-  onMountAddress();
+  $onMountAddress();
 });
 onUnmounted(() => {
-  unMountAddress();
+  $unMountAddress();
 });
 </script>
 <template>
   <div
-    class="relative flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
+    class="relative flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full xl:w-[40%] p-10 gap-5"
   >
     <ClearErrBtn v-if="errMsg" :err-msg="errMsg" @clear-err-msg="clearErrMsg" />
 
@@ -93,7 +98,7 @@ onUnmounted(() => {
         <div class="flex items-center gap-5">
           <div class="relative">
             <div
-              @click.prevent="clickPostCode(formData.addressData)"
+              @click.prevent="$clickAddressOpen(formData.addressData)"
               class="absolute size-full cursor-pointer"
             />
             <input
@@ -106,13 +111,14 @@ onUnmounted(() => {
             />
           </div>
           <button
+            type="button"
             class="mt-auto bg-slate-600 px-4 py-2 rounded-lg hover:bg-slate-800"
-            @click.prevent="clickPostCode(formData.addressData)"
+            @click.prevent="$clickAddressOpen(formData.addressData)"
           >
             주소찾기
           </button>
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-col xl:flex-row gap-3">
           <input
             type="text"
             placeholder="도로명 주소"

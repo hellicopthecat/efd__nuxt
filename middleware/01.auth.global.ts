@@ -47,7 +47,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         }
       } catch (error) {
         const err = error as Error;
-        console.log(err.message);
       }
     }
   }

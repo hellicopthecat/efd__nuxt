@@ -5,11 +5,11 @@ const {items} = defineProps<{items: IItemTypes}>();
 </script>
 
 <template>
-  <li :key="items.id" class="size-full overflow-hidden">
-    <NuxtLink :href="`/market/${items.id}`" class="flex flex-col">
-      <div class="relative size-72">
+  <li :key="items.id">
+    <NuxtLink :href="`/market/${items.id}`" class="flex flex-col size-full">
+      <div class="relative size-full rounded-md overflow-hidden aspect-square">
         <NuxtImg
-          fit="fill"
+          fit="cover"
           :src="items.itemImageUrl"
           :style="items.complete && 'filter:grayscale(100%)'"
           :alt="items.itemName"

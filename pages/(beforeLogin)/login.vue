@@ -5,7 +5,15 @@ definePageMeta({
   layout: "auth-layout",
 });
 useHead({title: "로그인"});
-
+useSeoMeta({
+  title: "로그인",
+  description: "로그인(LogIn)",
+  ogTitle: "로그인",
+  ogDescription: "로그인(LogIn)",
+  twitterTitle: "로그인",
+  twitterDescription: "로그인(LogIn)",
+  twitterCard: "app",
+});
 const formData = ref({
   uid: "",
   password: "",
@@ -32,7 +40,7 @@ const clearErrMsg = () => (errMsg.value = "");
 </script>
 <template>
   <div
-    class="flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full w-[40%] p-10"
+    class="flex flex-col justify-between bg-white/10 rounded-lg border border-white/25 h-full xl:w-[40%] p-10"
   >
     <ClearErrBtn v-if="errMsg" :err-msg="errMsg" @clear-err-msg="clearErrMsg" />
 

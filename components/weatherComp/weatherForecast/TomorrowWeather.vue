@@ -16,46 +16,54 @@ import {
 } from "~/utils/constants/weatherContants";
 import {createNewArr} from "~/utils/weather/createNewWeatherArr";
 import ForcastInfo from "./ForcastInfo.vue";
+import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
 
 const isLoading = ref(false);
+const errMsg = ref("");
 const todayWeathers = ref<INewForeCastType[]>([]);
 const tomorrowWeathers = ref<INewForeCastType[]>([]);
 const theDayAfterWeathers = ref<INewForeCastType[]>([]);
 
 const getTomorrwWeater = async (lat: number, lng: number) => {
-  isLoading.value = true;
-  const data = await $fetch<IDefaultApiResponse>(
+  const {data, error, status} = await useFetch<IDefaultApiResponse>(
     "/api/weather/tomorrowWeather",
     {
       query: {x: lat, y: lng},
     }
   );
-
-  const todayData = (
-    data.response.body.items.item as IWeatherTodayTomorrowTypes[]
-  ).filter((data) => data.fcstDate === `${year}${month}${date}`);
-  const tomorrowData = (
-    data.response.body.items.item as IWeatherTodayTomorrowTypes[]
-  ).filter(
-    (data) => data.fcstDate === `${VFCSTYEAR}${VFCSTMONTH}${tomorrowDate}`
-  );
-  const theDayAfterData = (
-    data.response.body.items.item as IWeatherTodayTomorrowTypes[]
-  ).filter(
-    (data) => data.fcstDate === `${VFCSTYEAR}${VFCSTMONTH}${dayAfterDate}`
-  );
-
-  createNewArr({data: todayData, newWeatherData: todayWeathers});
-  createNewArr({data: tomorrowData, newWeatherData: tomorrowWeathers});
-  createNewArr({data: theDayAfterData, newWeatherData: theDayAfterWeathers});
-
-  isLoading.value = false;
+  if (data.value) {
+    const todayData = (
+      data.value.response.body.items.item as IWeatherTodayTomorrowTypes[]
+    ).filter((data) => data.fcstDate === `${year}${month}${date}`);
+    const tomorrowData = (
+      data.value.response.body.items.item as IWeatherTodayTomorrowTypes[]
+    ).filter(
+      (data) => data.fcstDate === `${VFCSTYEAR}${VFCSTMONTH}${tomorrowDate}`
+    );
+    const theDayAfterData = (
+      data.value.response.body.items.item as IWeatherTodayTomorrowTypes[]
+    ).filter(
+      (data) => data.fcstDate === `${VFCSTYEAR}${VFCSTMONTH}${dayAfterDate}`
+    );
+    createNewArr({data: todayData, newWeatherData: todayWeathers});
+    createNewArr({data: tomorrowData, newWeatherData: tomorrowWeathers});
+    createNewArr({data: theDayAfterData, newWeatherData: theDayAfterWeathers});
+  }
+  if (error.value) {
+    const err = error.value.data as Error;
+    errMsg.value = err.message;
+  }
+  if (status.value === "pending") {
+    isLoading.value = true;
+  } else {
+    isLoading.value = false;
+  }
 };
 
 onMounted(() => {
   navigator.geolocation.getCurrentPosition(({coords}) => {
     getTomorrwWeater(coords.latitude, coords.longitude);
-  });
+  }, geolocationErrorUtil);
 });
 </script>
 <template>

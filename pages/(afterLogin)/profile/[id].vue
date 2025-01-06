@@ -22,18 +22,15 @@ const titleFn = (index: number) => {
     return "관심품목";
   }
 };
-watch(currentIndex, () => {
-  useHead({title: titleFn(Number(currentIndex.value))});
-});
-useHead({title: titleFn(Number(currentIndex.value))});
+useHead({title: () => titleFn(Number(currentIndex.value))});
 </script>
 <template>
-  <div class="flex w-full h-full">
+  <div class="flex flex-col xl:flex-row w-full">
     <ProfileNav
       :index="Number(currentIndex)"
       @editCurrentIndex="(index) => editCurrentIndex(index)"
     />
-    <div class="p-16 w-full">
+    <div class="p-16">
       <UserProfile v-if="currentIndex === 0" />
       <SellingItems v-if="currentIndex === 1" />
       <InterestedItems v-if="currentIndex === 2" />

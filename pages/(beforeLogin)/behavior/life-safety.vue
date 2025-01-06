@@ -25,10 +25,15 @@ const getHeadText = (txt: string) => {
 onMounted(async () => {
   await fetchData();
 });
-watch(defaultHeadText, () => {
-  useHead({title: defaultHeadText.value});
+useSeoMeta({
+  title: () => defaultHeadText.value,
+  description: () => `${defaultHeadText.value} (생활안전)`,
+  ogTitle: () => defaultHeadText.value,
+  ogDescription: () => `${defaultHeadText.value} (생활안전)`,
+  twitterTitle: () => defaultHeadText.value,
+  twitterDescription: () => `${defaultHeadText.value} (생활안전)`,
+  twitterCard: "app",
 });
-useHead({title: defaultHeadText.value});
 </script>
 <template>
   <BehaviorLayout>

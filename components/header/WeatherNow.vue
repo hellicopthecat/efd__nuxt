@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import type {IDefaultApiResponse} from "~/types/apiType";
 import type {IWeatherNowTypes} from "~/types/weather/weatherTypes";
 import Precipitation from "../weatherComp/Precipitation.vue";
 import RainfallProbability from "../weatherComp/RainfallProbability.vue";
 import WindDirection from "../weatherComp/WindDirection.vue";
 import WindPower from "../weatherComp/WindPower.vue";
 import LoadingIndicator from "../shared/LoadingIndicator.vue";
+import SharedText from "../shared/SharedText.vue";
+import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
 
-const weatherNow = ref<IDefaultApiResponse | null>(null);
+const {open} = defineProps({open: Boolean});
+
+const weatherNow = ref<IWeatherNowTypes[] | null>(null);
+const errMsg = ref("");
 //현재 날씨
 const precipitation = ref<number | null>(null);
 //현재 온도
@@ -24,13 +28,17 @@ const windPower = ref<number | null>(null);
 const rotate = ref(false);
 
 const getWeatherNow = async (lat: number, lng: number) => {
-  const data = await $fetch<IDefaultApiResponse>("/api/weather/nowWeather", {
-    params: {x: lat, y: lng},
-  });
-  weatherNow.value = data;
+  const {data, error} = await useFetch<IWeatherNowTypes[]>(
+    "/api/weather/nowWeather",
+    {
+      method: "GET",
+      params: {x: lat, y: lng},
+    }
+  );
 
-  (data.response.body.items.item as IWeatherNowTypes[]).map(
-    (weather: IWeatherNowTypes) => {
+  if (data.value) {
+    weatherNow.value = data.value;
+    (data.value as IWeatherNowTypes[]).map((weather: IWeatherNowTypes) => {
       if (weather.category === "PTY") {
         precipitation.value = Number(weather.obsrValue);
       }
@@ -46,33 +54,42 @@ const getWeatherNow = async (lat: number, lng: number) => {
       if (weather.category === "WSD") {
         windPower.value = Number(weather.obsrValue);
       }
-    }
-  );
+    });
+  }
+  if (errMsg) {
+    const err = error.value?.data as Error;
+    errMsg.value = err.message;
+  }
 };
 const handleRotate = () => (rotate.value = !rotate.value);
 
 onMounted(() => {
-  navigator.geolocation.getCurrentPosition(({coords}) => {
-    getWeatherNow(coords.latitude, coords.longitude);
-  });
+  navigator.geolocation.getCurrentPosition(async ({coords}) => {
+    await getWeatherNow(coords.latitude, coords.longitude);
+  }, geolocationErrorUtil);
 });
 </script>
 
 <template>
-  <div class="text-white *:transition-all *:ease-in-out *:duration-200 w-full">
-    <div v-if="!(weatherNow && weatherNow.response.body.items.item)">
+  <div
+    class="text-white *:transition-all *:ease-in-out *:duration-200 w-full transition-all duration-300 ease-in-out origin-top"
+    :class="open ? 'scale-0 h-0' : 'scale-100'"
+  >
+    <div v-if="!weatherNow">
       <LoadingIndicator />
     </div>
-
+    <div v-if="errMsg" class="*:text-red-400 *:font-semibold">
+      <SharedText tag="h5" :txt="errMsg" />
+    </div>
     <div
-      v-if="weatherNow && weatherNow.response.body.items.item"
-      class="flex flex-col gap-2 *:transition-all *:ease-in-out *:duration-200"
+      v-if="weatherNow"
+      class="flex xl:flex-col gap-2 *:transition-all *:ease-in-out *:duration-200"
     >
-      <NuxtLink to="/weather" class="self-end">
+      <NuxtLink to="/weather" class="hidden xl:block xl:self-end">
         <SharedText tag="h5" txt="날씨보러가기" />
       </NuxtLink>
 
-      <div class="flex justify-around items-center">
+      <div class="flex items-center gap-5 xl:gap-0 xl:justify-around w-full">
         <!-- 현재날씨 및 온도 -->
         <Precipitation
           :weatherType="Number(precipitation)"
@@ -82,7 +99,7 @@ onMounted(() => {
       </div>
 
       <div
-        class="origin-top"
+        class="origin-top hidden xl:block"
         :class="rotate ? 'scale-y-100 h-full' : 'scale-y-0 h-0'"
       >
         <div class="flex items-center gap-5">
@@ -113,7 +130,7 @@ onMounted(() => {
 
       <button
         @click="handleRotate"
-        class="size-10 self-center"
+        class="size-10 self-center hidden xl:block"
         :class="rotate ? '-rotate-180' : 'rotate-0'"
       >
         <Icon

@@ -36,7 +36,7 @@ const closeModal = () => router.push({query: {modal: undefined}});
 </script>
 <template>
   <div
-    class="absolute left-0 right-0 z-[99] mx-auto bg-slate-800 w-[50%] h-[50%] p-10 rounded-lg"
+    class="fixed top-[30%] left-0 right-0 z-[99] mx-auto bg-slate-800 w-[90%] xl:w-[50%] h-[50%] p-10 rounded-lg"
   >
     <form class="flex flex-col gap-5 h-full">
       <div class="flex flex-col gap-2">

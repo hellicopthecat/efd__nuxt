@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import FullCoverLoading from "~/components/shared/FullCoverLoading.vue";
-import {
-  clickPostCode,
-  onMountAddress,
-  unMountAddress,
-} from "~/utils/postCode/address";
+const {$onMountAddress, $unMountAddress, $clickAddressOpen} = useNuxtApp();
 const btnPending = ref(false);
 const imgData = ref<null | File>(null);
 const itemData = ref({
@@ -59,13 +55,19 @@ const inputFileClick = () => {
 };
 
 onMounted(async () => {
-  onMountAddress();
+  $onMountAddress();
 });
 onUnmounted(() => {
-  unMountAddress();
+  $unMountAddress();
 });
-useHead({
-  title: "물건등록하기",
+useSeoMeta({
+  title: "돕고돕기 물품등록",
+  description: "재난구호 물품거래품 등록하기",
+  ogTitle: "돕고돕기 물품등록",
+  ogDescription: "재난구호 물품거래품 등록하기",
+  twitterTitle: "돕고돕기 물품등록",
+  twitterDescription: "재난구호 물품거래품 등록하기",
+  twitterCard: "app",
 });
 </script>
 <template>
@@ -131,7 +133,7 @@ useHead({
         <label for="address">주소</label>
         <div class="flex items-center gap-3">
           <div
-            @click.prevent="clickPostCode(addressObj)"
+            @click.prevent="$clickAddressOpen(addressObj)"
             class="cursor-pointer"
           >
             <input
@@ -145,7 +147,7 @@ useHead({
             />
           </div>
           <button
-            @click.prevent="clickPostCode(addressObj)"
+            @click.prevent="$clickAddressOpen(addressObj)"
             class="bg-warnYellow text-slate-800 px-3 py-2 rounded-md"
           >
             우편번호찾기
