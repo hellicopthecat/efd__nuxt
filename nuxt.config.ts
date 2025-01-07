@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      link: [{rel: "manifest", href: "manifest.webmanifest"}],
       htmlAttrs: {lang: "ko"},
       script: [
         {

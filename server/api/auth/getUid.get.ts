@@ -1,14 +1,14 @@
-import {ACCESSTOKEN} from "~/utils/constants/constants";
+import {REFRESHTOKEN} from "~/utils/constants/constants";
 //@ts-ignore
 import jwt from "jsonwebtoken";
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
-  const accessToken = getCookie(event, ACCESSTOKEN);
+  const refreshToken = getCookie(event, REFRESHTOKEN);
   try {
     const verifiedToken = jwt.verify(
-      accessToken + "",
-      config.accessTokenKey
+      refreshToken + "",
+      config.refreshTokenKey
     ) as {
       uid: string;
     };

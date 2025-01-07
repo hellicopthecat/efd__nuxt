@@ -41,12 +41,11 @@ onUnmounted(() => {
       class="flex gap-10 w-full justify-between xl:justify-start"
       :class="headerOpen && 'xl:flex-col'"
     >
-      <NuxtLink to="/">
+      <NuxtLink to="/" title="홈">
         <SharedText
           tag="h3"
           txt="ESCAPE FORM DANGER"
           :class-name="headerOpen && 'xl:text-vertical'"
-          title="홈"
         />
       </NuxtLink>
       <NuxtLink

@@ -4,21 +4,6 @@ import WeatherSpecialComp from "~/components/weatherComp/weatherSpecialNotice/We
 import type {IDefaultSafetyDataTypes} from "~/types/apiType";
 import type {IWeatherSpecialNoticeType} from "~/types/weather/weatherTypes";
 
-useSeoMeta({
-  title: `${new Date().toLocaleDateString("KO-KR", {
-    dateStyle: "long",
-  })} 기상특보`,
-  description: "기상특보(Weather SpecialCast)",
-  ogTitle: `${new Date().toLocaleDateString("KO-KR", {
-    dateStyle: "long",
-  })} 기상특보`,
-  ogDescription: "기상특보(Weather SpecialCast)",
-  twitterTitle: `${new Date().toLocaleDateString("KO-KR", {
-    dateStyle: "long",
-  })} 기상특보`,
-  twitterDescription: "기상특보(Weather SpecialCast)",
-  twitterCard: "app",
-});
 //slide
 const slideNum = ref(0);
 // pagination
@@ -30,18 +15,14 @@ const totalPagesArray = computed(() =>
   Array.from({length: totalPage.value}, (_, i) => i + 1)
 );
 //data
-const {data, status, refresh} = useAsyncData(
-  "weatherSpecial",
-  async () =>
-    await $fetch<IDefaultSafetyDataTypes<IWeatherSpecialNoticeType>>(
-      "/api/weather/weatherSpecialNotice",
-      {
-        query: {
-          pageNo: pageNo.value,
-        },
-      }
-    )
-);
+const {data, status, refresh} = await useFetch<
+  IDefaultSafetyDataTypes<IWeatherSpecialNoticeType>
+>("/api/weather/weatherSpecialNotice", {
+  query: {
+    pageNo: pageNo.value,
+  },
+  key: "weatherSpecial",
+});
 
 //fn
 const leftClick = () => {
@@ -102,10 +83,29 @@ watchEffect(() => {
     totalPage.value = Math.floor(Number(totalCount) / Number(numOfRows));
   }
 });
+useSeoMeta({
+  title: `${new Date().toLocaleDateString("KO-KR", {
+    dateStyle: "long",
+  })} 기상특보`,
+  description: "기상특보(Weather SpecialCast)",
+  ogTitle: `${new Date().toLocaleDateString("KO-KR", {
+    dateStyle: "long",
+  })} 기상특보`,
+  ogDescription: "기상특보(Weather SpecialCast)",
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "/weatherSpecial",
+  twitterTitle: `${new Date().toLocaleDateString("KO-KR", {
+    dateStyle: "long",
+  })} 기상특보`,
+  twitterDescription: "기상특보(Weather SpecialCast)",
+  twitterImage: "/pwaIcons/icon-512.png",
+  twitterCard: "app",
+});
 </script>
 <template>
   <div
     class="flex flex-col items-center px-5 py-10 xl:px-10 gap-5 xl:gap-10 w-full"
+    :class="status === 'pending' && 'h-full'"
   >
     <div class="flex self-start gap-5">
       <h2 class="text-3xl xl:text-5xl">기상특보</h2>

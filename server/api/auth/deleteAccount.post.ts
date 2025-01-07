@@ -6,14 +6,14 @@ import {configCloudinary} from "~/lib/cloudinary";
 import prisma from "~/lib/prisma";
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
-  const accessToken = getCookie(event, ACCESSTOKEN);
+  const refreshToken = getCookie(event, REFRESHTOKEN);
   try {
     const verifiedToken = jwt.verify(
-      accessToken + "",
-      config.accessTokenKey
+      refreshToken + "",
+      config.refreshTokenKey
     ) as {uid: string};
-    configCloudinary();
 
+    configCloudinary();
     new Promise((resolve, reject) => {
       cloudinary.api.delete_resources_by_prefix(
         `${verifiedToken.uid}`,

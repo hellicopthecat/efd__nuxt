@@ -3,16 +3,23 @@ import InterestedItems from "~/components/user/InterestedItems.vue";
 import ProfileNav from "~/components/user/ProfileNav.vue";
 import SellingItems from "~/components/user/SellingItems.vue";
 import UserProfile from "~/components/user/UserProfile.vue";
-
+const route = useRoute();
+const router = useRouter();
 const currentIndex = ref<number | null>(null);
 
 const editCurrentIndex = (index: number) => {
   sessionStorage.setItem("USERNAV", index + "");
   currentIndex.value = Number(sessionStorage.getItem("USERNAV"));
 };
-onMounted(() => {
+onMounted(async () => {
   currentIndex.value = Number(sessionStorage.getItem("USERNAV"));
+
+  const uid = await $fetch("/api/auth/getUid");
+  if (route.params.id !== uid) {
+    router.replace(`/profile/${uid}`);
+  }
 });
+
 const titleFn = (index: number) => {
   if (index === 0) {
     return "회원정보";

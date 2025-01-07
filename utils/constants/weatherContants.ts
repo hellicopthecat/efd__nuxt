@@ -69,7 +69,7 @@ export const forecastDate = () => {
 };
 
 export const VFCSTTIME = (time: number) => {
-  if (time >= 2310 && time < 210) {
+  if (time >= 2310 || time < 210) {
     return "2310";
   } else if (time >= 210 && time < 510) {
     return "0210";

@@ -64,22 +64,18 @@ const deleteItem = async () => {
 const createRoom = async () => {
   await $fetch("/api/chatting/createRoom", {method: "POST"});
 };
-watch(data, () => {
-  useHead({
-    title: data.value?.itemName,
-  });
-});
+
 //meta
-useHead({
-  title: data.value?.itemName,
-});
 useSeoMeta({
   title: () => data.value?.itemName + "",
   description: () => data.value?.itemDesc + "",
   ogTitle: () => data.value?.itemName + "",
   ogDescription: () => data.value?.itemDesc + "",
+  ogImage: () => data.value?.itemImageUrl,
+  ogUrl: () => `/market/${data.value?.id}`,
   twitterTitle: () => data.value?.itemName + "",
   twitterDescription: () => data.value?.itemDesc + "",
+  twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
 </script>

@@ -11,11 +11,13 @@ export default defineEventHandler(async (event) => {
   const URL_TYPE = `&numOfRows=1000&dataType=json&pageNo=1&base_date=${DDAY}&base_time=${VFCSTTIME(
     Number(TIME)
   )}&nx=${nx}&ny=${ny}`;
+
   try {
     const response = await $fetch(`${URL}${URL_TYPE}`);
     return response;
   } catch (error) {
     const err = error as Error;
+    console.log(err.message);
     throw createError({
       statusCode: 400,
       statusMessage: "Bad Request",

@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import ClearErrBtn from "~/components/auth/ClearErrBtn.vue";
 import SharedText from "~/components/shared/SharedText.vue";
+
 definePageMeta({
   layout: "auth-layout",
 });
-useHead({title: "로그인"});
+
 useSeoMeta({
   title: "로그인",
   description: "로그인(LogIn)",
   ogTitle: "로그인",
   ogDescription: "로그인(LogIn)",
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "/login",
   twitterTitle: "로그인",
   twitterDescription: "로그인(LogIn)",
+  twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
 const formData = ref({

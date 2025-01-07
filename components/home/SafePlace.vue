@@ -3,6 +3,11 @@ import type {ISafeAreaTypes} from "~/types/safeArea/safeAreaTyeps";
 import SharedText from "../shared/SharedText.vue";
 import {zoomIn, setCenter} from "~/utils/kakaomap";
 import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
+interface IDataArrTypes {
+  id: string;
+  title: string;
+  latlng: {Ma: number; La: number};
+}
 const initMap = useKakaoMap();
 const currentBtn = useCurrentBtnId();
 
@@ -25,7 +30,7 @@ onMounted(async () => {
     });
     safePlaceData.value = data;
 
-    const dataArr = [] as any[];
+    const dataArr = [] as IDataArrTypes[];
     data.forEach((value) => {
       const data = {
         id: value.MNG_SN,
@@ -37,9 +42,9 @@ onMounted(async () => {
     });
 
     const marker = multiMarker(initMap.value, dataArr);
-    for (let index = 0; index <= marker.length; index++) {
-      const lat = (dataArr[index] as {latlng: {Ma: number}}).latlng.Ma;
-      const lng = (dataArr[index] as {latlng: {La: number}}).latlng.La;
+    for (let index = 0; index < marker.length; index++) {
+      const lat = dataArr[index].latlng.Ma;
+      const lng = dataArr[index].latlng.La;
       const domId = dataArr[index].id;
       markerClick({
         map: initMap.value,

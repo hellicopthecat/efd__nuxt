@@ -56,8 +56,8 @@ const getWeatherNow = async (lat: number, lng: number) => {
       }
     });
   }
-  if (errMsg) {
-    const err = error.value?.data as Error;
+  if (error.value) {
+    const err = error.value.data as Error;
     errMsg.value = err.message;
   }
 };

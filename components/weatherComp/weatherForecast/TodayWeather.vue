@@ -7,6 +7,7 @@ import SkyStatus from "../SkyStatus.vue";
 import WindPower from "../WindPower.vue";
 import WindDirection from "../WindDirection.vue";
 import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
+import LoadingIndicator from "~/components/shared/LoadingIndicator.vue";
 
 const isLoading = ref(false);
 const errMsg = ref("");
@@ -170,8 +171,10 @@ onMounted(() => {
       <div v-if="errMsg">
         <SharedText tag="h3" :txt="errMsg" class-name="text-red-500" />
       </div>
-      <NuxtImg v-if="isLoading" src="/utilIcon/loading.gif" />
-      <div v-if="!isLoading">
+      <div v-if="isLoading" class="h-full">
+        <LoadingIndicator />
+      </div>
+      <div v-else>
         <section>
           <ClientOnly>
             <VueApexCharts

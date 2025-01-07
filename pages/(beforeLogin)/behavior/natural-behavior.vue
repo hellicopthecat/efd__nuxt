@@ -32,8 +32,11 @@ useSeoMeta({
   description: () => `${defaultHeadText.value} (자연재난)`,
   ogTitle: () => defaultHeadText.value,
   ogDescription: () => `${defaultHeadText.value} (자연재난)`,
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "/natural-behavior",
   twitterTitle: () => defaultHeadText.value,
   twitterDescription: () => `${defaultHeadText.value} (자연재난)`,
+  twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
 </script>

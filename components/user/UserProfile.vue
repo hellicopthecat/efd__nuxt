@@ -109,8 +109,8 @@ const openFilePicker = () => {
             <SharedText
               id="postalCode"
               tag="p"
-              :txt="data?.address.zonecode"
-              class="text-xl"
+              :txt="data?.address.zonecode + ''"
+              className="text-xl"
             />
           </div>
           <!-- 위치 -->

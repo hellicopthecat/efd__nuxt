@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import ClearErrBtn from "~/components/auth/ClearErrBtn.vue";
+import CheckPassword from "~/components/auth/join/CheckPassword.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 definePageMeta({
   layout: "auth-layout",
 });
-useHead({title: "회원가입"});
 useSeoMeta({
   title: "회원가입",
   description: "회원가입(Create Account)",
   ogTitle: "회원가입",
   ogDescription: "회원가입(Create Account)",
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "/join",
   twitterTitle: "회원가입",
   twitterDescription: "회원가입(Create Account)",
+  twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
 const {$onMountAddress, $unMountAddress, $clickAddressOpen} = useNuxtApp();
@@ -138,6 +141,7 @@ onUnmounted(() => {
           />
         </div>
       </div>
+
       <SharedInput
         label-txt="비밀번호"
         name="password"
@@ -146,15 +150,21 @@ onUnmounted(() => {
         :value="formData.password"
         @update:value="formData.password = $event"
       />
-      <SharedInput
-        label-txt="비밀번호 확인"
-        name="checkPass"
-        type="password"
-        placeholder="비밀번호 확인"
-        :value="formData.checkPass"
-        @update:value="formData.checkPass = $event"
-      />
 
+      <div class="flex flex-col gap-3">
+        <SharedInput
+          label-txt="비밀번호 확인"
+          name="checkPass"
+          type="password"
+          placeholder="비밀번호 확인"
+          :value="formData.checkPass"
+          @update:value="formData.checkPass = $event"
+        />
+        <CheckPassword
+          :password="formData.password"
+          :check-pass="formData.checkPass"
+        />
+      </div>
       <button type="submit" class="bg-warnYellow h-10 rounded-lg text-black">
         회원가입
       </button>

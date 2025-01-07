@@ -24,8 +24,11 @@ useSeoMeta({
   description: () => `${defaultHeadText.value} (민방위)`,
   ogTitle: () => defaultHeadText.value,
   ogDescription: () => `${defaultHeadText.value} (민방위)`,
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "/civil-defence",
   twitterTitle: () => defaultHeadText.value,
   twitterDescription: () => `${defaultHeadText.value} (민방위)`,
+  twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
 </script>

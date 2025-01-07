@@ -4,8 +4,11 @@ useSeoMeta({
   description: "재난시 행동요령(자연,사회,생활안전,민방위)",
   ogTitle: "재난시 행동요령",
   ogDescription: "재난시 행동요령(자연,사회,생활안전,민방위)",
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "/behavior",
   twitterTitle: "재난시 행동요령",
   twitterDescription: "재난시 행동요령(자연,사회,생활안전,민방위)",
+  twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
 </script>

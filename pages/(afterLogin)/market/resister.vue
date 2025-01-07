@@ -65,8 +65,11 @@ useSeoMeta({
   description: "재난구호 물품거래품 등록하기",
   ogTitle: "돕고돕기 물품등록",
   ogDescription: "재난구호 물품거래품 등록하기",
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "/market/resister",
   twitterTitle: "돕고돕기 물품등록",
   twitterDescription: "재난구호 물품거래품 등록하기",
+  twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
 </script>

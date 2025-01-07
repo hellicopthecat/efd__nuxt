@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import SharedText from "~/components/shared/SharedText.vue";
+useHead({
+  titleTemplate: "%s | EFD",
+});
 </script>
 
 <template>
