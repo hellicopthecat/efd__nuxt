@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ClearErrBtn from "~/components/auth/ClearErrBtn.vue";
 import CheckPassword from "~/components/auth/join/CheckPassword.vue";
+import FullCoverLoading from "~/components/shared/FullCoverLoading.vue";
 import SharedText from "~/components/shared/SharedText.vue";
 definePageMeta({
   layout: "auth-layout",
@@ -17,7 +18,9 @@ useSeoMeta({
   twitterImage: "/pwaIcons/icon-512.png",
   twitterCard: "app",
 });
-const {$onMountAddress, $unMountAddress, $clickAddressOpen} = useNuxtApp();
+const {$onMountAddress, $unMountAddress, $clickAddressOpen, $token} =
+  useNuxtApp();
+const loading = ref(false);
 const formData = ref({
   uid: "",
   name: "",
@@ -34,19 +37,23 @@ const formData = ref({
     zonecode: "",
   },
   restAddress: "",
+  alertToken: $token,
 });
 
 const errMsg = ref("");
 const submitJoin = async () => {
+  loading.value = true;
   const {data, error} = await useFetch("/api/auth/join", {
     method: "POST",
     body: formData.value,
   });
 
   if (data.value && data.value.success) {
+    loading.value = false;
     navigateTo("/");
   }
   if (error.value && error.value.data) {
+    loading.value = false;
     const err = error.value.data as Error;
     errMsg.value = err.message;
   }
@@ -176,4 +183,5 @@ onUnmounted(() => {
       </p>
     </div>
   </div>
+  <FullCoverLoading :loading="loading" />
 </template>

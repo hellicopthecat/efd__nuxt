@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const response = await $fetch<
       IDefaultSafetyDataTypes<IWeatherSpecialNoticeType>
     >(
-      `${PUBLIC_API_BASE_URL}/DSSP-IF-00045?serviceKey=${config.weatherSpecialNotiKEY}&pageNo=${query.pageNo}&numOfRows=10&returnType=json`
+      `${PUBLIC_API_BASE_URL}/DSSP-IF-00045?serviceKey=${config.public.WEATHER_SPECIAL_NOTIFICATION_KEY}&pageNo=${query.pageNo}&numOfRows=10&returnType=json`
     );
     return response;
   } catch (error) {

@@ -1,8 +1,6 @@
 import {mixed, object, string} from "yup";
 import prisma from "~/lib/prisma";
 import {ACCESSTOKEN} from "~/utils/constants/constants";
-//@ts-ignore
-import jwt from "jsonwebtoken";
 import {v2 as cloudinary} from "cloudinary";
 import type {UploadApiOptions} from "cloudinary";
 import {configCloudinary} from "~/lib/cloudinary";
@@ -56,14 +54,15 @@ const itemResisterSchema = object({
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const readFormData = await readMultipartFormData(event);
+  const accessToken = getCookie(event, ACCESSTOKEN);
   try {
     //token
-    const accessToken = getCookie(event, ACCESSTOKEN);
-    const verifiyAccessToken = jwt.verify(
-      accessToken + "",
-      config.accessTokenKey
-    ) as {uid: string};
-    if (!verifiyAccessToken.uid) {
+    const verifiyAccessToken = await unsealSession(
+      event,
+      {name: ACCESSTOKEN, password: config.ACCESS_TOKEN_KEY},
+      accessToken + ""
+    );
+    if (!verifiyAccessToken.data?.uid) {
       throw createError({
         statusCode: 400,
         statusMessage: "Bad Request",
@@ -107,7 +106,7 @@ export default defineEventHandler(async (event) => {
       // // cloudinary
       configCloudinary();
       const uploadOption = {
-        folder: `${verifiyAccessToken.uid}/items`,
+        folder: `${verifiyAccessToken.data?.uid}/items`,
         public_id: filename,
         use_filename: true,
         unique_filename: false,
@@ -133,7 +132,7 @@ export default defineEventHandler(async (event) => {
                 itemSigungu: validateResult.address.sigungu + "",
                 itemRoadAdress: validateResult.address.roadAddress + "",
                 itemRestAdress: validateResult.address.restAddress + "",
-                seller: {connect: {id: Number(verifiyAccessToken.uid)}},
+                seller: {connect: {id: Number(verifiyAccessToken.data?.uid)}},
               },
             });
           })

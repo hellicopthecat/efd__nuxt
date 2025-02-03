@@ -7,6 +7,7 @@ const initMap = useKakaoMap();
 const {$initKakaoMap} = useNuxtApp();
 const width = ref("100%");
 const height = ref("100%");
+const mapContID = ref("mapCont");
 
 const resizeMap = (resizeWidth: number, resizeHeight: number) => {
   width.value = resizeWidth + "px";
@@ -24,7 +25,7 @@ onMounted(() => {
   }, geolocationErrorUtil);
 
   watchEffect(() => {
-    const mapCont = document.getElementById("mapCont");
+    const mapCont = document.getElementById(mapContID.value);
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const resizeWidth = entry.contentRect.width;
@@ -37,7 +38,9 @@ onMounted(() => {
         }
       }
     });
-    resizeObserver.observe(mapCont!);
+    if (mapCont) {
+      resizeObserver.observe(mapCont);
+    }
   });
 });
 onUnmounted(() => {
@@ -48,7 +51,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div id="mapCont" class="relative w-full h-full overflow-hidden text-em">
+  <div :id="mapContID" class="relative w-full h-full overflow-hidden text-em">
     <div v-if="!initMap" class="flex justify-center items-center w-full h-full">
       <LoadingIndicator class="size-32" />
     </div>

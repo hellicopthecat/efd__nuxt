@@ -15,7 +15,14 @@ const {data} = useFetch("/api/auth/getUserInfo", {
       <NuxtImg v-if="data?.avatarUrl" :src="data.avatarUrl" />
     </div>
     <div>
-      <SharedText tag="h4" :txt="data?.uid" />
+      <SharedText
+        tag="h4"
+        :txt="
+          String(data?.name).length > 13
+            ? `${String(data?.name).slice(0, 13)}...`
+            : String(data?.name)
+        "
+      />
     </div>
   </NuxtLink>
 </template>

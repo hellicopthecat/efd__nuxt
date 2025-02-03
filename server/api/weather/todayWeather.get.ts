@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const nx = convertedCoord.x;
   const ny = convertedCoord.y;
   const FORCASTDATE = forecastDate();
-  const URL = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/${FCST}?serviceKey=${config.publicAPIKEY}`;
+  const URL = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/${FCST}?serviceKey=${config.public.PUBLIC_DATA_APIKEY}`;
   const URL_TYPE = `&numOfRows=1000&dataType=json&pageNo=1&base_date=${FORCASTDATE}&base_time=${forecastTime}&nx=${nx}&ny=${ny}`;
   try {
     const response = await $fetch(`${URL}${URL_TYPE}`);

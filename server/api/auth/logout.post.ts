@@ -7,5 +7,4 @@ import {
 export default defineEventHandler((event) => {
   deleteCookie(event, ACCESSTOKEN);
   deleteCookie(event, REFRESHTOKEN);
-  deleteCookie(event, USERTOKEN);
 });

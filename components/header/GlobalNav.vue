@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {ACCESSTOKEN} from "~/utils/constants/constants";
 import SharedText from "../shared/SharedText.vue";
-const {open} = defineProps({open: Boolean});
-const accessToken = useCookie(ACCESSTOKEN);
+import {ACCESSTOKEN} from "~/utils/constants/constants";
+const {open, userId} = defineProps({open: Boolean, userId: String});
+const route = useRoute();
 </script>
 <template>
   <nav
@@ -12,7 +12,7 @@ const accessToken = useCookie(ACCESSTOKEN);
     <ul
       class="flex justify-between xl:flex-col xl:justify-start gap-1 *:p-2 *:rounded-md hover:*:bg-slate-500 hover:*:shadow-lg"
     >
-      <li>
+      <li :class="route.path === '/' && 'bg-slate-500'">
         <NuxtLink
           to="/"
           class="flex flex-col xl:flex-row justify-between items-center"
@@ -22,7 +22,7 @@ const accessToken = useCookie(ACCESSTOKEN);
           <SharedText tag="h5" txt="홈" class-name="hidden xl:block" />
         </NuxtLink>
       </li>
-      <li>
+      <li :class="route.path === '/weather' && 'bg-slate-500'">
         <NuxtLink
           to="/weather"
           class="flex flex-col xl:flex-row justify-between items-center"
@@ -32,7 +32,7 @@ const accessToken = useCookie(ACCESSTOKEN);
           <SharedText tag="h5" txt="날씨" class-name="hidden xl:block" />
         </NuxtLink>
       </li>
-      <li>
+      <li :class="route.path === '/weatherSpecial' && 'bg-slate-500'">
         <NuxtLink
           to="/weatherSpecial"
           class="flex flex-col xl:flex-row justify-between items-center"
@@ -42,7 +42,7 @@ const accessToken = useCookie(ACCESSTOKEN);
           <SharedText tag="h5" txt="기상특보" class-name="hidden xl:block" />
         </NuxtLink>
       </li>
-      <li>
+      <li :class="route.path === '/behavior' && 'bg-slate-500'">
         <NuxtLink
           to="/behavior"
           class="flex flex-col xl:flex-row justify-between items-center"
@@ -56,7 +56,7 @@ const accessToken = useCookie(ACCESSTOKEN);
           />
         </NuxtLink>
       </li>
-      <li>
+      <li :class="route.path === '/disasterbag' && 'bg-slate-500'">
         <NuxtLink
           to="/disasterbag"
           class="flex flex-col xl:flex-row justify-between items-center"
@@ -70,7 +70,7 @@ const accessToken = useCookie(ACCESSTOKEN);
           />
         </NuxtLink>
       </li>
-      <li v-if="accessToken">
+      <li v-if="userId" :class="route.path === '/market' && 'bg-slate-500'">
         <NuxtLink
           to="/market"
           class="flex flex-col xl:flex-row justify-between items-center"
@@ -78,6 +78,16 @@ const accessToken = useCookie(ACCESSTOKEN);
         >
           <Icon name="icon-park-twotone:weixin-market" class="size-6" />
           <SharedText tag="h5" txt="돕고돕기" class-name="hidden xl:block" />
+        </NuxtLink>
+      </li>
+      <li v-if="userId" :class="route.path === '/chatting' && 'bg-slate-500'">
+        <NuxtLink
+          to="/chatting"
+          class="flex flex-col xl:flex-row justify-between items-center"
+          title="채팅방"
+        >
+          <Icon name="mdi:chat" class="size-6" />
+          <SharedText tag="h5" txt="채팅방" class-name="hidden xl:block" />
         </NuxtLink>
       </li>
     </ul>

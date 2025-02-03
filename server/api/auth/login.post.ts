@@ -2,12 +2,11 @@ import prisma from "~/lib/prisma";
 import {ACCESSTOKEN, REFRESHTOKEN} from "~/utils/constants/constants";
 //@ts-ignore
 import bcrypt from "bcrypt";
-//@ts-ignore
-import jwt from "jsonwebtoken";
 
 interface ILoginType {
   uid: string;
   password: string;
+  token: string;
 }
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
@@ -36,38 +35,53 @@ export default defineEventHandler(async (event) => {
         message: "비밀번호가 일치하지 않습니다.",
       });
     }
+    // Save FCM TOKEN
+    await prisma.user.update({
+      where: {id: user.id},
+      data: {alertToken: formData.password},
+    });
     //TOKEN
-    const payload = {uid: user.id};
-    //Refresh TOKEN
-    const refreshToken = jwt.sign(payload, config.refreshTokenKey);
-    setCookie(event, REFRESHTOKEN, refreshToken, {
-      httpOnly: true,
-      sameSite: true,
-      secure: true,
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
+    const userInfo = {uid: user.id, alertToken: formData.token};
+    //Refresh Token
+    const refreshToken = await useSession(event, {
+      name: REFRESHTOKEN,
+      password: config.REFRESH_TOKEN_KEY,
+      cookie: {
+        httpOnly: true,
+        sameSite: true,
+        secure: true,
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      },
     });
-
-    const accessToken = jwt.sign({uid: user.id}, config.accessTokenKey);
-    setCookie(event, ACCESSTOKEN, accessToken, {
-      httpOnly: false,
-      sameSite: true,
-      secure: true,
-      maxAge: 60 * 60 * 3,
-      path: "/",
+    await refreshToken.update(userInfo);
+    //Access Token
+    const accessToken = await useSession(event, {
+      name: ACCESSTOKEN,
+      password: config.ACCESS_TOKEN_KEY,
+      cookie: {
+        httpOnly: false,
+        sameSite: true,
+        secure: true,
+        maxAge: 60 * 60 * 5,
+        // maxAge: 10,
+        path: "/",
+      },
     });
+    await accessToken.update(userInfo);
 
     return {
       ok: true,
+      errMsg: null,
       id: user.id,
     };
   } catch (error) {
     const err = error as Error;
     console.log("backend", err.message);
-    throw createError({
-      status: 400,
-      statusMessage: "Bad Requeset",
-      message: err.message || "로그인 시 알수없는 오류가 발생했습니다.",
-    });
+    return {
+      ok: false,
+      errMsg: err.message || "로그인 시 알수없는 오류가 발생했습니다.",
+      id: "null",
+    };
   }
 });

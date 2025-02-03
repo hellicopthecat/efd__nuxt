@@ -35,7 +35,7 @@ useHead({title: () => titleFn(Number(currentIndex.value))});
   <div class="flex flex-col xl:flex-row w-full">
     <ProfileNav
       :index="Number(currentIndex)"
-      @editCurrentIndex="(index) => editCurrentIndex(index)"
+      @editCurrentIndex="(index:number) => editCurrentIndex(index)"
     />
     <div class="p-16">
       <UserProfile v-if="currentIndex === 0" />

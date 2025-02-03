@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type {ItemTypes} from "~/types/market/itemType";
 import SharedText from "../shared/SharedText.vue";
+import MarketModalLayout from "./layouts/MarketModalLayout.vue";
 //hooks
 const route = useRoute();
 const router = useRouter();
@@ -35,9 +36,7 @@ const submitEditProduct = async () => {
 const closeModal = () => router.push({query: {modal: undefined}});
 </script>
 <template>
-  <div
-    class="fixed top-[30%] left-0 right-0 z-[99] mx-auto bg-slate-800 w-[90%] xl:w-[50%] h-[50%] p-10 rounded-lg"
-  >
+  <MarketModalLayout :height="'50%'">
     <form class="flex flex-col gap-5 h-full">
       <div class="flex flex-col gap-2">
         <label for="itemName" class="flex items-center gap-3">
@@ -97,5 +96,5 @@ const closeModal = () => router.push({query: {modal: undefined}});
         </button>
       </div>
     </form>
-  </div>
+  </MarketModalLayout>
 </template>

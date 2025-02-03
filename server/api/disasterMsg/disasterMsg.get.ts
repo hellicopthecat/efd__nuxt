@@ -12,7 +12,7 @@ export default defineEventHandler(async () => {
     String(today.getDate()).padStart(2, "0") === "0"
       ? "01"
       : String(today.getDate()).padStart(2, "0");
-  const url = `${PUBLIC_API_BASE_URL}/DSSP-IF-00247?serviceKey=${config.disasterMsgAPIKEY}&crtDt=${year}${month}${day}`;
+  const url = `${PUBLIC_API_BASE_URL}/DSSP-IF-00247?serviceKey=${config.public.DISASTERMSG_APIKEY}&crtDt=${year}${month}${day}`;
   try {
     const response = await $fetch<IDefaultSafetyDataTypes<IDisasterMsgType>>(
       url

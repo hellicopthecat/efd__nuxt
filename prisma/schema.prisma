@@ -1,13 +1,8 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  // provider = "sqlite"
-  // url      = env("DATABASE_URL")
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
@@ -21,17 +16,17 @@ model User {
   email          String      @unique
   name           String?
   password       String?
-  address        UserAddress @relation(fields: [userAddressId], references: [id], onDelete: Cascade)
-  googleId       String?
-  kakaoId        String?
+  googleId       String?     @unique
+  kakaoId        String?     @unique
   avatarUrl      String?
-  sellItem       Item[]      @relation("sell")
-  buyItem        Item[]      @relation("buy")
-  userAddressId  Int
+  alertToken     String?
+  address        UserAddress @relation(fields: [userAddressId], references: [id], onDelete: Cascade)
+  ChatRoom       ChatRoom[]
+  sellItem       Item[]      @relation(name: "sell")
+  buyItem        Item[]      @relation(name: "buy")
   interestedItem Item[]      @relation("interested")
-
-  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
-  chatRoomId String?
+  Chat           Chat[]
+  userAddressId  Int
 }
 
 model UserAddress {
@@ -46,14 +41,13 @@ model UserAddress {
   buildingNmae String
   restAddress  String?
   zonecode     String
-
-  User User[]
+  user         User[]
 }
 
 model Item {
-  id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id             Int        @id @default(autoincrement())
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   itemName       String
   itemFileName   String
   itemPrice      String
@@ -63,27 +57,32 @@ model Item {
   itemSigungu    String
   itemRoadAdress String
   itemRestAdress String
-  complete       Boolean  @default(false)
-  seller         User     @relation("sell", fields: [userId], references: [id], onDelete: Cascade, map: "Item_Seller_fKey")
-  buyer          User?    @relation("buy", fields: [userId], references: [id], onDelete: Cascade, map: "Item_Buyer_fKey")
-  interested     User[]   @relation("interested")
-  userId         Int
+  complete       Boolean    @default(false)
+  seller         User       @relation(name: "sell", fields: [sellerID], references: [id], onDelete: Cascade)
+  buyer          User?      @relation(name: "buy", fields: [buyerID], references: [id], map: "Item_Buyer_fKey")
+  ChatRoom       ChatRoom[]
+  sellerID       Int
+  buyerID        Int?
+  interested     User[]     @relation("interested")
 }
 
 model ChatRoom {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  User      User[]
   chat      Chat[]
-  user      User[]
+  Item      Item?    @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId    Int?
 }
 
 model Chat {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  chat      String
-
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updateAt   DateTime  @updatedAt
+  chat       String
+  user       User?     @relation(fields: [userId], references: [id])
   ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId String?
+  userId     Int?
 }

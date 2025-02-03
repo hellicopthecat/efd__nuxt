@@ -5,7 +5,7 @@ import {PUBLIC_API_BASE_URL} from "~/utils/constants/constants";
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const query = getQuery(event);
-  const URL = `${PUBLIC_API_BASE_URL}/DSSP-IF-20589?serviceKey=${config.socialDisasterKEY}&pageNo=1&numOfRows=100&safety_cate=${query.id}&returnType=json`;
+  const URL = `${PUBLIC_API_BASE_URL}/DSSP-IF-20589?serviceKey=${config.public.SOCIAL_DISASTER_KEY}&pageNo=1&numOfRows=100&safety_cate=${query.id}&returnType=json`;
   try {
     const response = await $fetch<IDefaultSafetyDataTypes<IBehaviorTypes>>(URL);
     return response.body;

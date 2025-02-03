@@ -2,8 +2,6 @@ import {v2 as cloudinary} from "cloudinary";
 import type {UploadApiOptions} from "cloudinary";
 import {configCloudinary} from "~/lib/cloudinary";
 import {ACCESSTOKEN} from "~/utils/constants/constants";
-//@ts-ignore
-import jwt from "jsonwebtoken";
 import {mixed} from "yup";
 import type {FileObject} from "~/types/fileObject";
 import prisma from "~/lib/prisma";
@@ -22,17 +20,19 @@ export default defineEventHandler(async (event) => {
   try {
     let url = "";
     //Verified TOKEN
-    const verifiedToken = jwt.verify(
-      accessToken + "",
-      config.accessTokenKey
-    ) as {uid: string};
+    const verifiedToken = await unsealSession(
+      event,
+      {name: ACCESSTOKEN, password: config.ACCESS_TOKEN_KEY},
+      accessToken + ""
+    );
+
     const result = (await uploadAvatarSchema.validate(fileData)) as FileObject;
     if (result) {
       const buffer = new Uint8Array(result.data);
       // //cloudinary
       configCloudinary();
       const uploadOption = {
-        folder: `${verifiedToken.uid}/avatar`,
+        folder: `${verifiedToken.data?.id}/avatar`,
         public_id: "avatar",
         use_filename: true,
         unique_filename: true,
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
               return;
             }
             await prisma.user.update({
-              where: {id: Number(verifiedToken.uid)},
+              where: {id: Number(verifiedToken.data?.id)},
               data: {avatarUrl: result?.url},
             });
             resolve(result);

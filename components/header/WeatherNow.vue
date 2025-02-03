@@ -28,7 +28,7 @@ const windPower = ref<number | null>(null);
 const rotate = ref(false);
 
 const getWeatherNow = async (lat: number, lng: number) => {
-  const {data, error} = await useFetch<IWeatherNowTypes[]>(
+  const result = await $fetch<{data: IWeatherNowTypes[]; errMsg: string}>(
     "/api/weather/nowWeather",
     {
       method: "GET",
@@ -36,9 +36,9 @@ const getWeatherNow = async (lat: number, lng: number) => {
     }
   );
 
-  if (data.value) {
-    weatherNow.value = data.value;
-    (data.value as IWeatherNowTypes[]).map((weather: IWeatherNowTypes) => {
+  if (result.data) {
+    weatherNow.value = result.data;
+    (result.data as IWeatherNowTypes[]).map((weather: IWeatherNowTypes) => {
       if (weather.category === "PTY") {
         precipitation.value = Number(weather.obsrValue);
       }
@@ -55,10 +55,8 @@ const getWeatherNow = async (lat: number, lng: number) => {
         windPower.value = Number(weather.obsrValue);
       }
     });
-  }
-  if (error.value) {
-    const err = error.value.data as Error;
-    errMsg.value = err.message;
+  } else {
+    errMsg.value = result.errMsg;
   }
 };
 const handleRotate = () => (rotate.value = !rotate.value);

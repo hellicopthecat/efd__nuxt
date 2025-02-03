@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import DisasterMsg from "~/components/disasterMsg/DisasterMsg.vue";
-import FooterNav from "~/components/footer/FooterNav.vue";
 useHead({
   title: "Escpae From Danger",
   titleTemplate: "%s | EFD",
@@ -13,6 +11,7 @@ useHead({
   >
     <HeaderNav />
     <main class="relative flex flex-col w-full h-full overflow-x-hidden">
+      <AlertMsg />
       <slot />
       <DisasterMsg />
       <FooterNav />

@@ -28,3 +28,6 @@ logs
 
 # Test Image File Root
 /public/testImg
+
+# firebase
+whenyouemergency-firebase-adminsdk-icsma-d5e1d8b054.json

@@ -2,8 +2,9 @@ import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery<{id: string}>(event);
+
   try {
-    const item = await prisma.item.findFirst({
+    const item = await prisma.item.findUnique({
       where: {id: Number(query.id)},
       include: {seller: true, interested: true},
     });

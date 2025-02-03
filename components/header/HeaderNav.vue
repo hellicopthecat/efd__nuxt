@@ -3,15 +3,21 @@ import SharedText from "../shared/SharedText.vue";
 import GlobalNav from "./GlobalNav.vue";
 import WeatherNow from "./WeatherNow.vue";
 import HomeUser from "../user/HomeUser.vue";
-import {ACCESSTOKEN} from "~/utils/constants/constants";
+import AlertBubble from "../alert/AlertBubble.vue";
 
 const headerOpen = ref(false);
-
-const accessToken = useCookie(ACCESSTOKEN);
+const {
+  data: userID,
+  refresh,
+  error,
+} = await useFetch("/api/auth/getUid", {
+  method: "GET",
+});
 const logoutHandler = async () => {
   await $fetch("/api/auth/logout", {method: "POST"});
+  await refresh();
   sessionStorage.removeItem("USERNAV");
-  navigateTo("/");
+  return navigateTo("/");
 };
 const headerOpenClick = () => {
   headerOpen.value = !headerOpen.value;
@@ -21,7 +27,7 @@ const detectiveWindowWidth = () => {
     headerOpen.value = false;
   }
 };
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener("resize", detectiveWindowWidth);
 });
 onUnmounted(() => {
@@ -49,7 +55,7 @@ onUnmounted(() => {
         />
       </NuxtLink>
       <NuxtLink
-        v-if="!accessToken"
+        v-if="!userID"
         to="/login"
         class="relative flex justify-center items-center bg-slate-600 size-10 p-3 rounded-full"
         title="로그인"
@@ -60,7 +66,7 @@ onUnmounted(() => {
         <Icon name="fa6-solid:lock" class="size-6" />
       </NuxtLink>
       <button
-        v-if="accessToken"
+        v-if="userID"
         @click="logoutHandler"
         class="flex justify-center items-center bg-slate-600 size-10 p-3 rounded-full"
       >
@@ -70,13 +76,16 @@ onUnmounted(() => {
 
     <WeatherNow :open="headerOpen" />
 
-    <GlobalNav :open="headerOpen" />
+    <GlobalNav :open="headerOpen" :user-id="userID" />
 
     <div
       class="flex items-center w-full mt-auto"
-      :class="accessToken ? 'justify-between' : 'justify-end'"
+      :class="userID ? 'justify-between' : 'justify-end'"
     >
-      <HomeUser v-if="accessToken" :class="headerOpen && 'xl:hidden'" />
+      <div v-if="userID" class="flex items-center gap-3">
+        <HomeUser :class="headerOpen && 'xl:hidden'" />
+        <AlertBubble :class="headerOpen && 'xl:hidden'" />
+      </div>
       <button
         id="headerOpenBtn"
         @click="headerOpenClick"

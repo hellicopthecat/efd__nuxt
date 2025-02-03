@@ -5,8 +5,6 @@ import prisma from "~/lib/prisma";
 import {ACCESSTOKEN, REFRESHTOKEN} from "~/utils/constants/constants";
 //@ts-ignore
 import bcrypt from "bcrypt";
-//@ts-ignore
-import jwt from "jsonwebtoken";
 
 const userSchema = object({
   uid: string()
@@ -34,6 +32,7 @@ const userSchema = object({
     zonecode: string(),
   }),
   restAddress: string(),
+  alertToken: string(),
 });
 
 type User = InferType<typeof userSchema>;
@@ -69,6 +68,7 @@ export default defineEventHandler(async (event) => {
           email: results.email,
           name: results.name,
           password: hashPassword,
+          alertToken: results.alertToken,
           address: {
             create: {
               sido: results.addressData.sido + "",
@@ -83,10 +83,14 @@ export default defineEventHandler(async (event) => {
           },
         },
       });
+      const userInfo = {
+        uid: user.id,
+        alertToken: user.alertToken,
+      };
       //Refresh Token
       const refreshToken = await useSession(event, {
         name: REFRESHTOKEN,
-        password: config.refreshTokenKey,
+        password: config.REFRESH_TOKEN_KEY,
         cookie: {
           httpOnly: true,
           sameSite: true,
@@ -95,17 +99,21 @@ export default defineEventHandler(async (event) => {
           path: "/",
         },
       });
-      await refreshToken.update({uid: user.id});
+      await refreshToken.update(userInfo);
 
       //Access Token
-      const accessToken = jwt.sign({uid: user.id}, config.accessTokenKey);
-      setCookie(event, ACCESSTOKEN, accessToken, {
-        httpOnly: false,
-        sameSite: true,
-        secure: true,
-        path: "/",
-        maxAge: 60 * 60 * 3,
+      const accessToken = await useSession(event, {
+        name: ACCESSTOKEN,
+        password: config.ACCESS_TOKEN_KEY,
+        cookie: {
+          httpOnly: false,
+          sameSite: true,
+          secure: true,
+          maxAge: 60 * 60 * 3,
+          path: "/",
+        },
       });
+      await accessToken.update(userInfo);
 
       return {
         success: true,

@@ -10,44 +10,28 @@ const publicRouter: {[key: string]: boolean} = {
   "/disasterbag": true,
 };
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
-  const refreshToken = await $fetch("/api/auth/getRefresh", {method: "GET"});
-  const accessToken = useCookie(ACCESSTOKEN, {
-    httpOnly: false,
-    sameSite: true,
-    secure: true,
-    maxAge: 60 * 60 * 3,
-    path: "/",
-  });
-
-  const isPublicRouter = (path: string) => {
-    if (publicRouter[to.path]) {
-      return true;
-    } else if (path.startsWith("/behavior")) {
-      return true;
-    }
+const isPublicRouter = (path: string) => {
+  if (publicRouter[path]) {
+    return true;
+  } else if (path.startsWith("/behavior")) {
+    return true;
+  } else {
     return false;
-  };
-  if (accessToken.value && refreshToken) {
-    if (to.path === "/login" || to.path === "/join") {
+  }
+};
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const accessToken = useCookie(ACCESSTOKEN).value;
+  if (!accessToken) {
+    const response = await $fetch("/api/auth/refresh", {method: "POST"});
+    if (!response.ok) {
+      await $fetch("/api/auth/logout", {method: "POST"});
+    }
+    if (!isPublicRouter(to.path)) {
       return navigateTo("/");
     }
-  }
-  if (!accessToken.value && !refreshToken && !isPublicRouter(to.path)) {
-    return navigateTo("/");
-  }
-  //refresh Token
-  if (!accessToken.value) {
-    if (refreshToken) {
-      try {
-        const response = await $fetch("/api/auth/refresh", {method: "POST"});
-        accessToken.value = response;
-        if (!accessToken.value) {
-          throw new Error("Token refresh failed");
-        }
-      } catch (error) {
-        const err = error as Error;
-      }
+  } else {
+    if (to.path === "/login" || to.path === "/join") {
+      return navigateTo("/");
     }
   }
 });

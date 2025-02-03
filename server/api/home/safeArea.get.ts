@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   try {
     const response = await $fetch(
       `https://www.safetydata.go.kr/V2/api/DSSP-IF-10941?serviceKey=${
-        config.safeAreaKEY
+        config.public.SAFEAREA_KEY
       }&returnType=json&pageNo=1&numOfRows=50&startLat=${String(
         Number(query.lat) - 0.01
       )}&endLat=${String(Number(query.lat) + 0.01)}&startLot=${String(
