@@ -10,9 +10,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const firebaseConfig = {
     apiKey: config.public.FIREBASE_APIKEY,
     authDomain: config.public.FIREBASE_AUTH_DOMAIN,
-    databaseURL: config.public.FIREBASE_DATABASE_URL,
     projectId: config.public.FIREBASE_PROJECT_ID,
-    storageBucket: config.public.FIREBASE_STORAGE_BUCKET,
     messagingSenderId: config.public.FIREBASE_MESSAGING_SENDER_ID,
     appId: config.public.FIREBASE_APPID,
   };
