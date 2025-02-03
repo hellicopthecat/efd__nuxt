@@ -34,7 +34,7 @@ useSeoMeta({
   ogTitle: () => defaultHeadText.value,
   ogDescription: () => `${defaultHeadText.value} (사회재난)`,
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/social-behavior",
+  ogUrl: "https://efd.netlify.app/social-behavior",
   twitterTitle: () => defaultHeadText.value,
   twitterDescription: () => `${defaultHeadText.value} (사회재난)`,
   twitterImage: "/pwaIcons/icon-512.png",

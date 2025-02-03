@@ -44,7 +44,7 @@ useSeoMeta({
   ogTitle: "돕고돕기",
   ogDescription: "재난구호 물품/현찰 거래",
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/market",
+  ogUrl: "https://efd.netlify.app/market",
   twitterTitle: "돕고돕기",
   twitterDescription: "재난구호 물품/현찰 거래",
   twitterImage: "/pwaIcons/icon-512.png",

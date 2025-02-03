@@ -8,7 +8,7 @@ useSeoMeta({
   ogTitle: "날씨",
   ogDescription: "날씨(Weather)",
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/weather",
+  ogUrl: "https://efd.netlify.app/weather",
   twitterTitle: "날씨",
   twitterDescription: "날씨(Weather)",
   twitterImage: "/pwaIcons/icon-512.png",

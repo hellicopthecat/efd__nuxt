@@ -5,7 +5,7 @@ useSeoMeta({
   ogTitle: "재난시 행동요령",
   ogDescription: "재난시 행동요령(자연,사회,생활안전,민방위)",
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/behavior",
+  ogUrl: "https://efd.netlify.app/behavior",
   twitterTitle: "재난시 행동요령",
   twitterDescription: "재난시 행동요령(자연,사회,생활안전,민방위)",
   twitterImage: "/pwaIcons/icon-512.png",

@@ -31,7 +31,7 @@ useSeoMeta({
   ogTitle: () => defaultHeadText.value,
   ogDescription: () => `${defaultHeadText.value} (생활안전)`,
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/life-safety",
+  ogUrl: "https://efd.netlify.app/life-safety",
   twitterTitle: () => defaultHeadText.value,
   twitterDescription: () => `${defaultHeadText.value} (생활안전)`,
   twitterImage: "/pwaIcons/icon-512.png",

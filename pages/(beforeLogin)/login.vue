@@ -14,7 +14,7 @@ useSeoMeta({
   ogTitle: "로그인",
   ogDescription: "로그인(LogIn)",
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/login",
+  ogUrl: "https://efd.netlify.app/login",
   twitterTitle: "로그인",
   twitterDescription: "로그인(LogIn)",
   twitterImage: "/pwaIcons/icon-512.png",

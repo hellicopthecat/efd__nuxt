@@ -39,7 +39,7 @@ useSeoMeta({
   ogTitle: "재난구호대비가방",
   ogDescription: "재난구호 대비 가방 및 비상대비용품관련",
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/disasterbag",
+  ogUrl: "https://efd.netlify.app/disasterbag",
   twitterTitle: "재난구호대비가방",
   twitterDescription: "재난구호 대비 가방 및 비상대비용품관련",
   twitterImage: "/pwaIcons/icon-512.png",

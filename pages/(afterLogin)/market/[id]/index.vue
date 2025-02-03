@@ -43,7 +43,7 @@ useSeoMeta({
   ogTitle: () => data.value?.itemName + "",
   ogDescription: () => data.value?.itemDesc + "",
   ogImage: () => data.value?.itemImageUrl,
-  ogUrl: () => `/market/${data.value?.id}`,
+  ogUrl: () => `https://efd.netlify.app/market/${data.value?.id}`,
   twitterTitle: () => data.value?.itemName + "",
   twitterDescription: () => data.value?.itemDesc + "",
   twitterImage: "/pwaIcons/icon-512.png",

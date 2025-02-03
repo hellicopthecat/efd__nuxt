@@ -93,7 +93,7 @@ useSeoMeta({
   })} 기상특보`,
   ogDescription: "기상특보(Weather SpecialCast)",
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/weatherSpecial",
+  ogUrl: "https://efd.netlify.app/weatherSpecial",
   twitterTitle: `${new Date().toLocaleDateString("KO-KR", {
     dateStyle: "long",
   })} 기상특보`,

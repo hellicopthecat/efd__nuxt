@@ -12,7 +12,7 @@ useSeoMeta({
   ogTitle: "회원가입",
   ogDescription: "회원가입(Create Account)",
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/join",
+  ogUrl: "https://efd.netlify.app/join",
   twitterTitle: "회원가입",
   twitterDescription: "회원가입(Create Account)",
   twitterImage: "/pwaIcons/icon-512.png",

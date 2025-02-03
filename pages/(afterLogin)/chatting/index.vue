@@ -1,5 +1,17 @@
 <script setup lang="ts">
 const {data} = useFetch("/api/chatting/getChatRoomList", {method: "GET"});
+useSeoMeta({
+  title: "채팅방",
+  description: "채팅방 리스트",
+  ogTitle: "채팅방",
+  ogDescription: "채팅방리스트",
+  ogImage: "/pwaIcons/icon-512.png",
+  ogUrl: "https://efd.netlify.app/chatting",
+  twitterTitle: "채팅방",
+  twitterDescription: "채팅방리스트",
+  twitterImage: "/pwaIcons/icon-512.png",
+  twitterCard: "app",
+});
 </script>
 <template>
   <div class="flex flex-col gap-5 p-5">

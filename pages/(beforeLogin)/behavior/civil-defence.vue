@@ -25,7 +25,7 @@ useSeoMeta({
   ogTitle: () => defaultHeadText.value,
   ogDescription: () => `${defaultHeadText.value} (민방위)`,
   ogImage: "/pwaIcons/icon-512.png",
-  ogUrl: "/civil-defence",
+  ogUrl: "https://efd.netlify.app/civil-defence",
   twitterTitle: () => defaultHeadText.value,
   twitterDescription: () => `${defaultHeadText.value} (민방위)`,
   twitterImage: "/pwaIcons/icon-512.png",
