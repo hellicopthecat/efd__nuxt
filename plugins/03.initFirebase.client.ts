@@ -24,7 +24,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   });
 
   onMessage(messaging, async (payload) => {
-    console.log(payload);
     const payLoadTitle = payload.notification?.title;
     const payLoadOption = {
       icon: payload.notification?.icon,
@@ -50,7 +49,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       });
 
       noti.onclick = () => {
-        console.log("is clicked");
         window.open(`http://localhost:3000/chatting/${data.roomId}`);
       };
     }

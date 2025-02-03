@@ -101,5 +101,7 @@ export default defineEventHandler(async (event) => {
     });
     await accessToken.update(userInfo);
     return sendRedirect(event, "/");
-  } catch (error) {}
+  } catch (error) {
+    const err = error as Error;
+  }
 });

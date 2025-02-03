@@ -6,14 +6,14 @@ export default defineNuxtPlugin(async () => {
           navigator.serviceWorker
             .register("/firebase-messaging-sw.js")
             .then((regist) => {
-              console.log("Service Worker", regist);
+              // console.log("Service Worker", regist);
               regist.addEventListener("updatefound", () => {
                 regist.update();
-                console.log("Service Worker Update", regist);
+                // console.log("Service Worker Update", regist);
               });
             })
             .catch((err) => {
-              console.log("service Worker Error", err);
+              // console.log("service Worker Error", err);
             });
         }
       },

@@ -27,7 +27,6 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     const err = error as Error;
-    // console.log("refreshPost ::", err.message);
     return {
       ok: false,
       errMsg: err.message,

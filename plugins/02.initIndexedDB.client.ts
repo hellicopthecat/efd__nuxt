@@ -59,7 +59,7 @@ export default defineNuxtPlugin(async () => {
       }
     };
     request.onerror = (event) => {
-      console.log("addDB ERROR", event);
+      // console.log("addDB ERROR", event);
     };
   };
 
@@ -95,7 +95,7 @@ export default defineNuxtPlugin(async () => {
         resolve(await getAllDB(storeName, ver));
       };
       request.onerror = (event) => {
-        console.log("delete err");
+        // console.log("delete err");
       };
     });
   };

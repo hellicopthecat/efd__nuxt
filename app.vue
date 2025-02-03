@@ -21,12 +21,12 @@ onMounted(async () => {
     } else {
       Notification.requestPermission().then(async (permission) => {
         if (permission === "denied") {
-          console.log("denied");
+          // console.log("denied");
           return;
         }
         if (permission === "granted") {
           $registServiceWorker();
-          console.log($token);
+          // console.log($token);
         }
       });
     }

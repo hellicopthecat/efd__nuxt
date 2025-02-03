@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     const err = error as Error;
-    console.log(err.message);
     throw createError(err.message);
   }
 });

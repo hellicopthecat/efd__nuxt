@@ -68,7 +68,6 @@ export default defineEventHandler(async (event) => {
     return user as UserInfoType;
   } catch (error) {
     const err = error as Error;
-    console.log(err.message);
     throw createError("유저의 정보를 불러오는데 실패했습니다.");
   }
 });

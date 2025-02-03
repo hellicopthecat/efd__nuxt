@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
     return response;
   } catch (error) {
     const err = error as Error;
-    console.log(err.message);
     throw createError({
       statusCode: 400,
       statusMessage: "Bad Request",

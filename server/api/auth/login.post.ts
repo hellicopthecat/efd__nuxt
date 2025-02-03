@@ -77,7 +77,6 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     const err = error as Error;
-    console.log("backend", err.message);
     return {
       ok: false,
       errMsg: err.message || "로그인 시 알수없는 오류가 발생했습니다.",

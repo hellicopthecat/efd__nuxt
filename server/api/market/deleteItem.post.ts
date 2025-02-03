@@ -30,7 +30,6 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     const err = error as Error;
-    console.log(err.message);
     return {
       ok: false,
       errMsg: createError("삭제하는 과정에서 에러가 발생했습니다."),

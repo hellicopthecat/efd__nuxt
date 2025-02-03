@@ -17,6 +17,5 @@ export default defineEventHandler(async (event) => {
     return response.body;
   } catch (error) {
     const err = error as Error;
-    console.log(err.message);
   }
 });

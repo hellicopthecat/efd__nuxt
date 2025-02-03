@@ -25,6 +25,5 @@ export default defineEventHandler(async (event) => {
     return verifiedToken.data?.uid;
   } catch (error) {
     const err = error as Error;
-    // console.log("getUid err", err.message);
   }
 });

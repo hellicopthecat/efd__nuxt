@@ -20,6 +20,5 @@ export default defineEventHandler(async () => {
     return response.body.toSorted((a, b) => 1 - response.body.length);
   } catch (error) {
     const err = error as Error;
-    console.log("DisasterMsg : ", err.message);
   }
 });

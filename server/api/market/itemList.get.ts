@@ -51,6 +51,5 @@ export default defineEventHandler(async (event) => {
     return items;
   } catch (error) {
     const err = error as Error;
-    console.log("Item List Error ::", err.message);
   }
 });
