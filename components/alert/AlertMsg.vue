@@ -28,6 +28,7 @@ watch(alertData, () => {
 
     <div class="flex gap-3">
       <button
+        v-if="alertData?.roomId"
         @click="goToChatRoom"
         class="p-2 rounded-md shadow-md hover:bg-yellow-500"
       >

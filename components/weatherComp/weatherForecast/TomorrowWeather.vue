@@ -16,7 +16,8 @@ import {
 } from "~/utils/constants/weatherContants";
 import {createNewArr} from "~/utils/weather/createNewWeatherArr";
 import ForcastInfo from "./ForcastInfo.vue";
-import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
+
+const {lat, lng} = defineProps({lat: Number, lng: Number});
 
 const isLoading = ref(false);
 const errMsg = ref("");
@@ -60,10 +61,10 @@ const getTomorrwWeater = async (lat: number, lng: number) => {
   }
 };
 
-onMounted(() => {
-  navigator.geolocation.getCurrentPosition(({coords}) => {
-    getTomorrwWeater(coords.latitude, coords.longitude);
-  }, geolocationErrorUtil);
+onMounted(async () => {
+  watchEffect(async () => {
+    await getTomorrwWeater(Number(lat), Number(lng));
+  });
 });
 </script>
 <template>

@@ -17,6 +17,9 @@ const incomeAlert = useNewAlert();
 // Fns
 const openBubble = async () => {
   open.value = !open.value;
+  if (Notification.permission === "denied") {
+    alert("알림권한이 거절되었습니다. 브라우저 설정에서 알림 요청설정하세요");
+  }
   if (open.value) {
     const db = (await $getAllDB(OFFER, 1)) as IDBResultsTypes[];
     await $editAlertState(BADGE, 1, 1, "false");

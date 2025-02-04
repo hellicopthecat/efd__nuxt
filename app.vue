@@ -1,16 +1,32 @@
 <script setup lang="ts">
-import {ACCESSTOKEN, REFRESHTOKEN} from "./utils/constants/constants";
+import {ACCESSTOKEN} from "./utils/constants/constants";
 
 const {$registServiceWorker, $token} = useNuxtApp();
 const accessToken = useCookie(ACCESSTOKEN).value;
-
+const alertTxt = useNewAlert();
 useHead({
   htmlAttrs: {lang: "ko"},
   link: [{rel: "icon", type: "image/png", href: "favicon.png"}],
 });
-
+const requerstAlertPermission = () => {
+  Notification.requestPermission().then(async (permission) => {
+    if (permission === "denied") {
+      alertTxt.value = {
+        title: "알림이 거절되어있습니다.",
+        desc: "알림이 거절되어있습니다.",
+        roomId: "",
+        itemId: "",
+      };
+      setTimeout(() => (alertTxt.value = null), 3000);
+      return;
+    }
+    if (permission === "granted") {
+      $registServiceWorker();
+    }
+  });
+};
 onMounted(async () => {
-  if (import.meta.client && typeof Notification !== undefined) {
+  if (import.meta.client && typeof Notification !== "undefined") {
     if (Notification.permission === "granted") {
       if (accessToken) {
         await $fetch("/api/auth/updateUserAlertToken", {
@@ -18,19 +34,8 @@ onMounted(async () => {
           body: {token: $token},
         });
       }
-    } else if (Notification.permission === "denied") {
-      alert("알림이 거부되었습니다.");
     } else {
-      Notification.requestPermission().then(async (permission) => {
-        if (permission === "denied") {
-          // console.log("denied");
-          return;
-        }
-        if (permission === "granted") {
-          $registServiceWorker();
-          // console.log($token);
-        }
-      });
+      requerstAlertPermission();
     }
   }
 });

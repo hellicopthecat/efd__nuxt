@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TodayWeather from "~/components/weatherComp/weatherForecast/TodayWeather.vue";
 import TomorrowWeather from "~/components/weatherComp/weatherForecast/TomorrowWeather.vue";
+import WeatherForecastLayout from "~/components/weatherComp/weatherForecast/WeatherForecastLayout.vue";
 
 useSeoMeta({
   title: "날씨",
@@ -16,8 +17,5 @@ useSeoMeta({
 });
 </script>
 <template>
-  <div class="flex flex-col gap-10 p-10">
-    <TodayWeather />
-    <TomorrowWeather />
-  </div>
+  <WeatherForecastLayout />
 </template>

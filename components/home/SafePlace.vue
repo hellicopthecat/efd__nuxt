@@ -2,12 +2,16 @@
 import type {ISafeAreaTypes} from "~/types/safeArea/safeAreaTyeps";
 import SharedText from "../shared/SharedText.vue";
 import {zoomIn, setCenter} from "~/utils/kakaomap";
-import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
+import {palaceLat, palaceLng} from "~/utils/geolocations/locationUtil";
 interface IDataArrTypes {
   id: string;
   title: string;
   latlng: {Ma: number; La: number};
 }
+const {lat, lng} = defineProps({
+  lat: Number,
+  lng: Number,
+});
 const initMap = useKakaoMap();
 const currentBtn = useCurrentBtnId();
 
@@ -20,13 +24,13 @@ const toggleContainer = () => {
 };
 const goPosition = (map: any, lat: number, lot: number, btnId: string) => {
   currentBtn.value = btnId;
-  setCenter(map, lat, lot);
+  setCenter(map, lat || palaceLat, lot || palaceLng);
   zoomIn(map);
 };
 onMounted(async () => {
-  navigator.geolocation.getCurrentPosition(async (position) => {
+  watchEffect(async () => {
     const data = await $fetch<ISafeAreaTypes[]>("/api/home/safeArea", {
-      query: {lat: position.coords.latitude, lon: position.coords.longitude},
+      query: {lat: lat || palaceLat, lon: lng || palaceLng},
     });
     safePlaceData.value = data;
 
@@ -55,7 +59,7 @@ onMounted(async () => {
         currentBtn: currentBtn,
       });
     }
-  }, geolocationErrorUtil);
+  });
 });
 </script>
 <template>
@@ -72,7 +76,7 @@ onMounted(async () => {
 
         <SharedText
           tag="h3"
-          txt="근처 대피소 정보"
+          txt="내 근처 대피소 정보"
           :class-name="
             toggleSafePlace
               ? 'origin-left transition ease-in-out duration-300 opacity-1 scale-x-full w-full text-nowrap'

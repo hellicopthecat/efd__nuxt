@@ -6,8 +6,9 @@ import Precipitation from "../Precipitation.vue";
 import SkyStatus from "../SkyStatus.vue";
 import WindPower from "../WindPower.vue";
 import WindDirection from "../WindDirection.vue";
-import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
 import LoadingIndicator from "~/components/shared/LoadingIndicator.vue";
+
+const {lat, lng} = defineProps({lat: Number, lng: Number});
 
 const isLoading = ref(false);
 const errMsg = ref("");
@@ -158,9 +159,9 @@ const getWeatherToday = async (lat: number, lng: number) => {
   }
 };
 onMounted(() => {
-  navigator.geolocation.getCurrentPosition(({coords}) => {
-    getWeatherToday(coords.latitude, coords.longitude);
-  }, geolocationErrorUtil);
+  watchEffect(async () => {
+    await getWeatherToday(Number(lat), Number(lng));
+  });
 });
 </script>
 <template>
@@ -168,11 +169,11 @@ onMounted(() => {
     <SharedText tag="h2" txt="오늘 날씨예보" class-name="text-white" />
 
     <div class="flex flex-col gap-5">
-      <div v-if="errMsg">
-        <SharedText tag="h3" :txt="errMsg" class-name="text-red-500" />
-      </div>
       <div v-if="isLoading" class="h-full">
         <LoadingIndicator />
+      </div>
+      <div v-if="errMsg">
+        <SharedText tag="h3" :txt="errMsg" class-name="text-red-500" />
       </div>
       <div v-else>
         <section>

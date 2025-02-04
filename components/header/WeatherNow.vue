@@ -6,7 +6,7 @@ import WindDirection from "../weatherComp/WindDirection.vue";
 import WindPower from "../weatherComp/WindPower.vue";
 import LoadingIndicator from "../shared/LoadingIndicator.vue";
 import SharedText from "../shared/SharedText.vue";
-import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
+import {palaceLat, palaceLng} from "~/utils/geolocations/locationUtil";
 
 const {open} = defineProps({open: Boolean});
 
@@ -62,9 +62,14 @@ const getWeatherNow = async (lat: number, lng: number) => {
 const handleRotate = () => (rotate.value = !rotate.value);
 
 onMounted(() => {
-  navigator.geolocation.getCurrentPosition(async ({coords}) => {
-    await getWeatherNow(coords.latitude, coords.longitude);
-  }, geolocationErrorUtil);
+  navigator.geolocation.getCurrentPosition(
+    async ({coords}) => {
+      await getWeatherNow(Number(coords.latitude), Number(coords.longitude));
+    },
+    async () => {
+      await getWeatherNow(palaceLat, palaceLng);
+    }
+  );
 });
 </script>
 

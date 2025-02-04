@@ -3,8 +3,11 @@ import GoMyPosition from "./GoMyPosition.vue";
 import LoadingIndicator from "../shared/LoadingIndicator.vue";
 import SafePlace from "./SafePlace.vue";
 import {geolocationErrorUtil} from "~/utils/geolocations/locationUtil";
+
 const initMap = useKakaoMap();
 const {$initKakaoMap} = useNuxtApp();
+const lat = ref(0);
+const lng = ref(0);
 const width = ref("100%");
 const height = ref("100%");
 const mapContID = ref("mapCont");
@@ -14,18 +17,19 @@ const resizeMap = (resizeWidth: number, resizeHeight: number) => {
   height.value = resizeHeight + "px";
   //@ts-ignore
   initMap.value.relayout();
+  setCenter(initMap.value, lat.value, lng.value);
 };
 let resizeHandler: (() => void) | null = null;
-onMounted(() => {
-  navigator.geolocation.getCurrentPosition(async (position) => {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-    const {map} = await $initKakaoMap(lat, lon, true);
+onMounted(async () => {
+  navigator.geolocation.getCurrentPosition(async ({coords}) => {
+    const {map} = await $initKakaoMap(coords.latitude, coords.longitude, true);
     initMap.value = map;
+    lat.value = coords.latitude;
+    lng.value = coords.longitude;
   }, geolocationErrorUtil);
-
   watchEffect(() => {
     const mapCont = document.getElementById(mapContID.value);
+    if (!mapCont) return;
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const resizeWidth = entry.contentRect.width;
@@ -33,14 +37,15 @@ onMounted(() => {
         if (entry.contentBoxSize) {
           width.value = resizeWidth + "px";
           height.value = resizeHeight + "px";
-          resizeHandler = () => resizeMap(resizeWidth, resizeHeight);
-          window.addEventListener("resize", () => resizeHandler);
+          resizeHandler = () =>
+            resizeMap(window.innerWidth, window.innerHeight);
+
+          window.addEventListener("resize", resizeHandler);
         }
       }
     });
-    if (mapCont) {
-      resizeObserver.observe(mapCont);
-    }
+
+    resizeObserver.observe(mapCont);
   });
 });
 onUnmounted(() => {
@@ -56,9 +61,9 @@ onUnmounted(() => {
       <LoadingIndicator class="size-32" />
     </div>
     <div class="relative">
-      <SafePlace />
+      <SafePlace :lat="lat" :lng="lng" />
       <div id="map" :style="`width:${width};height:${height}`"></div>
-      <GoMyPosition />
+      <GoMyPosition :lat="lat" :lng="lng" />
     </div>
   </div>
 </template>
