@@ -8,7 +8,11 @@ useHead({
   htmlAttrs: {lang: "ko"},
   link: [{rel: "icon", type: "image/png", href: "favicon.png"}],
 });
+const isKakaoApp = () => /KAKAOTALK/i.test(navigator.userAgent);
 const requerstAlertPermission = () => {
+  if (isKakaoApp() || typeof Notification === "undefined") {
+    alert("알림설정을 할 수 없는 브라우저입니다.");
+  }
   Notification.requestPermission().then(async (permission) => {
     if (permission === "denied") {
       alertTxt.value = {
@@ -37,6 +41,8 @@ onMounted(async () => {
     } else {
       requerstAlertPermission();
     }
+  } else {
+    alert("알림설정을 할 수 없는 브라우저입니다.");
   }
 });
 </script>
