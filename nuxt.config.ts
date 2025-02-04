@@ -4,7 +4,8 @@ export default defineNuxtConfig({
   modules: ["@nuxt/icon", "@prisma/nuxt", "@nuxt/image", "@nuxtjs/tailwindcss"],
   devtools: {enabled: true},
   nitro: {
-    preset: "netlify",
+    preset: "node-server",
+    // preset: "netlify",
   },
   typescript: {
     typeCheck: true,
@@ -62,11 +63,11 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    "/": {ssr: false},
+    "/": {ssr: true},
     "/login": {prerender: true},
     "/join": {prerender: true},
-    "/weather": {ssr: false},
-    "/weatherSpecial": {ssr: false},
+    "/weather": {ssr: true},
+    "/weatherSpecial": {ssr: true},
     "/behavior": {prerender: true},
     "/behavior/**": {cors: true},
     "/disasterbag": {prerender: true},
