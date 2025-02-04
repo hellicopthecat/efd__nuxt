@@ -10,7 +10,7 @@ useHead({
 });
 
 onMounted(async () => {
-  if (import.meta.client) {
+  if (import.meta.client && typeof Notification !== undefined) {
     if (Notification.permission === "granted") {
       if (accessToken) {
         await $fetch("/api/auth/updateUserAlertToken", {
@@ -18,6 +18,8 @@ onMounted(async () => {
           body: {token: $token},
         });
       }
+    } else if (Notification.permission === "denied") {
+      alert("알림이 거부되었습니다.");
     } else {
       Notification.requestPermission().then(async (permission) => {
         if (permission === "denied") {
