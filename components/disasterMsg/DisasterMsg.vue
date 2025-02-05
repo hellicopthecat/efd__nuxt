@@ -17,6 +17,7 @@ const fetchData = async () => {
 
 onMounted(async () => {
   const data = await fetchData();
+  console.log(data);
   disasterMsgData.value = data;
   setInterval(() => {
     msgMarginTop.value = msgMarginTop.value + 144;
@@ -29,11 +30,11 @@ onMounted(async () => {
 <template>
   <div class="flex flex-col w-full mt-auto">
     <div class="w-full h-36 bg-red-600 overflow-hidden relative">
-      <div
-        class="trasition ease-in-out duration-500"
+      <ul
+        class="flex flex-col trasition ease-in-out duration-500"
         :style="{marginTop: `-${msgMarginTop}px`}"
       >
-        <div
+        <li
           v-for="data in disasterMsgData"
           :key="data.CRT_DT"
           class="flex flex-col gap-3 xl:gap-2 justify-center h-36 p-2"
@@ -51,8 +52,8 @@ onMounted(async () => {
             <SharedText tag="p" :txt="data.CRT_DT" />
             <SharedText tag="p" :txt="data.MSG_CN" />
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
       <button
         class="absolute top-2 right-5 size-10"
         @click.prevent="() => fetchData()"

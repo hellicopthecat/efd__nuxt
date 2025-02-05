@@ -2,8 +2,8 @@ import type {IDefaultSafetyDataTypes} from "~/types/apiType";
 import type {IDisasterMsgType} from "~/types/disasterMsg/disasterMsgType";
 import {PUBLIC_API_BASE_URL} from "~/utils/constants/constants";
 
-export default defineEventHandler(async () => {
-  const config = useRuntimeConfig();
+export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig(event);
   const today = new Date();
   today.setDate(today.getDate() - 1);
   const year = today.getFullYear();
@@ -20,5 +20,6 @@ export default defineEventHandler(async () => {
     return response.body.toSorted((a, b) => 1 - response.body.length);
   } catch (error) {
     const err = error as Error;
+    console.log(err.message);
   }
 });
