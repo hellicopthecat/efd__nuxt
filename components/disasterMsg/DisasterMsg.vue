@@ -2,15 +2,17 @@
 import type {IDisasterMsgType} from "~/types/disasterMsg/disasterMsgType";
 import SharedText from "../shared/SharedText.vue";
 
-const disasterMsgData = ref<IDisasterMsgType[] | null>(null);
 const msgCont = ref("msgCont");
 const msgMarginTop = ref(0);
-
+const {
+  data: disasterMsgData,
+  refresh,
+  status,
+} = useFetch<IDisasterMsgType[]>("/api/disasterMsg/disasterMsg", {
+  method: "GET",
+});
+console.log(disasterMsgData.value);
 onMounted(async () => {
-  const result = await $fetch<IDisasterMsgType[]>(
-    "/api/disasterMsg/disasterMsg"
-  );
-  disasterMsgData.value = result;
   const msgContainer = document.getElementById("msgCont");
   if (msgContainer) {
     setInterval(() => {
@@ -24,7 +26,10 @@ onMounted(async () => {
 </script>
 <template>
   <div class="flex flex-col w-full mt-auto">
-    <div class="w-full h-36 bg-red-600 overflow-hidden">
+    <div
+      v-if="status === 'success'"
+      class="w-full h-36 bg-red-600 overflow-hidden relative"
+    >
       <div
         :id="msgCont"
         class="trasition ease-in-out duration-500"
@@ -48,6 +53,12 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+      <button
+        class="absolute top-2 right-5 size-10"
+        @click.prevent="() => refresh()"
+      >
+        <Icon name="mdi:refresh" class="size-5" />
+      </button>
     </div>
   </div>
 </template>
