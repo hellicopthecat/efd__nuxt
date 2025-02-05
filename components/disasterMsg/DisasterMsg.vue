@@ -12,13 +12,13 @@ const fetchData = async () => {
       method: "GET",
     }
   );
+
+  disasterMsgData.value = result;
   return result;
 };
 
 onMounted(async () => {
-  const data = await fetchData();
-  console.log(data);
-  disasterMsgData.value = data;
+  await fetchData();
   setInterval(() => {
     msgMarginTop.value = msgMarginTop.value + 144;
     if (msgMarginTop.value >= 144 * disasterMsgData.value?.length!) {
