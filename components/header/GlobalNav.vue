@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SharedText from "../shared/SharedText.vue";
 import {ACCESSTOKEN} from "~/utils/constants/constants";
-const {open, userId} = defineProps({open: Boolean, userId: String});
+const {open, userId} = defineProps({open: Boolean, userId: Number});
 const route = useRoute();
 </script>
 <template>

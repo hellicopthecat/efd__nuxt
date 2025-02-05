@@ -12,6 +12,7 @@ const {
   error,
 } = await useFetch("/api/auth/getUid", {
   method: "GET",
+  server: false,
 });
 const logoutHandler = async () => {
   await $fetch("/api/auth/logout", {method: "POST"});

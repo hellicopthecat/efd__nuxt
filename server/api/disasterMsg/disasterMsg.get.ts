@@ -17,9 +17,8 @@ export default defineEventHandler(async (event) => {
     const response = await $fetch<IDefaultSafetyDataTypes<IDisasterMsgType>>(
       url
     );
-    return response.body.toSorted((a, b) => 1 - response.body.length);
+    return response.body;
   } catch (error) {
     const err = error as Error;
-    console.log(err.message);
   }
 });
