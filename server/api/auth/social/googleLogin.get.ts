@@ -1,5 +1,5 @@
 import {initGoogleAuth} from "~/server/googleAuth";
-
+import crypto from "crypto";
 export default defineEventHandler(async (event) => {
   const oauth2Client = initGoogleAuth();
   const state = crypto.randomUUID();
