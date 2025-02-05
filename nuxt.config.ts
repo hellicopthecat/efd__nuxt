@@ -4,7 +4,8 @@ export default defineNuxtConfig({
   modules: ["@nuxt/icon", "@prisma/nuxt", "@nuxt/image", "@nuxtjs/tailwindcss"],
   devtools: {enabled: true},
   nitro: {
-    preset: "netlify",
+    preset: "node-server",
+    // preset: "netlify",
   },
   typescript: {
     typeCheck: true,

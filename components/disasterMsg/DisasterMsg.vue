@@ -10,8 +10,9 @@ const {
   status,
 } = useFetch<IDisasterMsgType[]>("/api/disasterMsg/disasterMsg", {
   method: "GET",
+  server: true,
 });
-console.log(disasterMsgData.value);
+
 onMounted(async () => {
   const msgContainer = document.getElementById("msgCont");
   if (msgContainer) {
