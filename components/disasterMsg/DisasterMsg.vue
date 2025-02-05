@@ -39,6 +39,7 @@ onMounted(async () => {
           class="flex flex-col gap-3 xl:gap-2 justify-center h-36 p-2"
         >
           <div class="flex xl:items-center gap-4">
+            <p>{{ data.EMRG_STEP_NM }}</p>
             <SharedText
               tag="p"
               :txt="`${data.EMRG_STEP_NM}(${data.DST_SE_NM})`"
