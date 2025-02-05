@@ -2,16 +2,22 @@
 import type {IDisasterMsgType} from "~/types/disasterMsg/disasterMsgType";
 import SharedText from "../shared/SharedText.vue";
 
+const disasterMsgData = ref<IDisasterMsgType[] | []>([]);
 const msgMarginTop = ref(0);
 
-const {data: disasterMsgData, refresh} = useAsyncData(
-  "disasterMsg",
-  async () =>
-    await $fetch<IDisasterMsgType[]>("/api/disasterMsg/disasterMsg", {
+const fetchData = async () => {
+  const result = await $fetch<IDisasterMsgType[]>(
+    "/api/disasterMsg/disasterMsg",
+    {
       method: "GET",
-    })
-);
+    }
+  );
+  return result;
+};
+
 onMounted(async () => {
+  const data = await fetchData();
+  disasterMsgData.value = data;
   setInterval(() => {
     msgMarginTop.value = msgMarginTop.value + 144;
     if (msgMarginTop.value >= 144 * disasterMsgData.value?.length!) {
@@ -48,7 +54,7 @@ onMounted(async () => {
       </div>
       <button
         class="absolute top-2 right-5 size-10"
-        @click.prevent="() => refresh()"
+        @click.prevent="() => fetchData()"
       >
         <Icon name="mdi:refresh" class="size-5" />
       </button>
