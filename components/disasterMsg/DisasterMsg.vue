@@ -5,14 +5,12 @@ import SharedText from "../shared/SharedText.vue";
 const disasterMsgData = ref<IDisasterMsgType[] | null>(null);
 const msgCont = ref("msgCont");
 const msgMarginTop = ref(0);
-const fetchData = async () => {
+
+onMounted(async () => {
   const result = await $fetch<IDisasterMsgType[]>(
     "/api/disasterMsg/disasterMsg"
   );
   disasterMsgData.value = result;
-};
-onMounted(async () => {
-  await fetchData();
   const msgContainer = document.getElementById("msgCont");
   if (msgContainer) {
     setInterval(() => {
