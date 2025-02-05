@@ -22,13 +22,17 @@ onMounted(async () => {
 </script>
 <template>
   <div class="flex flex-col w-full mt-auto">
-    <div class="w-full h-36 bg-red-600 overflow-hidden relative">
+    <div
+      v-if="disasterMsgData"
+      class="w-full h-36 bg-red-600 overflow-hidden relative"
+    >
       <div
         class="trasition ease-in-out duration-500"
         :style="{marginTop: `-${msgMarginTop}px`}"
       >
         <div
           v-for="data in disasterMsgData"
+          :key="data.CRT_DT"
           class="flex flex-col gap-3 xl:gap-2 justify-center h-36 p-2"
         >
           <div class="flex xl:items-center gap-4">
