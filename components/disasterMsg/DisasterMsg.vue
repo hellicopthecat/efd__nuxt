@@ -2,7 +2,6 @@
 import type {IDisasterMsgType} from "~/types/disasterMsg/disasterMsgType";
 import SharedText from "../shared/SharedText.vue";
 
-const msgCont = ref("msgCont");
 const msgMarginTop = ref(0);
 
 const {data: disasterMsgData, refresh} = useAsyncData(
@@ -13,23 +12,18 @@ const {data: disasterMsgData, refresh} = useAsyncData(
     })
 );
 onMounted(async () => {
-  const msgContainer = document.getElementById("msgCont");
-
-  if (msgContainer) {
-    setInterval(() => {
-      msgMarginTop.value = msgMarginTop.value + 144;
-      if (msgMarginTop.value >= 144 * disasterMsgData.value?.length!) {
-        msgMarginTop.value = 0;
-      }
-    }, 3000);
-  }
+  setInterval(() => {
+    msgMarginTop.value = msgMarginTop.value + 144;
+    if (msgMarginTop.value >= 144 * disasterMsgData.value?.length!) {
+      msgMarginTop.value = 0;
+    }
+  }, 3000);
 });
 </script>
 <template>
   <div class="flex flex-col w-full mt-auto">
     <div class="w-full h-36 bg-red-600 overflow-hidden relative">
       <div
-        :id="msgCont"
         class="trasition ease-in-out duration-500"
         :style="{marginTop: `-${msgMarginTop}px`}"
       >
