@@ -12,7 +12,11 @@ const {data} = useNuxtData<UserInfoType>("userInfo");
   <UserInfoLayout>
     <SharedText tag="h2" txt="판매품" />
     <UserPageItemListLayout>
-      <MyItems v-for="items in data?.sellItem" :items="items as IItemTypes" />
+      <MyItems
+        v-for="items in data?.sellItem"
+        :key="items.id"
+        :items="items as IItemTypes"
+      />
     </UserPageItemListLayout>
   </UserInfoLayout>
 </template>

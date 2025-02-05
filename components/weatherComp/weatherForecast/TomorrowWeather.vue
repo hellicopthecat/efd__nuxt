@@ -76,6 +76,7 @@ onMounted(async () => {
         <div class="flex overflow-x-auto gap-10 py-10">
           <div
             v-for="weather in todayWeathers"
+            :key="weather.TMP"
             class="flex flex-col min-w-[300px] bg-slate-700 p-5 rounded-md gap-2"
           >
             <ForcastInfo :data="weather" />
@@ -88,6 +89,7 @@ onMounted(async () => {
         <div class="flex overflow-x-auto gap-10 py-10">
           <div
             v-for="weather in tomorrowWeathers"
+            :key="weather.TMP"
             class="flex flex-col min-w-[300px] bg-slate-700 p-5 rounded-md gap-2"
           >
             <ForcastInfo :data="weather" />
@@ -100,6 +102,7 @@ onMounted(async () => {
         <div class="flex overflow-x-auto gap-10 py-10">
           <div
             v-for="weather in theDayAfterWeathers"
+            :key="weather.TMP"
             class="flex flex-col min-w-[300px] bg-slate-700 p-5 rounded-md gap-2"
           >
             <ForcastInfo :data="weather" />

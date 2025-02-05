@@ -14,6 +14,7 @@ const {data} = useNuxtData<UserInfoType>("userInfo");
     <UserPageItemListLayout>
       <MyItems
         v-for="items in data?.interestedItem"
+        :key="items.id"
         :items="items as IItemTypes"
       />
     </UserPageItemListLayout>

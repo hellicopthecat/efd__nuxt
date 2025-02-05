@@ -22,10 +22,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="flex flex-col w-full mt-auto">
-    <div
-      v-if="disasterMsgData"
-      class="w-full h-36 bg-red-600 overflow-hidden relative"
-    >
+    <div class="w-full h-36 bg-red-600 overflow-hidden relative">
       <div
         class="trasition ease-in-out duration-500"
         :style="{marginTop: `-${msgMarginTop}px`}"

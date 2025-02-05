@@ -189,6 +189,7 @@ onMounted(() => {
         <section class="flex gap-10 w-full overflow-x-auto">
           <div
             v-for="(time, index) in fcstTime.slice(0, 6)"
+            :key="index"
             class="flex flex-col p-5 mb-5 items-end bg-gray-700 rounded-xl w-full text-nowrap gap-2"
           >
             <SharedText
