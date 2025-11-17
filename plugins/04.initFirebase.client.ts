@@ -48,7 +48,8 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         });
 
         noti.onclick = () => {
-          window.open(`http://localhost:3000/chatting/${data.roomId}`);
+          // window.open(`http://localhost:3000/chatting/${data.roomId}`);
+          window.open(`https://efd.netlify.app/chatting/${data.roomId}`);
         };
       }
     });
